@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    tools:context=".LoginPage">
+    tools:context=".SignupEmail">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline4"
@@ -120,6 +120,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="14sp"
+            android:textColor="@color/black"
             android:inputType="textPersonName"
             android:background="@color/btn_bg"
             >
@@ -160,6 +161,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="14sp"
+            android:textColor="@color/black"
             android:hint="Enter you email/phone number"
             android:background="@color/btn_bg"/>
     </com.google.android.material.textfield.TextInputLayout>
@@ -197,6 +199,7 @@
             android:layout_height="wrap_content"
             android:textSize="14sp"
             android:hint="Enter you password"
+            android:textColor="@color/black"
             android:inputType="textPassword"
             android:background="@color/btn_bg"
 
@@ -232,13 +235,14 @@
         app:layout_constraintGuide_percent="0.90" />
 
     <Button
-        android:id="@+id/login_btn"
+        android:id="@+id/getOTP"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/btn"
         android:text="Get OTP"
         android:textSize="20sp"
         app:cornerRadius="10dp"
+        android:textColor="@color/white"
         app:layout_constraintEnd_toStartOf="@+id/guideline5"
         app:layout_constraintStart_toEndOf="@+id/guideline4"
         app:layout_constraintTop_toBottomOf="@+id/guideline8"
@@ -253,7 +257,7 @@
         android:textColor="@color/btn"
         app:layout_constraintStart_toEndOf="@+id/guideline4"
         app:layout_constraintEnd_toStartOf="@+id/guideline5"
-        app:layout_constraintTop_toBottomOf="@id/login_btn"
+        app:layout_constraintTop_toBottomOf="@id/getOTP"
         app:layout_constraintBottom_toTopOf="@id/guideline9"/>
 
     <androidx.constraintlayout.widget.Guideline

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    tools:context=".VerificationCode">
+    tools:context=".Verified">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline4"
@@ -123,6 +123,7 @@
         android:backgroundTint="@color/btn"
         android:text="Continue"
         android:textSize="20sp"
+        android:textColor="@color/white"
         app:cornerRadius="10dp"
         app:layout_constraintBottom_toTopOf="@id/guideline9"
         app:layout_constraintEnd_toStartOf="@id/guideline5"

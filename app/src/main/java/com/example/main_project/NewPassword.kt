@@ -7,20 +7,20 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.example.main_project.databinding.FragmentForgotPasswordBinding
-import com.example.main_project.databinding.FragmentLoginPageBinding
+import com.example.main_project.databinding.FragmentNewPasswordBinding
 
-class ForgotPassword : Fragment() {
+class NewPassword : Fragment() {
 
-    private var _binding: FragmentForgotPasswordBinding? = null
+    private var _binding: FragmentNewPasswordBinding? = null
     private val binding get() = _binding!!
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentForgotPasswordBinding.inflate(inflater, container, false)
+        _binding = FragmentNewPasswordBinding.inflate(inflater, container, false)
 
-        binding.cnt.setOnClickListener {
-            findNavController().navigate(R.id.newPassword)
+        binding.loginBtn.setOnClickListener {
+            findNavController().navigate(R.id.verificationCode)
         }
 
         return binding.root

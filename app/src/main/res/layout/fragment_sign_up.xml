@@ -2,11 +2,10 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    tools:context=".VerificationCode">
+    tools:context=".SignUp">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline4"
@@ -98,30 +97,32 @@
 
 
     <Button
-        android:id="@+id/login_email"
+        android:id="@+id/loginEmail"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/btn"
         android:text="Sign up via Email"
         android:textSize="20sp"
+        android:textColor="@color/white"
         app:cornerRadius="10dp"
-        app:layout_constraintBottom_toTopOf="@id/login_phone_number"
+        app:layout_constraintBottom_toTopOf="@id/loginPhoneNumber"
         app:layout_constraintEnd_toStartOf="@id/guideline5"
         app:layout_constraintStart_toEndOf="@id/guideline4"
         app:layout_constraintTop_toBottomOf="@id/guideline7" />
 
     <Button
-        android:id="@+id/login_phone_number"
+        android:id="@+id/loginPhoneNumber"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/btn"
         android:text="Sign up via Phone Number"
+        android:textColor="@color/white"
         android:textSize="20sp"
         app:cornerRadius="10dp"
         app:layout_constraintBottom_toTopOf="@id/guideline6"
         app:layout_constraintEnd_toStartOf="@id/guideline5"
         app:layout_constraintStart_toEndOf="@id/guideline4"
-        app:layout_constraintTop_toBottomOf="@id/login_email" />
+        app:layout_constraintTop_toBottomOf="@id/loginEmail" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
