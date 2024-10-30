@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/loginPage">
+
+    <fragment
+        android:id="@+id/loginPage"
+        android:name="com.example.main_project.LoginPage"
+        android:label="fragment_login_page"
+        tools:layout="@layout/fragment_login_page" />
+    <fragment
+        android:id="@+id/forgotPassword"
+        android:name="com.example.main_project.ForgotPassword"
+        android:label="fragment_forgot_password"
+        tools:layout="@layout/fragment_forgot_password" />
+    <fragment
+        android:id="@+id/signUp"
+        android:name="com.example.main_project.SignUp"
+        android:label="SignUp" />
+    <fragment
+        android:id="@+id/signupEmail"
+        android:name="com.example.main_project.SignupEmail"
+        android:label="SignupEmail" />
+    <fragment
+        android:id="@+id/verificationCode"
+        android:name="com.example.main_project.VerificationCode"
+        android:label="fragment_verified"
+        tools:layout="@layout/fragment_verified" />
+    <fragment
+        android:id="@+id/verified2"
+        android:name="com.example.main_project.verified"
+        android:label="verified" />
+    <fragment
+        android:id="@+id/splashScreen"
+        android:name="com.example.main_project.SplashScreen"
+        android:label="fragment_splash_screen"
+        tools:layout="@layout/fragment_splash_screen" >
+        <action
+            android:id="@+id/action_splashScreen_to_loginPage"
+            app:destination="@id/loginPage" />
+    </fragment>
+    <activity
+        android:id="@+id/mainActivity"
+        android:name="com.example.main_project.MainActivity"
+        android:label="activity_main"
+        tools:layout="@layout/activity_main" />
+
+</navigation>
