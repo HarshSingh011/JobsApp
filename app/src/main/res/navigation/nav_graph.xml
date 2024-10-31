@@ -51,5 +51,10 @@
         android:name="com.example.main_project.NewPassword"
         android:label="fragment_new_password"
         tools:layout="@layout/fragment_new_password" />
+    <fragment
+        android:id="@+id/loginSuccessful"
+        android:name="com.example.main_project.LoginSuccessful"
+        android:label="fragment_successfull"
+        tools:layout="@layout/fragment_successfull" />
 
 </navigation>

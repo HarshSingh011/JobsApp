@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.navigation.fragment.findNavController
 import com.example.main_project.databinding.FragmentSignUpBinding
 
@@ -25,6 +26,13 @@ class SignUp : Fragment() {
         binding.loginPhoneNumber.setOnClickListener {
             findNavController().navigate(R.id.signupEmail)
         }
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                findNavController().navigate(R.id.loginPage)
+            }
+        })
+
         return binding.root
     }
 }
