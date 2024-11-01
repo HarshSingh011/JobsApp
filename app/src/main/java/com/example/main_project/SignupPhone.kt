@@ -1,19 +1,19 @@
 package com.example.main_project
 
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
-import androidx.fragment.app.Fragment
+import androidx.core.widget.doOnTextChanged
 import androidx.navigation.fragment.findNavController
 import com.example.main_project.databinding.FragmentSignupEmailBinding
-import androidx.core.widget.doOnTextChanged
 
-class SignupEmail : Fragment() {
+class SignupPhone : Fragment() {
+
     private var _binding: FragmentSignupEmailBinding? = null
     private val binding get() = _binding!!
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -54,13 +54,6 @@ class SignupEmail : Fragment() {
         val password = binding.editPassword.editText?.text.toString()
 
         var hasError = false
-
-        val passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,20}$".toRegex()
-        if ( !passwordRegex.matches(password)) {
-            binding.editPassword.error = "Password must be 8-20 characters, include uppercase, lowercase, number, and special symbol"
-            hasError = true
-        }
-
 
         if (email.isBlank()) {
             binding.editEmail.error = "*Required"

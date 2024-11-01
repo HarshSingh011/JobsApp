@@ -56,5 +56,10 @@
         android:name="com.example.main_project.LoginSuccessful"
         android:label="fragment_successfull"
         tools:layout="@layout/fragment_successfull" />
+    <fragment
+        android:id="@+id/signupPhone"
+        android:name="com.example.main_project.SignupPhone"
+        android:label="fragment_signup_phone"
+        tools:layout="@layout/fragment_signup_phone" />
 
 </navigation>

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    tools:context=".SignupEmail">
+    tools:context=".SignupPhone">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline4"
@@ -44,7 +44,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="2dp"
-        android:text="Sign up with Email"
+        android:text="Sign up with Phone Number"
         android:textColor="@color/white"
         android:textSize="25sp"
         android:textStyle="bold"
@@ -92,7 +92,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="start"
-        android:text="Email:"
+        android:text="Phone Number:"
         android:textColor="@color/black"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@id/edit_email"
@@ -122,7 +122,7 @@
             android:textSize="14sp"
             android:textColorHint="@color/black"
             android:textColor="@color/black"
-            android:hint="Enter your email"
+            android:hint="Enter your phone number"
             android:background="@drawable/edittext_prop"/>
     </com.google.android.material.textfield.TextInputLayout>
 

@@ -24,7 +24,7 @@ class SignUp : Fragment() {
         }
 
         binding.loginPhoneNumber.setOnClickListener {
-            findNavController().navigate(R.id.signupEmail)
+            findNavController().navigate(R.id.signupPhone)
         }
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {

@@ -47,12 +47,25 @@ class NewPassword : Fragment() {
     }
 
     private fun validateInputs() {
-        val email = binding.typePassword.editText?.text.toString()
+        val type = binding.typePassword.editText?.text.toString()
         val password = binding.editPassword.editText?.text.toString()
 
         var hasError = false
 
-        if (email.isBlank()) {
+        if( type != password ){
+            binding.typePassword.error="Not matched"
+            binding.editPassword.error="Not matched"
+            hasError=true
+        }
+
+        val passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,20}$".toRegex()
+        if ( !passwordRegex.matches(type) || !passwordRegex.matches(password)) {
+            binding.editPassword.error = "8-20 char,A-Z, a-z, 0-9, and symbol"
+            binding.typePassword.error = "8-20 char,A-Z, a-z, 0-9, and symbol"
+            hasError = true
+        }
+
+        if (type.isBlank()) {
             binding.typePassword.error = "*Required"
             hasError = true
         }
