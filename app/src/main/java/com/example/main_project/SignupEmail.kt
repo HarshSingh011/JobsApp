@@ -4,15 +4,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.main_project.databinding.FragmentSignupEmailBinding
 import androidx.core.widget.doOnTextChanged
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class SignupEmail : Fragment() {
     private var _binding: FragmentSignupEmailBinding? = null
     private val binding get() = _binding!!
+    private val sharedViewModel: RegisterViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,6 +37,7 @@ class SignupEmail : Fragment() {
                 findNavController().navigate(R.id.loginPage)
             }
         })
+
         return binding.root
     }
 
@@ -46,21 +53,14 @@ class SignupEmail : Fragment() {
                 binding.editPassword.error = null
             }
         }
-
     }
 
     private fun validateInputs() {
+
         val email = binding.editEmail.editText?.text.toString()
         val password = binding.editPassword.editText?.text.toString()
 
         var hasError = false
-
-        val passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,20}$".toRegex()
-        if ( !passwordRegex.matches(password)) {
-            binding.editPassword.error = "Password must be 8-20 characters, include uppercase, lowercase, number, and special symbol"
-            hasError = true
-        }
-
 
         if (email.isBlank()) {
             binding.editEmail.error = "*Required"
@@ -72,10 +72,49 @@ class SignupEmail : Fragment() {
             hasError = true
         }
 
+
         if (!hasError) {
-            findNavController().navigate(R.id.verificationCode)
+            sendDataToApi(email, password)
         }
     }
+
+    private fun sendDataToApi(email: String, password: String) {
+        val firstName = sharedViewModel.firstName
+        val lastName = sharedViewModel.lastName
+
+        val request = RegisterRequestEmail(firstName, lastName, email, password)
+
+        RetrofitClient.instance.register(request).enqueue(object : Callback<RegisterResponse> {
+            override fun onResponse(call: Call<RegisterResponse>, response: Response<RegisterResponse>) {
+                if (response.isSuccessful && response.body() != null) {
+                    val responseMessage = response.body()?.message ?: "Registration successful"
+
+                    if (responseMessage == "Email already exists") {
+                        Toast.makeText(requireContext(), responseMessage, Toast.LENGTH_SHORT).show()
+                        binding.editEmail.error = responseMessage
+                        return
+                    } else {
+                        Toast.makeText(requireContext(), "Registration successful", Toast.LENGTH_SHORT).show()
+                        findNavController().navigate(R.id.verificationCode)
+                    }
+                } else {
+                    val errorMessage = response.errorBody()?.string() ?: "Invalid credentials"
+                    Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
+                    binding.editEmail.error = "Invalid credentials"
+                }
+            }
+
+            override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
+                if (t is java.net.SocketTimeoutException) {
+                    Toast.makeText(requireContext(), "Request timed out. Please try again.", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(requireContext(), "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+                }
+                binding.editEmail.error = "Error: ${t.message}"
+            }
+        })
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

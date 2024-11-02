@@ -12,4 +12,12 @@ interface ApiService {
     @POST("api/v1/auth/forgot-password")
     fun forgotPassword(@Body request: ForgotPasswordRequest): Call<ForgotPasswordResponse>
 
+    @POST("api/v1/auth/register")
+    fun register(@Body request: RegisterRequestEmail): Call<RegisterResponse>
+
+    @POST("api/v1/auth/register")
+    fun register(@Body request: RegisterRequestPhone): Call<RegisterResponse>
+    @POST("validate")
+    fun validateOtp(@Body request: OtpRequest): Call<OtpResponse>
+
 }

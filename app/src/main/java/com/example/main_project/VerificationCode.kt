@@ -3,19 +3,25 @@ package com.example.main_project
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.main_project.databinding.FragmentVerificationCodeBinding
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class VerificationCode : Fragment() {
 
     private var _binding: FragmentVerificationCodeBinding? = null
     private val binding get() = _binding!!
+    private val sharedViewModel: RegisterViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -25,7 +31,8 @@ class VerificationCode : Fragment() {
 
         binding.loginBtn.setOnClickListener {
             if (areAllDigitsEntered()) {
-                findNavController().navigate(R.id.verified)
+                val otp = getEnteredOtp()
+                sendOtpToApi(sharedViewModel.email, otp)
             } else {
                 clearAllEntries()
                 setEditTextErrorOutline()
@@ -42,6 +49,42 @@ class VerificationCode : Fragment() {
         setUpOtpEditTexts()
 
         return binding.root
+    }
+
+    private fun getEnteredOtp(): String {
+        return binding.digitOne.text.toString() +
+                binding.digitTwo.text.toString() +
+                binding.digitThree.text.toString() +
+                binding.digitFour.text.toString() +
+                binding.digitFive.text.toString() +
+                binding.digitSix.text.toString()
+    }
+
+    private fun sendOtpToApi(contact: String, otp: String) {
+        val request = OtpRequest(contact = contact, otp = otp)
+        val call = RetrofitClient.instance.validateOtp(request)
+
+        call.enqueue(object : Callback<OtpResponse> {
+            override fun onResponse(call: Call<OtpResponse>, response: Response<OtpResponse>) {
+                if (response.isSuccessful && response.body() != null) {
+                    val token = response.body()?.token
+                    if (token != null) {
+                        Toast.makeText(context, response.body()!!.message, Toast.LENGTH_SHORT).show()
+                        findNavController().navigate(R.id.verified) // Navigate to the verified fragment
+                    } else {
+                        clearAllEntries()
+                        Toast.makeText(context, "Invalid OTP, please try again.", Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    clearAllEntries()
+                    Toast.makeText(context, "Invalid OTP, please try again.", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<OtpResponse>, t: Throwable) {
+                Toast.makeText(context, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     private fun setUpOtpEditTexts() {
@@ -75,7 +118,6 @@ class VerificationCode : Fragment() {
                 override fun afterTextChanged(s: Editable?) {}
             })
 
-            // Override back button behavior
             editText.setOnKeyListener { v, keyCode, event ->
                 if (keyCode == android.view.KeyEvent.KEYCODE_DEL && (editText.text.isEmpty() && editText.isFocused)) {
                     val previousIndex = editTexts.indexOf(editText) - 1
@@ -123,22 +165,6 @@ class VerificationCode : Fragment() {
         binding.digitFour.text.clear()
         binding.digitFive.text.clear()
         binding.digitSix.text.clear()
-    }
-
-    private fun clearAllOutlines() {
-        val editTexts = listOf(
-            binding.digitOne,
-            binding.digitTwo,
-            binding.digitThree,
-            binding.digitFour,
-            binding.digitFive,
-            binding.digitSix
-        )
-
-        // Reset backgrounds to default
-        for (editText in editTexts) {
-            editText.background = resources.getDrawable(R.drawable.edittext_prop)
-        }
     }
 
     private fun unfocusEditTexts() {

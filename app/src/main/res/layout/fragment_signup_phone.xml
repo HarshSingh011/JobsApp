@@ -122,7 +122,7 @@
             android:textSize="14sp"
             android:textColorHint="@color/black"
             android:textColor="@color/black"
-            android:hint="Enter your phone number"
+            android:hint="Enter your Phone Number"
             android:background="@drawable/edittext_prop"/>
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -162,7 +162,7 @@
             android:layout_height="wrap_content"
             android:textSize="14sp"
             android:maxLength="20"
-            android:hint="Enter your password"
+            android:hint="Enter your Password"
             android:textColorHint="@color/black"
             android:textColor="@color/black"
             android:inputType="textPassword"
@@ -170,18 +170,6 @@
             />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <CheckBox
-        android:id="@+id/chkbox"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="17dp"
-        android:textSize="12sp"
-        android:text="I agree to the Terms and Conditions and Privacy Policy."
-        android:textColor="@color/black"
-        app:layout_constraintEnd_toStartOf="@+id/guideline5"
-        app:layout_constraintStart_toEndOf="@id/guideline4"
-        app:layout_constraintTop_toBottomOf="@id/edit_password"
-        app:layout_constraintBottom_toBottomOf="@id/guideline6"/>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline6"
@@ -203,7 +191,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/btn"
-        android:text="Get OTP"
+        android:text="Continue"
         android:textSize="20sp"
         app:cornerRadius="10dp"
         android:textColor="@color/white"

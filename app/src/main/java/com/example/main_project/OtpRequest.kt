@@ -1,7 +1,6 @@
 package com.example.main_project
 
-data class LoginRequest(
+class OtpRequest (
     val contact: String,
-    val password: String
+    val otp: String
 )
-

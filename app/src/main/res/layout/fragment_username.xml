@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    tools:context=".SignupEmail">
+    tools:context=".Username">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline4"
@@ -44,7 +44,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="2dp"
-        android:text="Sign up with Email"
+        android:text="Name"
         android:textColor="@color/white"
         android:textSize="25sp"
         android:textStyle="bold"
@@ -92,7 +92,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="start"
-        android:text="Email:"
+        android:text="First Name:"
         android:textColor="@color/black"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@id/edit_email"
@@ -102,7 +102,7 @@
         app:layout_constraintVertical_chainStyle="spread" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/edit_email"
+        android:id="@+id/edit_first_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:inputType="textEmailAddress"
@@ -117,12 +117,13 @@
         app:layout_constraintTop_toBottomOf="@id/text_email">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editTextFirstName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="14sp"
             android:textColorHint="@color/black"
             android:textColor="@color/black"
-            android:hint="Enter your email:"
+            android:hint="Enter your first name"
             android:background="@drawable/edittext_prop"/>
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -131,16 +132,16 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="start"
-        android:text="Password:"
+        android:text="Last Name:"
         android:textSize="18sp"
         android:textColor="@color/black"
-        app:layout_constraintBottom_toTopOf="@id/edit_password"
+        app:layout_constraintBottom_toTopOf="@id/edit_last_name"
         app:layout_constraintEnd_toStartOf="@id/guideline5"
         app:layout_constraintStart_toEndOf="@id/guideline4"
-        app:layout_constraintTop_toBottomOf="@id/edit_email" />
+        app:layout_constraintTop_toBottomOf="@id/edit_first_name" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/edit_password"
+        android:id="@+id/edit_last_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textColor="@color/black"
@@ -148,8 +149,6 @@
         app:helperText=""
         app:hintEnabled="false"
         app:helperTextTextColor="@color/red"
-        app:endIconMode="password_toggle"
-        app:endIconTintMode="@color/black"
         app:counterMaxLength="20"
         app:counterEnabled="true"
         app:layout_constraintBottom_toTopOf="@id/guideline6"
@@ -158,30 +157,19 @@
         app:layout_constraintTop_toBottomOf="@+id/text_password">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editTextLastName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="14sp"
             android:maxLength="20"
-            android:hint="Enter your password"
+            android:hint="Enter your last name"
             android:textColorHint="@color/black"
             android:textColor="@color/black"
-            android:inputType="textPassword"
+            android:inputType="textPersonName"
             android:background="@drawable/edittext_prop"
             />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <CheckBox
-        android:id="@+id/chkbox"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="17dp"
-        android:textSize="12sp"
-        android:text="I agree to the Terms and Conditions and Privacy Policy."
-        android:textColor="@color/black"
-        app:layout_constraintEnd_toStartOf="@+id/guideline5"
-        app:layout_constraintStart_toEndOf="@id/guideline4"
-        app:layout_constraintTop_toBottomOf="@id/edit_password"
-        app:layout_constraintBottom_toBottomOf="@id/guideline6"/>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline6"
@@ -199,11 +187,11 @@
         app:layout_constraintGuide_percent="0.90" />
 
     <Button
-        android:id="@+id/getOTP"
+        android:id="@+id/contactenter"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/btn"
-        android:text="Get OTP"
+        android:text="Continue"
         android:textSize="20sp"
         app:cornerRadius="10dp"
         android:textColor="@color/white"
@@ -221,7 +209,7 @@
         android:textColor="@color/btn"
         app:layout_constraintStart_toEndOf="@+id/guideline4"
         app:layout_constraintEnd_toStartOf="@+id/guideline5"
-        app:layout_constraintTop_toBottomOf="@id/getOTP"
+        app:layout_constraintTop_toBottomOf="@id/contactenter"
         app:layout_constraintBottom_toTopOf="@id/guideline9"/>
 
     <androidx.constraintlayout.widget.Guideline

@@ -56,20 +56,18 @@ class ForgotPassword : Fragment() {
     }
 
     private fun sendForgotPasswordRequest(username: String) {
-        val request = ForgotPasswordRequest(username = username)
+        val request = ForgotPasswordRequest(contact = username)
 
         RetrofitClient.instance.forgotPassword(request).enqueue(object : Callback<ForgotPasswordResponse> {
             override fun onResponse(call: Call<ForgotPasswordResponse>, response: Response<ForgotPasswordResponse>) {
                 if (response.isSuccessful && response.body() != null) {
                     val forgotPasswordResponse = response.body()!!
 
-                    // Show the success message and navigate to newPassword
                     Toast.makeText(requireContext(), forgotPasswordResponse.message, Toast.LENGTH_SHORT).show()
                     findNavController().navigate(R.id.newPassword)
                 } else {
-                    // Handle the case where the response is unsuccessful or body is null
-                    binding.editEmail.error = "Invalid username" // Show error in EditText
-                    Toast.makeText(requireContext(), "Invalid username", Toast.LENGTH_SHORT).show() // Show toast message
+                    binding.editEmail.error = "Invalid username"
+                    Toast.makeText(requireContext(), "Invalid username", Toast.LENGTH_SHORT).show()
                     Log.e("ForgotPasswordError", "Response code: ${response.code()} - ${response.message()}")
                 }
             }
