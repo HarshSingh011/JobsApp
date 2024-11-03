@@ -18,11 +18,13 @@ class LoginSuccessful : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_successfull, container, false)
 
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                findNavController().navigate(R.id.loginPage)
-            }
-        })
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    activity?.finish()
+                }
+            })
 
         val loginBtn: Button = view.findViewById(R.id.login_btn)
         loginBtn.setOnClickListener {

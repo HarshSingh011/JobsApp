@@ -39,6 +39,7 @@ class LoginPage : Fragment() {
 
         binding.loginBtn.setOnClickListener {
             validateInputs()
+            binding.progressBar.visibility = View.VISIBLE
         }
 
         binding.editEmail.editText?.doOnTextChanged { text, _, _, _ ->
@@ -107,18 +108,16 @@ class LoginPage : Fragment() {
             return
         }
 
-        binding.progressBar.visibility = View.VISIBLE
 
         RetrofitClient.instance.login(request).enqueue(object : Callback<LoginResponse> {
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
-                binding.progressBar.visibility = View.GONE // Hide loading indicator
-
+                binding.progressBar.visibility = View.GONE
+                findNavController().navigate(R.id.loginSuccessful)
                 if (response.isSuccessful) {
                     response.body()?.let { loginResponse ->
                         val token = loginResponse.token
 
                         if (token != null) {
-                            // Store the token in SharedPreferences
                             val sharedPreferences = requireContext().getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE)
                             sharedPreferences.edit().putString("user_token", token).apply()
 
@@ -127,7 +126,7 @@ class LoginPage : Fragment() {
                                 loginResponse.message,
                                 Toast.LENGTH_SHORT
                             ).show()
-                            findNavController().navigate(R.id.loginSuccessful)
+
                         } else {
                             showInvalidCredentialsError()
                         }

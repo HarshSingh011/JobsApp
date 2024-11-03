@@ -122,7 +122,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/btn"
-        android:text="Continue"
+        android:text="Log Out"
         android:textSize="20sp"
         android:textColor="@color/white"
         app:cornerRadius="10dp"

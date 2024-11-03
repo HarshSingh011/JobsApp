@@ -7,7 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.navigation.fragment.findNavController
+import com.example.main_project.databinding.FragmentVerifiedBinding
+
 class Verified : Fragment() {
+
+    private var _binding: FragmentVerifiedBinding? = null
+    private val binding get() = _binding!!
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -19,6 +24,9 @@ class Verified : Fragment() {
             }
         })
 
+        binding.loginPg.setOnClickListener {
+            findNavController().navigate(R.id.loginPage)
+        }
 
         return inflater.inflate(R.layout.fragment_verified, container, false)
     }

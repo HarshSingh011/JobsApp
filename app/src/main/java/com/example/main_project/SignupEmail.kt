@@ -39,6 +39,10 @@ class SignupEmail : Fragment() {
             }
         })
 
+        binding.signin.setOnClickListener {
+            findNavController().navigate(R.id.loginPage)
+        }
+
         return binding.root
     }
     private fun setupTextWatchers() {

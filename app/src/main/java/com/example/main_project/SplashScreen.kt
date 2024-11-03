@@ -27,14 +27,11 @@ class SplashScreen : Fragment() {
             val token = sharedPreferences.getString("user_token", null)
 
             if (token != null) {
-                // Token exists, navigate to LoginSuccessful
                 findNavController().navigate(R.id.loginSuccessful)
             } else {
-                // Token doesn't exist, navigate to LoginPage
                 findNavController().navigate(R.id.loginPage)
             }
         }, 3000)
-
         return binding.root
     }
 

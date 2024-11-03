@@ -31,6 +31,10 @@ class SignupPhone : Fragment() {
             validateInputs()
         }
 
+        binding.signin.setOnClickListener {
+            findNavController().navigate(R.id.loginPage)
+        }
+
         setupTextWatchers()
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {

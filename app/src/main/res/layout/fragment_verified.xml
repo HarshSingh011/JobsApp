@@ -118,11 +118,11 @@
         app:layout_constraintGuide_percent="0.85" />
 
     <Button
-        android:id="@+id/login_btn"
+        android:id="@+id/loginPg"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/btn"
-        android:text="Continue"
+        android:text="Log In"
         android:textSize="20sp"
         android:textColor="@color/white"
         app:cornerRadius="10dp"
