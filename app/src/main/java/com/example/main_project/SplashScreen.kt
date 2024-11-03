@@ -1,5 +1,6 @@
 package com.example.main_project
 
+import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -22,7 +23,16 @@ class SplashScreen : Fragment() {
         _binding = FragmentSplashScreenBinding.inflate(inflater, container, false)
 
         Handler(Looper.getMainLooper()).postDelayed({
-            findNavController().navigate(R.id.loginPage)
+            val sharedPreferences = requireContext().getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE)
+            val token = sharedPreferences.getString("user_token", null)
+
+            if (token != null) {
+                // Token exists, navigate to LoginSuccessful
+                findNavController().navigate(R.id.loginSuccessful)
+            } else {
+                // Token doesn't exist, navigate to LoginPage
+                findNavController().navigate(R.id.loginPage)
+            }
         }, 3000)
 
         return binding.root

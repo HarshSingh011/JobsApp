@@ -48,15 +48,25 @@ class ForgotPassword : Fragment() {
     }
 
     private fun validateInput() {
-        val username = binding.editEmail.editText?.text.toString()
+        val input = binding.editEmail.editText?.text.toString().trim()
 
-        if (username.isBlank()) {
+        if (input.isBlank()) {
             binding.editEmail.error = "*Required"
         } else {
+            var username = ""
+            val phoneRegex = "^[0-9]{10}$".toRegex()
+            if (phoneRegex.matches(input)) {
+                username = "+91$input"
+            } else {
+                username = input
+            }
+
             sharedViewModel.contact = username
+            println(username)
             sendForgotPasswordRequest(username)
         }
     }
+
 
     private fun sendForgotPasswordRequest(username: String) {
         val request = ForgotPasswordRequest(contact = username)

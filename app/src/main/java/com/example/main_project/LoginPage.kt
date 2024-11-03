@@ -53,48 +53,51 @@ class LoginPage : Fragment() {
             }
         }
 
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                activity?.finish()
-            }
-        })
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    activity?.finish()
+                }
+            })
 
         return binding.root
     }
 
     private fun validateInputs() {
-        val email = binding.editEmail.editText?.text.toString()
-        val password = binding.editPassword.editText?.text.toString()
+        var input = binding.editEmail.editText?.text.toString().trim()
+        val password = binding.editPassword.editText?.text.toString().trim()
 
         var hasError = false
 
-        val passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,20}$".toRegex()
+        if (input.isBlank()) {
+            binding.editEmail.error = "*Required"
+            hasError = true
+        } else {
+            val phoneRegex = "^[0-9]{10}$".toRegex()
+            if (phoneRegex.matches(input)) {
+                input = "+91$input"
+            }
+        }
+
+        val passwordRegex =
+            "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,20}$".toRegex()
         if (!passwordRegex.matches(password)) {
             binding.editPassword.error = "8-20 char, A-Z, a-z, 0-9, and symbol"
             hasError = true
         }
 
-        if (email.isBlank()) {
-            binding.editEmail.error = "*Required"
-            hasError = true
-        }
+        if (hasError) return
 
-        if (password.isBlank()) {
-            binding.editPassword.error = "*Required"
-            hasError = true
-        }
-
-        if (!hasError) {
-            loginUser(email, password)
-        }
+        loginUser(input, password)
     }
 
     private fun isNetworkAvailable(): Boolean {
-        val connectivityManager = requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val connectivityManager =
+            requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val activeNetwork = connectivityManager.activeNetworkInfo
         return activeNetwork?.isConnectedOrConnecting == true
     }
-
 
     private fun loginUser(email: String, password: String) {
         val request = LoginRequest(contact = email, password = password)
@@ -104,7 +107,6 @@ class LoginPage : Fragment() {
             return
         }
 
-        // Show loading indicator
         binding.progressBar.visibility = View.VISIBLE
 
         RetrofitClient.instance.login(request).enqueue(object : Callback<LoginResponse> {
@@ -116,7 +118,15 @@ class LoginPage : Fragment() {
                         val token = loginResponse.token
 
                         if (token != null) {
-                            Toast.makeText(requireContext(), loginResponse.message, Toast.LENGTH_SHORT).show()
+                            // Store the token in SharedPreferences
+                            val sharedPreferences = requireContext().getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE)
+                            sharedPreferences.edit().putString("user_token", token).apply()
+
+                            Toast.makeText(
+                                requireContext(),
+                                loginResponse.message,
+                                Toast.LENGTH_SHORT
+                            ).show()
                             findNavController().navigate(R.id.loginSuccessful)
                         } else {
                             showInvalidCredentialsError()
@@ -133,23 +143,33 @@ class LoginPage : Fragment() {
 
                 if (t is IOException) {
                     if (t.message?.contains("timeout") == true) {
-                        Toast.makeText(requireContext(), "Network timeout. Please try again.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            requireContext(),
+                            "Network timeout. Please try again.",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     } else {
-                        Toast.makeText(requireContext(), "Network error: ${t.message}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            requireContext(),
+                            "Network error: ${t.message}",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 } else {
-                    Toast.makeText(requireContext(), "Unexpected error: ${t.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        "Unexpected error: ${t.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         })
     }
 
-
     private fun showInvalidCredentialsError() {
         binding.editEmail.error = "Invalid credentials"
         binding.editPassword.error = "Invalid credentials"
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()

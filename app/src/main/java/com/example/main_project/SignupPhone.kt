@@ -56,12 +56,12 @@ class SignupPhone : Fragment() {
     }
 
     private fun validateInputs() {
-        val mobile = binding.editEmail.editText?.text.toString()
+        val input = binding.editEmail.editText?.text.toString()
         val password = binding.editPassword.editText?.text.toString()
 
         var hasError = false
 
-        if (mobile.isBlank()) {
+        if (input.isBlank()) {
             binding.editEmail.error = "*Required"
             hasError = true
         }
@@ -72,6 +72,10 @@ class SignupPhone : Fragment() {
         }
 
         if (!hasError) {
+            var mobile = "+91$input"
+            sharedViewModel.email = mobile
+            println(mobile)
+            println(password)
             sendDataToApi(mobile, password)
         }
     }

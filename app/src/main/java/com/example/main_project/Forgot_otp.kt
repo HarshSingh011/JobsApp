@@ -32,6 +32,7 @@ class Forgot_otp : Fragment() {
         binding.loginBtn.setOnClickListener {
             if (areAllDigitsEntered()) {
                 val otp = getEnteredOtp()
+                println(sharedViewModel.contact)
                 sendOtpToApi(sharedViewModel.contact, otp, sharedViewModel.newPassword, sharedViewModel.confirmPassword)
             } else {
                 clearAllEntries()

@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 
 class ForgotPasswordViewModel : ViewModel() {
     var contact: String = ""
-    var otp: String = ""
     var newPassword: String = ""
     var confirmPassword: String = ""
 }

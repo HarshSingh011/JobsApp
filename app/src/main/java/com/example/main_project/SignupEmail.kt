@@ -11,6 +11,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.main_project.databinding.FragmentSignupEmailBinding
 import androidx.core.widget.doOnTextChanged
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -88,32 +89,38 @@ class SignupEmail : Fragment() {
                 if (response.isSuccessful && response.body() != null) {
                     val responseMessage = response.body()?.message ?: "Registration successful"
 
-                    if (responseMessage == "Email already exists") {
-                        Toast.makeText(requireContext(), responseMessage, Toast.LENGTH_SHORT).show()
-                        binding.editEmail.error = responseMessage
-                        return
-                    } else {
-                        Toast.makeText(requireContext(), "Registration successful", Toast.LENGTH_SHORT).show()
-                        findNavController().navigate(R.id.verificationCode)
-                    }
+                    Toast.makeText(requireContext(), responseMessage, Toast.LENGTH_SHORT).show()
+
+                    findNavController().navigate(R.id.verificationCode)
+
                 } else {
-                    val errorMessage = response.errorBody()?.string() ?: "Invalid credentials"
+                    val errorResponse = response.errorBody()?.string()
+                    val errorMessage = errorResponse?.let { parseErrorMessage(it) } ?: "An error occurred"
                     Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
-                    binding.editEmail.error = "Invalid credentials"
+                    binding.editEmail.error = errorMessage
                 }
             }
 
             override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
-                if (t is java.net.SocketTimeoutException) {
-                    Toast.makeText(requireContext(), "Request timed out. Please try again.", Toast.LENGTH_SHORT).show()
+                val errorMessage = if (t is java.net.SocketTimeoutException) {
+                    "Request timed out. Please try again."
                 } else {
-                    Toast.makeText(requireContext(), "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+                    "Error: ${t.message}"
                 }
-                binding.editEmail.error = "Error: ${t.message}"
+                Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
+                binding.editEmail.error = errorMessage
             }
         })
     }
 
+    private fun parseErrorMessage(response: String): String {
+        return try {
+            val jsonObject = JSONObject(response)
+            jsonObject.getString("message")
+        } catch (e: Exception) {
+            "An error occurred"
+        }
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
