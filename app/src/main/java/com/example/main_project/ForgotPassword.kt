@@ -10,6 +10,7 @@ import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import android.widget.Toast
+import androidx.fragment.app.activityViewModels
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -19,6 +20,7 @@ class ForgotPassword : Fragment() {
 
     private var _binding: FragmentForgotPasswordBinding? = null
     private val binding get() = _binding!!
+    private val sharedViewModel: ForgotPasswordViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,6 +53,7 @@ class ForgotPassword : Fragment() {
         if (username.isBlank()) {
             binding.editEmail.error = "*Required"
         } else {
+            sharedViewModel.contact = username
             sendForgotPasswordRequest(username)
         }
     }

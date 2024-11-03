@@ -16,6 +16,9 @@
         android:theme="@style/Theme.Main_Project"
         tools:targetApi="31">
         <activity
+            android:name=".ForgotPasswordViewModel"
+            android:exported="false" />
+        <activity
             android:name=".RegisterViewModel"
             android:exported="false" />
         <activity

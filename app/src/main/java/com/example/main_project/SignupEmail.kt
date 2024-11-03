@@ -40,7 +40,6 @@ class SignupEmail : Fragment() {
 
         return binding.root
     }
-
     private fun setupTextWatchers() {
         binding.editEmail.editText?.doOnTextChanged { text, _, _, _ ->
             if (!text.isNullOrEmpty()) {
@@ -74,10 +73,10 @@ class SignupEmail : Fragment() {
 
 
         if (!hasError) {
+            sharedViewModel.email = email
             sendDataToApi(email, password)
         }
     }
-
     private fun sendDataToApi(email: String, password: String) {
         val firstName = sharedViewModel.firstName
         val lastName = sharedViewModel.lastName

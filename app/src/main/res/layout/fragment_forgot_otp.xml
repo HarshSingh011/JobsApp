@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    tools:context=".Forgot_otp">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.06" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.94" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.1" />
+
+
+    <TextView
+        android:id="@+id/ft_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="2dp"
+        android:text="Enter verification code"
+        android:textColor="@color/white"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/todo_text"
+        app:layout_constraintEnd_toStartOf="@id/guideline5"
+        app:layout_constraintStart_toEndOf="@id/guideline4"
+        app:layout_constraintTop_toBottomOf="@id/guideline1" />
+
+    <TextView
+        android:id="@+id/todo_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="2dp"
+        android:text="Please enter the verification code we have sent to\nabc@gamil.com"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toTopOf="@id/guideline3"
+        app:layout_constraintEnd_toStartOf="@id/guideline5"
+        app:layout_constraintStart_toEndOf="@id/guideline4"
+        app:layout_constraintTop_toBottomOf="@id/ft_text" />
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.30642954" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.42">
+
+    </androidx.constraintlayout.widget.Guideline>
+
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/bg_shape"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline2">
+
+    </ImageView>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.52" />
+
+    <EditText
+        android:id="@+id/digit_one"
+        android:layout_width="50dp"
+        android:layout_height="0dp"
+        android:background="@drawable/edittext_prop"
+        android:maxLength="1"
+        android:maxEms="1"
+        android:gravity="center"
+        android:inputType="number"
+        android:padding="8dp"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@id/guideline6"
+        app:layout_constraintEnd_toStartOf="@id/digit_two"
+        app:layout_constraintStart_toEndOf="@id/guideline4"
+        app:layout_constraintTop_toBottomOf="@id/guideline7"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        android:layout_marginEnd="2dp"/>
+
+    <EditText
+        android:id="@+id/digit_two"
+        android:layout_width="50dp"
+        android:layout_height="0dp"
+        android:background="@drawable/edittext_prop"
+        android:maxLength="1"
+        android:maxEms="1"
+        android:gravity="center"
+        android:inputType="number"
+        android:padding="8dp"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@id/guideline6"
+        app:layout_constraintEnd_toStartOf="@id/digit_three"
+        app:layout_constraintStart_toEndOf="@id/digit_one"
+        app:layout_constraintTop_toBottomOf="@id/guideline7"
+        android:layout_marginEnd="2dp"
+        android:layout_marginStart="2dp"/>
+
+    <EditText
+        android:id="@+id/digit_three"
+        android:layout_width="50dp"
+        android:layout_height="0dp"
+        android:background="@drawable/edittext_prop"
+        android:maxLength="1"
+        android:maxEms="1"
+        android:gravity="center"
+        android:inputType="number"
+        android:padding="8dp"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@id/guideline6"
+        app:layout_constraintEnd_toStartOf="@id/digit_four"
+        app:layout_constraintStart_toEndOf="@id/digit_two"
+        app:layout_constraintTop_toBottomOf="@id/guideline7"
+        android:layout_marginEnd="2dp"
+        android:layout_marginStart="2dp"/>
+
+    <EditText
+        android:id="@+id/digit_four"
+        android:layout_width="50dp"
+        android:layout_height="0dp"
+        android:background="@drawable/edittext_prop"
+        android:maxLength="1"
+        android:maxEms="1"
+        android:gravity="center"
+        android:inputType="number"
+        android:padding="8dp"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@id/guideline6"
+        app:layout_constraintEnd_toStartOf="@id/digit_five"
+        app:layout_constraintStart_toEndOf="@id/digit_three"
+        app:layout_constraintTop_toBottomOf="@id/guideline7"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        android:layout_marginStart="2dp"
+        android:layout_marginEnd="2dp"/>
+
+    <EditText
+        android:id="@+id/digit_five"
+        android:layout_width="50dp"
+        android:layout_height="0dp"
+        android:background="@drawable/edittext_prop"
+        android:maxLength="1"
+        android:maxEms="1"
+        android:gravity="center"
+        android:inputType="number"
+        android:padding="8dp"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@id/guideline6"
+        app:layout_constraintEnd_toStartOf="@id/digit_six"
+        app:layout_constraintStart_toEndOf="@id/digit_four"
+        app:layout_constraintTop_toBottomOf="@id/guideline7"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        android:layout_marginStart="2dp"
+        android:layout_marginEnd="2dp"/>
+
+    <EditText
+        android:id="@+id/digit_six"
+        android:layout_width="50dp"
+        android:layout_height="0dp"
+        android:background="@drawable/edittext_prop"
+        android:maxLength="1"
+        android:maxEms="1"
+        android:gravity="center"
+        android:inputType="number"
+        android:padding="8dp"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@id/guideline6"
+        app:layout_constraintEnd_toStartOf="@id/guideline5"
+        app:layout_constraintStart_toEndOf="@id/digit_five"
+        app:layout_constraintTop_toBottomOf="@id/guideline7"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        android:layout_marginStart="2dp"/>
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline6"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.60" />
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline8"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.75" />
+
+    <TextView
+        android:id="@+id/timer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Resend code in 30s"
+        android:textColor="@color/black"
+        android:gravity="center"
+        app:layout_constraintBottom_toTopOf="@id/login_btn"
+        app:layout_constraintEnd_toStartOf="@id/guideline5"
+        app:layout_constraintStart_toEndOf="@id/guideline4"
+        app:layout_constraintTop_toBottomOf="@id/guideline8"/>
+
+    <Button
+        android:id="@+id/login_btn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/btn"
+        android:text="Continue"
+        android:textSize="20sp"
+        app:cornerRadius="10dp"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toTopOf="@id/send_code"
+        app:layout_constraintEnd_toStartOf="@id/guideline5"
+        app:layout_constraintStart_toEndOf="@id/guideline4"
+        app:layout_constraintTop_toBottomOf="@id/timer" />
+
+    <TextView
+        android:id="@+id/send_code"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Try another way"
+        android:textColor="@color/background"
+        android:gravity="center"
+        app:layout_constraintBottom_toTopOf="@id/guideline9"
+        app:layout_constraintEnd_toStartOf="@+id/guideline5"
+        app:layout_constraintStart_toEndOf="@+id/guideline4"
+        app:layout_constraintTop_toBottomOf="@+id/login_btn"/>
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline9"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.95" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.doOnTextChanged
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.main_project.databinding.FragmentNewPasswordBinding
 
@@ -14,6 +15,7 @@ class NewPassword : Fragment() {
 
     private var _binding: FragmentNewPasswordBinding? = null
     private val binding get() = _binding!!
+    private val sharedViewModel: ForgotPasswordViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -76,7 +78,9 @@ class NewPassword : Fragment() {
         }
 
         if (!hasError) {
-            findNavController().navigate(R.id.verificationCode)
+            sharedViewModel.newPassword=type
+            sharedViewModel.confirmPassword=password
+            findNavController().navigate(R.id.forgot_otp)
         }
     }
 

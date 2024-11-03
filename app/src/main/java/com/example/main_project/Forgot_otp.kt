@@ -3,37 +3,36 @@ package com.example.main_project
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.example.main_project.databinding.FragmentVerificationCodeBinding
+import com.example.main_project.databinding.FragmentForgotOtpBinding
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class VerificationCode : Fragment() {
+class Forgot_otp : Fragment() {
 
-    private var _binding: FragmentVerificationCodeBinding? = null
+    private var _binding: FragmentForgotOtpBinding? = null
     private val binding get() = _binding!!
-    private val sharedViewModel: RegisterViewModel by activityViewModels()
+    private val sharedViewModel: ForgotPasswordViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentVerificationCodeBinding.inflate(inflater, container, false)
+        _binding = FragmentForgotOtpBinding.inflate(inflater, container, false)
 
         binding.loginBtn.setOnClickListener {
             if (areAllDigitsEntered()) {
                 val otp = getEnteredOtp()
-                println(sharedViewModel.email)
-                sendOtpToApi(sharedViewModel.email, otp)
+                sendOtpToApi(sharedViewModel.contact, otp, sharedViewModel.newPassword, sharedViewModel.confirmPassword)
             } else {
                 clearAllEntries()
                 setEditTextErrorOutline()
@@ -61,34 +60,33 @@ class VerificationCode : Fragment() {
                 binding.digitSix.text.toString()
     }
 
-    private fun sendOtpToApi(contact: String, otp: String) {
-        val request = OtpRequest(contact = contact, otp = otp)
-        println(contact)
-        println(otp)
-        val call = RetrofitClient.instance.validateOtp(request)
+    private fun sendOtpToApi(contact: String, otp: String, newPassword: String, confirmPassword: String) {
+        val request = ChangePasswordRequest(contact = contact, otp = otp, newPassword = newPassword, confirmPassword = confirmPassword)
+        val call = RetrofitClient.instance.changepassword(request)
 
-        call.enqueue(object : Callback<OtpResponse> {
-            override fun onResponse(call: Call<OtpResponse>, response: Response<OtpResponse>) {
+        call.enqueue(object : Callback<ChangePasswordResponse> {
+            override fun onResponse(call: Call<ChangePasswordResponse>, response: Response<ChangePasswordResponse>) {
                 if (response.isSuccessful && response.body() != null) {
-                    val token = response.body()?.token
-                    if (token != null) {
-                        Toast.makeText(context, response.body()!!.message, Toast.LENGTH_SHORT).show()
-                        findNavController().navigate(R.id.verified)
+                    val message = response.body()?.message
+                    if (message == "Password changed successfully") {
+                        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                        findNavController().navigate(R.id.verified) // Navigate to the next fragment
                     } else {
                         clearAllEntries()
-                        Toast.makeText(context, "Invalid OTP, please try again.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, message ?: "Unknown error", Toast.LENGTH_SHORT).show()
                     }
                 } else {
                     clearAllEntries()
-                    Toast.makeText(context, "Invalid OTP, please try again.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Invalid OTP or error occurred", Toast.LENGTH_SHORT).show()
                 }
             }
 
-            override fun onFailure(call: Call<OtpResponse>, t: Throwable) {
+            override fun onFailure(call: Call<ChangePasswordResponse>, t: Throwable) {
                 Toast.makeText(context, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
     }
+
 
     private fun setUpOtpEditTexts() {
         val editTexts = listOf(
@@ -119,8 +117,8 @@ class VerificationCode : Fragment() {
                 }
 
                 override fun afterTextChanged(s: Editable?) {}
-
             })
+
             editText.setOnKeyListener { v, keyCode, event ->
                 if (keyCode == android.view.KeyEvent.KEYCODE_DEL && (editText.text.isEmpty() && editText.isFocused)) {
                     val previousIndex = editTexts.indexOf(editText) - 1
@@ -132,7 +130,6 @@ class VerificationCode : Fragment() {
                     false
                 }
             }
-
         }
     }
 

@@ -3,6 +3,7 @@ package com.example.main_project
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.POST
+import retrofit2.http.PUT
 
 interface ApiService {
 
@@ -17,7 +18,11 @@ interface ApiService {
 
     @POST("api/v1/auth/register")
     fun register(@Body request: RegisterRequestPhone): Call<RegisterResponse>
-    @POST("validate")
+
+    @POST("api/v1/auth/validate")
     fun validateOtp(@Body request: OtpRequest): Call<OtpResponse>
+
+    @PUT("api/v1/auth/verify-otp")
+    fun changepassword(@Body request: ChangePasswordRequest): Call<ChangePasswordResponse>
 
 }
