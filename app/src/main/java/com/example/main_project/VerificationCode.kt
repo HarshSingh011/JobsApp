@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -112,11 +111,7 @@ class VerificationCode : Fragment() {
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                     if (s != null && s.isNotEmpty()) {
-                        editText.background = ResourcesCompat.getDrawable(
-                            resources,
-                            R.drawable.edittext_prop,
-                            null
-                        )
+                        editText.setBackgroundResource(R.drawable.edittext_prop)
                     }
 
                     if (s != null) {
@@ -131,7 +126,7 @@ class VerificationCode : Fragment() {
                 override fun afterTextChanged(s: Editable?) {}
             })
 
-            editText.setOnKeyListener { _, keyCode, _ ->
+            editText.setOnKeyListener { v, keyCode, _ ->
                 if (keyCode == android.view.KeyEvent.KEYCODE_DEL && editText.text.isEmpty()) {
                     val previousIndex = editTexts.indexOf(editText) - 1
                     if (previousIndex >= 0) {
@@ -165,11 +160,7 @@ class VerificationCode : Fragment() {
         )
 
         for (editText in editTexts) {
-            editText.background = ResourcesCompat.getDrawable(
-                resources,
-                R.drawable.error_prop,
-                null
-            )
+            editText.setBackgroundResource(R.drawable.error_prop)
         }
     }
 

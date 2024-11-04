@@ -34,38 +34,54 @@ class Username : Fragment() {
     private fun setupTextWatchers() {
         binding.editFirstName.editText?.doOnTextChanged { text, _, _, _ ->
             if (!text.isNullOrEmpty()) {
-                binding.editFirstName.error = null
+                resetFirstNameField()
             }
         }
 
         binding.editLastName.editText?.doOnTextChanged { text, _, _, _ ->
             if (!text.isNullOrEmpty()) {
-                binding.editLastName.error = null
+                resetLastNameField()
             }
         }
     }
 
     private fun validateAndNavigate() {
-        val firstName = binding.editFirstName.editText?.text.toString() ?: ""
-        val lastName = binding.editLastName.editText?.text.toString() ?: ""
+        val firstName = binding.editFirstName.editText?.text.toString()
+        val lastName = binding.editLastName.editText?.text.toString()
 
         var hasError = false
 
         if (firstName.isBlank()) {
             binding.editFirstName.error = "*Required"
+            binding.editFirstName.editText?.setBackgroundResource(R.drawable.error_prop)
             hasError = true
         }
 
         if (lastName.isBlank()) {
             binding.editLastName.error = "*Required"
+            binding.editLastName.editText?.setBackgroundResource(R.drawable.error_prop)
             hasError = true
         }
 
-        if (!hasError) {
+        if (hasError) {
+            // Clear focus from both EditTexts
+            binding.editFirstName.editText?.clearFocus()
+            binding.editLastName.editText?.clearFocus()
+        } else {
             sharedViewModel.firstName = firstName
             sharedViewModel.lastName = lastName
             findNavController().navigate(R.id.signUp)
         }
+    }
+
+    private fun resetFirstNameField() {
+        binding.editFirstName.error = null
+        binding.editFirstName.editText?.setBackgroundResource(R.drawable.edittext_prop)
+    }
+
+    private fun resetLastNameField() {
+        binding.editLastName.error = null
+        binding.editLastName.editText?.setBackgroundResource(R.drawable.edittext_prop)
     }
 
     override fun onDestroyView() {

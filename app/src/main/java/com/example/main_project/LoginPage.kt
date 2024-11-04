@@ -3,11 +3,12 @@ package com.example.main_project
 import android.content.Context
 import android.net.ConnectivityManager
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
-import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.main_project.databinding.FragmentLoginPageBinding
@@ -30,7 +31,7 @@ class LoginPage : Fragment() {
         _binding = FragmentLoginPageBinding.inflate(inflater, container, false)
 
         binding.forgot.setOnClickListener {
-            findNavController().navigate(R.id.forgotPassword)
+            findNavController().navigate(R.id.newPassword)
         }
 
         binding.signup.setOnClickListener {
@@ -46,7 +47,9 @@ class LoginPage : Fragment() {
             }
         }
 
-        // Focus change listeners to reset drawable when EditText regains focus
+        binding.editEmail.editText?.addTextChangedListener(resetErrorTextWatcher)
+        binding.editPassword.editText?.addTextChangedListener(resetErrorTextWatcher)
+
         binding.editEmail.editText?.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
                 resetToDefaultDrawable()
@@ -59,7 +62,6 @@ class LoginPage : Fragment() {
             }
         }
 
-        // Handle back press
         requireActivity().onBackPressedDispatcher.addCallback(
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
@@ -72,6 +74,14 @@ class LoginPage : Fragment() {
         return binding.root
     }
 
+    private val resetErrorTextWatcher = object : TextWatcher {
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        override fun afterTextChanged(s: Editable?) {
+            resetToDefaultDrawable()
+        }
+    }
+
     private fun validateInputs() {
         var input = binding.editEmail.editText?.text.toString().trim()
         val password = binding.editPassword.editText?.text.toString().trim()
@@ -80,18 +90,10 @@ class LoginPage : Fragment() {
 
         if (input.isBlank()) {
             binding.editEmail.error = "*Required"
-            binding.editEmail.editText?.background = ResourcesCompat.getDrawable(
-                resources,
-                R.drawable.error_prop,
-                null
-            )
+            binding.editEmail.editText?.setBackgroundResource(R.drawable.error_prop)
             hasError = true
         } else {
-            binding.editEmail.editText?.background = ResourcesCompat.getDrawable(
-                resources,
-                R.drawable.edittext_prop,
-                null
-            )
+            binding.editEmail.editText?.setBackgroundResource(R.drawable.edittext_prop)
             val phoneRegex = "^[0-9]{10}$".toRegex()
             if (phoneRegex.matches(input)) {
                 input = "+91$input"
@@ -101,22 +103,14 @@ class LoginPage : Fragment() {
         val passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,20}$".toRegex()
         if (!passwordRegex.matches(password)) {
             binding.editPassword.error = "8-20 char, A-Z, a-z, 0-9, and symbol"
-            binding.editPassword.editText?.background = ResourcesCompat.getDrawable(
-                resources,
-                R.drawable.error_prop,
-                null
-            )
+            binding.editPassword.editText?.setBackgroundResource(R.drawable.error_prop)
             hasError = true
         } else {
-            binding.editPassword.editText?.background = ResourcesCompat.getDrawable(
-                resources,
-                R.drawable.edittext_prop,
-                null
-            )
+            binding.editPassword.editText?.setBackgroundResource(R.drawable.edittext_prop)
         }
 
         if (hasError) {
-            binding.progressBar.visibility = View.GONE // Hide progress bar if validation fails
+            binding.progressBar.visibility = View.GONE
             return
         }
 
@@ -178,34 +172,16 @@ class LoginPage : Fragment() {
     private fun showError(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
 
-        // Apply error drawable to both EditTexts in case of API error
-        binding.editEmail.editText?.background = ResourcesCompat.getDrawable(
-            resources,
-            R.drawable.error_prop,
-            null
-        )
-        binding.editPassword.editText?.background = ResourcesCompat.getDrawable(
-            resources,
-            R.drawable.error_prop,
-            null
-        )
+        binding.editEmail.editText?.setBackgroundResource(R.drawable.error_prop)
+        binding.editPassword.editText?.setBackgroundResource(R.drawable.error_prop)
 
-        // Remove focus from both EditTexts after showing error
         binding.editEmail.editText?.clearFocus()
         binding.editPassword.editText?.clearFocus()
     }
 
     private fun resetToDefaultDrawable() {
-        binding.editEmail.editText?.background = ResourcesCompat.getDrawable(
-            resources,
-            R.drawable.edittext_prop,
-            null
-        )
-        binding.editPassword.editText?.background = ResourcesCompat.getDrawable(
-            resources,
-            R.drawable.edittext_prop,
-            null
-        )
+        binding.editEmail.editText?.setBackgroundResource(R.drawable.edittext_prop)
+        binding.editPassword.editText?.setBackgroundResource(R.drawable.edittext_prop)
     }
 
     private fun isNetworkAvailable(): Boolean {

@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -47,6 +46,7 @@ class ForgotOtp : Fragment() {
                     sharedViewModel.confirmPassword
                 )
             } else {
+                clearAllEntries()
                 applyErrorToAllEditTexts()
             }
         }
@@ -121,14 +121,15 @@ class ForgotOtp : Fragment() {
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                     if (s != null) {
-                        if (s.isNotEmpty()) {
-                            editText.background = ContextCompat.getDrawable(requireContext(), R.drawable.edittext_prop)
-                        }
                         if (s.length == 1 && index < editTexts.size - 1) {
                             editTexts[index + 1].requestFocus()
                         } else if (s.isEmpty() && index > 0) {
                             editTexts[index - 1].requestFocus()
                         }
+
+                        editText.setBackgroundResource(
+                            if (s.isNotEmpty()) R.drawable.edittext_prop else R.drawable.error_prop
+                        )
                     }
                 }
 
@@ -148,6 +149,7 @@ class ForgotOtp : Fragment() {
             }
         }
     }
+
 
     private fun areAllDigitsEntered(): Boolean {
         return binding.digitOne.text.isNotEmpty() &&
@@ -170,7 +172,9 @@ class ForgotOtp : Fragment() {
 
         for (editText in editTexts) {
             if (editText.text.isEmpty()) {
-                editText.background = ContextCompat.getDrawable(requireContext(), R.drawable.error_prop)
+                editText.setBackgroundResource(R.drawable.error_prop)
+            } else {
+                editText.setBackgroundResource(R.drawable.edittext_prop)
             }
         }
     }

@@ -7,10 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.main_project.databinding.FragmentSignupPhoneBinding
+import com.google.android.material.textfield.TextInputLayout
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -21,6 +23,7 @@ class SignupPhone : Fragment() {
     private val binding get() = _binding!!
 
     private val sharedViewModel: RegisterViewModel by activityViewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -42,44 +45,58 @@ class SignupPhone : Fragment() {
                 findNavController().navigate(R.id.loginPage)
             }
         })
+
         return binding.root
     }
 
     private fun setupTextWatchers() {
         binding.editEmail.editText?.doOnTextChanged { text, _, _, _ ->
             if (!text.isNullOrEmpty()) {
-                binding.editEmail.error = null
+                resetToDefaultDrawable(binding.editEmail)
             }
         }
 
         binding.editPassword.editText?.doOnTextChanged { text, _, _, _ ->
             if (!text.isNullOrEmpty()) {
-                binding.editPassword.error = null
+                resetToDefaultDrawable(binding.editPassword)
             }
         }
     }
 
     private fun validateInputs() {
-        val input = binding.editEmail.editText?.text.toString()
-        val password = binding.editPassword.editText?.text.toString()
+        val input = binding.editEmail.editText?.text.toString().trim()
+        val password = binding.editPassword.editText?.text.toString().trim()
 
         var hasError = false
 
-        if (input.isBlank()) {
-            binding.editEmail.error = "*Required"
+        if (input.isBlank() || input.length != 10) {
+            binding.editEmail.error = "10 digit mobile number required"
+            binding.editEmail.editText?.setBackgroundResource(R.drawable.error_prop)
             hasError = true
+        } else {
+            binding.editEmail.editText?.setBackgroundResource(R.drawable.edittext_prop)
+        }
+
+        val passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,20}$".toRegex()
+        if (!passwordRegex.matches(password)) {
+            binding.editPassword.error = "8-20 char, A-Z, a-z, 0-9, and symbol"
+            binding.editPassword.editText?.setBackgroundResource(R.drawable.error_prop)
+            hasError = true
+        } else {
+            binding.editPassword.editText?.setBackgroundResource(R.drawable.edittext_prop)
         }
 
         if (password.isBlank()) {
             binding.editPassword.error = "*Required"
+            binding.editPassword.editText?.setBackgroundResource(R.drawable.error_prop)
             hasError = true
+        } else {
+            binding.editPassword.editText?.setBackgroundResource(R.drawable.edittext_prop)
         }
 
         if (!hasError) {
-            var mobile = "+91$input"
+            val mobile = "+91$input"
             sharedViewModel.email = mobile
-            println(mobile)
-            println(password)
             sendDataToApi(mobile, password)
         }
     }
@@ -98,20 +115,31 @@ class SignupPhone : Fragment() {
                     findNavController().navigate(R.id.verificationCode)
                 } else {
                     val errorMessage = response.errorBody()?.string() ?: "Invalid credentials"
-                    Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
-                    binding.editEmail.error = "Invalid credentials"
+                    handleApiError(errorMessage)
                 }
             }
 
             override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
-                if (t is java.net.SocketTimeoutException) {
-                    Toast.makeText(requireContext(), "Request timed out. Please try again.", Toast.LENGTH_SHORT).show()
+                val errorMessage = if (t is java.net.SocketTimeoutException) {
+                    "Request timed out. Please try again."
                 } else {
-                    Toast.makeText(requireContext(), "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+                    "Error: ${t.message}"
                 }
-                binding.editEmail.error = "Error: ${t.message}"
+                handleApiError(errorMessage)
             }
         })
+    }
+
+    private fun handleApiError(errorMessage: String) {
+        Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
+        binding.editEmail.error = errorMessage
+        binding.editEmail.editText?.setBackgroundResource(R.drawable.error_prop)
+        binding.editPassword.editText?.setBackgroundResource(R.drawable.error_prop)
+    }
+
+    private fun resetToDefaultDrawable(editTextLayout: TextInputLayout) {
+        editTextLayout.error = null
+        editTextLayout.editText?.setBackgroundResource(R.drawable.edittext_prop)
     }
 
     override fun onDestroyView() {

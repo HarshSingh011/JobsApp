@@ -41,7 +41,7 @@ class ForgotPassword : Fragment() {
 
         binding.editEmail.editText?.doOnTextChanged { text, _, _, _ ->
             if (!text.isNullOrEmpty()) {
-                binding.editEmail.error = null
+                resetEmailField()
             }
         }
 
@@ -58,9 +58,10 @@ class ForgotPassword : Fragment() {
 
         if (input.isBlank()) {
             binding.editEmail.error = "*Required"
+            binding.editEmail.editText?.setBackgroundResource(R.drawable.error_prop) // Set custom drawable
         } else {
             val username = if (input.matches(Regex("^[0-9]{10}\$"))) {
-                "+91$input" // Add country code if input is a valid phone number
+                "+91$input"
             } else {
                 input
             }
@@ -78,12 +79,13 @@ class ForgotPassword : Fragment() {
                 if (response.isSuccessful) {
                     response.body()?.let { forgotPasswordResponse ->
                         Toast.makeText(requireContext(), forgotPasswordResponse.message, Toast.LENGTH_SHORT).show()
-                        findNavController().navigate(R.id.newPassword)
+                        findNavController().navigate(R.id.forgotOtp)
                     }
                 } else {
                     val errorResponse = response.errorBody()?.string()
                     val errorMessage = parseErrorMessage(errorResponse ?: "Unknown error")
                     binding.editEmail.error = errorMessage
+                    binding.editEmail.editText?.setBackgroundResource(R.drawable.error_prop)
                     Log.e("ForgotPasswordError", "Response code: ${response.code()} - $errorMessage")
                 }
             }
@@ -104,6 +106,11 @@ class ForgotPassword : Fragment() {
             Log.e("ParseError", "Failed to parse error message", e)
             "An error occurred"
         }
+    }
+
+    private fun resetEmailField() {
+        binding.editEmail.error = null
+        binding.editEmail.editText?.setBackgroundResource(R.drawable.edittext_prop)
     }
 
     override fun onDestroyView() {

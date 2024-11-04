@@ -19,7 +19,6 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class SignupEmail : Fragment() {
-
     private var _binding: FragmentSignupEmailBinding? = null
     private val binding get() = _binding!!
     private val sharedViewModel: RegisterViewModel by activityViewModels()
@@ -70,6 +69,15 @@ class SignupEmail : Fragment() {
             hasError = true
         }
 
+        val passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,20}$".toRegex()
+        if (!passwordRegex.matches(password)) {
+            binding.editPassword.error = "8-20 char, A-Z, a-z, 0-9, and symbol"
+            binding.editPassword.editText?.setBackgroundResource(R.drawable.error_prop)
+            hasError = true
+        } else {
+            binding.editPassword.editText?.setBackgroundResource(R.drawable.edittext_prop)
+        }
+
         if (password.isBlank()) {
             applyErrorBackground(binding.editPassword, "Password is required")
             hasError = true
@@ -82,23 +90,19 @@ class SignupEmail : Fragment() {
     }
 
     private fun applyErrorBackground(editText: TextInputLayout, errorMessage: String) {
-        editText.editText?.background = ResourcesCompat.getDrawable(
-            resources, R.drawable.error_prop, null
-        )
+        editText.editText?.setBackgroundResource(R.drawable.error_prop)
         editText.error = errorMessage
         editText.editText?.clearFocus()
     }
 
     private fun clearErrorBackground(editText: TextInputLayout) {
         editText.error = null
-        editText.editText?.background = ResourcesCompat.getDrawable(
-            resources, R.drawable.edittext_prop, null
-        )
+        editText.editText?.setBackgroundResource(R.drawable.edittext_prop)
     }
 
     private fun sendDataToApi(email: String, password: String) {
-        val firstName = sharedViewModel.firstName ?: ""
-        val lastName = sharedViewModel.lastName ?: ""
+        val firstName = sharedViewModel.firstName
+        val lastName = sharedViewModel.lastName
 
         val request = RegisterRequestEmail(firstName, lastName, email, password)
 
@@ -141,4 +145,5 @@ class SignupEmail : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
 }
