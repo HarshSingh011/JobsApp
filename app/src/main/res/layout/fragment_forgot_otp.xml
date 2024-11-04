@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    tools:context=".Forgot_otp">
+    tools:context=".ForgotOtp">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline4"

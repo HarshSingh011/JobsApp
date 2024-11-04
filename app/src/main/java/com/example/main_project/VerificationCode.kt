@@ -9,10 +9,12 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.main_project.databinding.FragmentVerificationCodeBinding
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -32,8 +34,9 @@ class VerificationCode : Fragment() {
         binding.loginBtn.setOnClickListener {
             if (areAllDigitsEntered()) {
                 val otp = getEnteredOtp()
-                println(sharedViewModel.email)
-                sendOtpToApi(sharedViewModel.email, otp)
+                sharedViewModel.email?.let { email ->
+                    sendOtpToApi(email, otp)
+                }
             } else {
                 clearAllEntries()
                 setEditTextErrorOutline()
@@ -43,7 +46,9 @@ class VerificationCode : Fragment() {
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                findNavController().navigate(R.id.loginPage)
+                if (findNavController().currentDestination?.id == R.id.verificationCode) {
+                    findNavController().navigate(R.id.loginPage)
+                }
             }
         })
 
@@ -63,24 +68,19 @@ class VerificationCode : Fragment() {
 
     private fun sendOtpToApi(contact: String, otp: String) {
         val request = OtpRequest(contact = contact, otp = otp)
-        println(contact)
-        println(otp)
         val call = RetrofitClient.instance.validateOtp(request)
 
         call.enqueue(object : Callback<OtpResponse> {
             override fun onResponse(call: Call<OtpResponse>, response: Response<OtpResponse>) {
                 if (response.isSuccessful && response.body() != null) {
-                    val token = response.body()?.token
-                    if (token != null) {
+                    response.body()?.token?.let {
                         Toast.makeText(context, response.body()!!.message, Toast.LENGTH_SHORT).show()
                         findNavController().navigate(R.id.verified)
-                    } else {
-                        clearAllEntries()
-                        Toast.makeText(context, "Invalid OTP, please try again.", Toast.LENGTH_SHORT).show()
+                    } ?: run {
+                        handleInvalidOtp()
                     }
                 } else {
-                    clearAllEntries()
-                    Toast.makeText(context, "Invalid OTP, please try again.", Toast.LENGTH_SHORT).show()
+                    handleInvalidOtp()
                 }
             }
 
@@ -88,6 +88,12 @@ class VerificationCode : Fragment() {
                 Toast.makeText(context, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
+    }
+
+    private fun handleInvalidOtp() {
+        clearAllEntries()
+        setEditTextErrorOutline()
+        Toast.makeText(context, "Invalid OTP, please try again.", Toast.LENGTH_SHORT).show()
     }
 
     private fun setUpOtpEditTexts() {
@@ -105,6 +111,14 @@ class VerificationCode : Fragment() {
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    if (s != null && s.isNotEmpty()) {
+                        editText.background = ResourcesCompat.getDrawable(
+                            resources,
+                            R.drawable.edittext_prop,
+                            null
+                        )
+                    }
+
                     if (s != null) {
                         if (s.length == 1 && index < editTexts.size - 1) {
                             editTexts[index + 1].requestFocus()
@@ -112,17 +126,13 @@ class VerificationCode : Fragment() {
                             editTexts[index - 1].requestFocus()
                         }
                     }
-
-                    if (s != null && s.isNotEmpty()) {
-                        editText.background = resources.getDrawable(R.drawable.edittext_prop)
-                    }
                 }
 
                 override fun afterTextChanged(s: Editable?) {}
-
             })
-            editText.setOnKeyListener { v, keyCode, event ->
-                if (keyCode == android.view.KeyEvent.KEYCODE_DEL && (editText.text.isEmpty() && editText.isFocused)) {
+
+            editText.setOnKeyListener { _, keyCode, _ ->
+                if (keyCode == android.view.KeyEvent.KEYCODE_DEL && editText.text.isEmpty()) {
                     val previousIndex = editTexts.indexOf(editText) - 1
                     if (previousIndex >= 0) {
                         editTexts[previousIndex].requestFocus()
@@ -132,7 +142,6 @@ class VerificationCode : Fragment() {
                     false
                 }
             }
-
         }
     }
 
@@ -156,9 +165,11 @@ class VerificationCode : Fragment() {
         )
 
         for (editText in editTexts) {
-            if (editText.text.isEmpty()) {
-                editText.background = resources.getDrawable(R.drawable.error_prop)
-            }
+            editText.background = ResourcesCompat.getDrawable(
+                resources,
+                R.drawable.error_prop,
+                null
+            )
         }
     }
 

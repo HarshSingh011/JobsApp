@@ -8,13 +8,14 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import android.widget.Toast
-import androidx.fragment.app.activityViewModels
+import com.example.main_project.databinding.FragmentForgotPasswordBinding
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import com.example.main_project.databinding.FragmentForgotPasswordBinding
 
 class ForgotPassword : Fragment() {
 
@@ -25,9 +26,15 @@ class ForgotPassword : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
+    ): View? {
         _binding = FragmentForgotPasswordBinding.inflate(inflater, container, false)
 
+        setupUI()
+
+        return binding.root
+    }
+
+    private fun setupUI() {
         binding.cnt.setOnClickListener {
             validateInput()
         }
@@ -38,13 +45,12 @@ class ForgotPassword : Fragment() {
             }
         }
 
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                findNavController().navigate(R.id.loginPage)
-            }
-        })
-
-        return binding.root
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner, object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    findNavController().navigate(R.id.loginPage)
+                }
+            })
     }
 
     private fun validateInput() {
@@ -53,43 +59,51 @@ class ForgotPassword : Fragment() {
         if (input.isBlank()) {
             binding.editEmail.error = "*Required"
         } else {
-            var username = ""
-            val phoneRegex = "^[0-9]{10}$".toRegex()
-            if (phoneRegex.matches(input)) {
-                username = "+91$input"
+            val username = if (input.matches(Regex("^[0-9]{10}\$"))) {
+                "+91$input" // Add country code if input is a valid phone number
             } else {
-                username = input
+                input
             }
 
             sharedViewModel.contact = username
-            println(username)
             sendForgotPasswordRequest(username)
         }
     }
-
 
     private fun sendForgotPasswordRequest(username: String) {
         val request = ForgotPasswordRequest(contact = username)
 
         RetrofitClient.instance.forgotPassword(request).enqueue(object : Callback<ForgotPasswordResponse> {
             override fun onResponse(call: Call<ForgotPasswordResponse>, response: Response<ForgotPasswordResponse>) {
-                if (response.isSuccessful && response.body() != null) {
-                    val forgotPasswordResponse = response.body()!!
-
-                    Toast.makeText(requireContext(), forgotPasswordResponse.message, Toast.LENGTH_SHORT).show()
-                    findNavController().navigate(R.id.newPassword)
+                if (response.isSuccessful) {
+                    response.body()?.let { forgotPasswordResponse ->
+                        Toast.makeText(requireContext(), forgotPasswordResponse.message, Toast.LENGTH_SHORT).show()
+                        findNavController().navigate(R.id.newPassword)
+                    }
                 } else {
-                    binding.editEmail.error = "Invalid username"
-                    Toast.makeText(requireContext(), "Invalid username", Toast.LENGTH_SHORT).show()
-                    Log.e("ForgotPasswordError", "Response code: ${response.code()} - ${response.message()}")
+                    val errorResponse = response.errorBody()?.string()
+                    val errorMessage = parseErrorMessage(errorResponse ?: "Unknown error")
+                    binding.editEmail.error = errorMessage
+                    Log.e("ForgotPasswordError", "Response code: ${response.code()} - $errorMessage")
                 }
             }
 
             override fun onFailure(call: Call<ForgotPasswordResponse>, t: Throwable) {
-                Toast.makeText(requireContext(), "Request failed: ${t.message}", Toast.LENGTH_SHORT).show()
-                Log.e("ForgotPasswordFailure", "Error: ${t.message}")
+                val errorMessage = t.message ?: "Unknown error"
+                Toast.makeText(requireContext(), "Request failed: $errorMessage", Toast.LENGTH_SHORT).show()
+                Log.e("ForgotPasswordFailure", "Error: $errorMessage")
             }
         })
+    }
+
+    private fun parseErrorMessage(response: String): String {
+        return try {
+            val jsonObject = JSONObject(response)
+            jsonObject.getString("message")
+        } catch (e: Exception) {
+            Log.e("ParseError", "Failed to parse error message", e)
+            "An error occurred"
+        }
     }
 
     override fun onDestroyView() {

@@ -80,7 +80,7 @@ class NewPassword : Fragment() {
         if (!hasError) {
             sharedViewModel.newPassword=type
             sharedViewModel.confirmPassword=password
-            findNavController().navigate(R.id.forgot_otp)
+            findNavController().navigate(R.id.forgotOtp)
         }
     }
 

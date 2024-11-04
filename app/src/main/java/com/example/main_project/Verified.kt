@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.navigation.fragment.findNavController
+import com.example.main_project.databinding.FragmentVerificationCodeBinding
 import com.example.main_project.databinding.FragmentVerifiedBinding
 
 class Verified : Fragment() {
@@ -17,6 +18,7 @@ class Verified : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        _binding = FragmentVerifiedBinding.inflate(inflater, container, false)
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
@@ -28,6 +30,11 @@ class Verified : Fragment() {
             findNavController().navigate(R.id.loginPage)
         }
 
-        return inflater.inflate(R.layout.fragment_verified, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
