@@ -223,7 +223,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.75" />
+        app:layout_constraintGuide_percent="0.8" />
 
     <TextView
         android:id="@+id/timer"
@@ -246,22 +246,10 @@
         android:textSize="20sp"
         app:cornerRadius="10dp"
         android:textColor="@color/white"
-        app:layout_constraintBottom_toTopOf="@id/send_code"
+        app:layout_constraintBottom_toTopOf="@id/guideline9"
         app:layout_constraintEnd_toStartOf="@id/guideline5"
         app:layout_constraintStart_toEndOf="@id/guideline4"
         app:layout_constraintTop_toBottomOf="@id/timer" />
-
-    <TextView
-        android:id="@+id/send_code"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Try another way"
-        android:textColor="@color/background"
-        android:gravity="center"
-        app:layout_constraintBottom_toTopOf="@id/guideline9"
-        app:layout_constraintEnd_toStartOf="@+id/guideline5"
-        app:layout_constraintStart_toEndOf="@+id/guideline4"
-        app:layout_constraintTop_toBottomOf="@+id/login_btn"/>
 
 
     <androidx.constraintlayout.widget.Guideline

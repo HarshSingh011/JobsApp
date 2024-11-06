@@ -1,18 +1,19 @@
 package com.example.main_project
 
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.main_project.databinding.FragmentForgotOtpBinding
-import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -22,6 +23,8 @@ class ForgotOtp : Fragment() {
     private var _binding: FragmentForgotOtpBinding? = null
     private val binding get() = _binding!!
     private val sharedViewModel: ForgotPasswordViewModel by activityViewModels()
+    private lateinit var countdownTimer: CountDownTimer
+    private var timeLeftInMillis: Long = 30000 // 30 seconds in milliseconds
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,34 +32,72 @@ class ForgotOtp : Fragment() {
     ): View {
         _binding = FragmentForgotOtpBinding.inflate(inflater, container, false)
 
-        setupUI()
-        setUpOtpEditTexts()
-
-        return binding.root
-    }
-
-    private fun setupUI() {
         binding.loginBtn.setOnClickListener {
             if (areAllDigitsEntered()) {
                 val otp = getEnteredOtp()
-                sendOtpToApi(
-                    sharedViewModel.contact,
-                    otp,
-                    sharedViewModel.newPassword,
-                    sharedViewModel.confirmPassword
-                )
+                sharedViewModel.contact?.let { contact ->
+                    sendOtpToApi(contact, otp, sharedViewModel.newPassword, sharedViewModel.confirmPassword)
+                }
+                binding.loginBtn.isEnabled = false
             } else {
                 clearAllEntries()
-                applyErrorToAllEditTexts()
+                setEditTextErrorOutline()
+                unfocusEditTexts()
             }
         }
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                findNavController().navigate(R.id.loginPage)
+                if (findNavController().currentDestination?.id == R.id.forgotOtp) {
+                    findNavController().navigate(R.id.loginPage)
+                }
             }
         })
+
+        setUpOtpEditTexts()
+        startTimer()
+
+        return binding.root
     }
+
+    private fun startTimer() {
+        countdownTimer = object : CountDownTimer(timeLeftInMillis, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                timeLeftInMillis = millisUntilFinished
+                updateTimerText()
+            }
+
+            override fun onFinish() {
+                binding.timer.text = "Didn’t receive any code? Resend code"
+                binding.timer.isEnabled = true
+                binding.timer.setTextColor(resources.getColor(R.color.background, null))
+                binding.timer.setOnClickListener {
+                    resendOtp()
+                }
+            }
+        }.start()
+    }
+
+    private fun updateTimerText() {
+        val seconds = (timeLeftInMillis / 1000).toInt()
+        binding.timer.text = "Resend code in $seconds s"
+        binding.timer.setTextColor(resources.getColor(R.color.background, null))
+    }
+
+    private fun resendOtp() {
+        sharedViewModel.sendForgotPasswordRequest(
+            onSuccess = {
+                Toast.makeText(context, "OTP resent successfully", Toast.LENGTH_SHORT).show()
+                timeLeftInMillis = 30000
+                startTimer()
+            },
+            onError = { errorMessage ->
+                Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
+            }
+        )
+        binding.timer.isEnabled = false
+    }
+
 
     private fun getEnteredOtp(): String {
         return with(binding) {
@@ -71,38 +112,30 @@ class ForgotOtp : Fragment() {
 
     private fun sendOtpToApi(contact: String, otp: String, newPassword: String, confirmPassword: String) {
         val request = ChangePasswordRequest(contact, otp, newPassword, confirmPassword)
+        val call = RetrofitClient.instance.changepassword(request)
 
-        RetrofitClient.instance.changepassword(request).enqueue(object : Callback<ChangePasswordResponse> {
+        call.enqueue(object : Callback<ChangePasswordResponse> {
             override fun onResponse(call: Call<ChangePasswordResponse>, response: Response<ChangePasswordResponse>) {
-                if (response.isSuccessful) {
-                    val message = response.body()?.message
-                    if (message == "Password changed successfully") {
-                        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
-                        findNavController().navigate(R.id.verified)
-                    } else {
-                        applyErrorToAllEditTexts()
-                        Toast.makeText(requireContext(), parseErrorMessage(response.errorBody()?.string()), Toast.LENGTH_SHORT).show()
-                    }
+                binding.loginBtn.isEnabled = true
+                if (response.isSuccessful && response.body() != null) {
+                    Toast.makeText(context, response.body()!!.message, Toast.LENGTH_SHORT).show()
+                    findNavController().navigate(R.id.verified)
                 } else {
-                    applyErrorToAllEditTexts()
-                    Toast.makeText(requireContext(), "Invalid OTP or an error occurred", Toast.LENGTH_SHORT).show()
+                    handleInvalidOtp()
                 }
             }
 
             override fun onFailure(call: Call<ChangePasswordResponse>, t: Throwable) {
-                applyErrorToAllEditTexts()
-                Toast.makeText(requireContext(), "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+                binding.loginBtn.isEnabled = true
+                Toast.makeText(context, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
     }
 
-    private fun parseErrorMessage(response: String?): String {
-        return try {
-            val jsonObject = JSONObject(response ?: "")
-            jsonObject.getString("message")
-        } catch (e: Exception) {
-            "An error occurred"
-        }
+    private fun handleInvalidOtp() {
+        clearAllEntries()
+        setEditTextErrorOutline()
+        Toast.makeText(context, "Invalid OTP, please try again.", Toast.LENGTH_SHORT).show()
     }
 
     private fun setUpOtpEditTexts() {
@@ -120,24 +153,24 @@ class ForgotOtp : Fragment() {
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    if (s != null && s.isNotEmpty()) {
+                        editText.setBackgroundResource(R.drawable.edittext_prop)
+                    }
+
                     if (s != null) {
                         if (s.length == 1 && index < editTexts.size - 1) {
                             editTexts[index + 1].requestFocus()
                         } else if (s.isEmpty() && index > 0) {
                             editTexts[index - 1].requestFocus()
                         }
-
-                        editText.setBackgroundResource(
-                            if (s.isNotEmpty()) R.drawable.edittext_prop else R.drawable.error_prop
-                        )
                     }
                 }
 
                 override fun afterTextChanged(s: Editable?) {}
             })
 
-            editText.setOnKeyListener { _, keyCode, _ ->
-                if (keyCode == android.view.KeyEvent.KEYCODE_DEL && editText.text.isEmpty()) {
+            editText.setOnKeyListener { v, keyCode, event ->
+                if (keyCode == android.view.KeyEvent.KEYCODE_DEL && (editText.text.isEmpty() && editText.isFocused)) {
                     val previousIndex = editTexts.indexOf(editText) - 1
                     if (previousIndex >= 0) {
                         editTexts[previousIndex].requestFocus()
@@ -150,7 +183,6 @@ class ForgotOtp : Fragment() {
         }
     }
 
-
     private fun areAllDigitsEntered(): Boolean {
         return binding.digitOne.text.isNotEmpty() &&
                 binding.digitTwo.text.isNotEmpty() &&
@@ -160,7 +192,7 @@ class ForgotOtp : Fragment() {
                 binding.digitSix.text.isNotEmpty()
     }
 
-    private fun applyErrorToAllEditTexts() {
+    private fun setEditTextErrorOutline() {
         val editTexts = listOf(
             binding.digitOne,
             binding.digitTwo,
@@ -171,11 +203,7 @@ class ForgotOtp : Fragment() {
         )
 
         for (editText in editTexts) {
-            if (editText.text.isEmpty()) {
-                editText.setBackgroundResource(R.drawable.error_prop)
-            } else {
-                editText.setBackgroundResource(R.drawable.edittext_prop)
-            }
+            editText.setBackgroundResource(R.drawable.error_prop)
         }
     }
 
@@ -188,8 +216,27 @@ class ForgotOtp : Fragment() {
         binding.digitSix.text.clear()
     }
 
+    private fun unfocusEditTexts() {
+        val imm = activity?.getSystemService(InputMethodManager::class.java)
+        imm?.hideSoftInputFromWindow(binding.loginBtn.windowToken, 0)
+
+        val editTexts = listOf(
+            binding.digitOne,
+            binding.digitTwo,
+            binding.digitThree,
+            binding.digitFour,
+            binding.digitFive,
+            binding.digitSix
+        )
+
+        for (editText in editTexts) {
+            editText.clearFocus()
+        }
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
+        countdownTimer.cancel()
         _binding = null
     }
 }

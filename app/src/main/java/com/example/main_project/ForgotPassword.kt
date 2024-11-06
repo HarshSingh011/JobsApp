@@ -5,12 +5,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import android.widget.Toast
 import com.example.main_project.databinding.FragmentForgotPasswordBinding
 import org.json.JSONObject
 import retrofit2.Call
@@ -26,7 +26,7 @@ class ForgotPassword : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentForgotPasswordBinding.inflate(inflater, container, false)
 
         setupUI()
@@ -36,7 +36,14 @@ class ForgotPassword : Fragment() {
 
     private fun setupUI() {
         binding.cnt.setOnClickListener {
-            validateInput()
+            if (isInputValid()) {
+                binding.cnt.isEnabled = false
+                val username = getFormattedUsername()
+                sharedViewModel.contact = username
+                sendForgotPasswordRequest(username)
+            } else {
+                applyErrorToEmailField()
+            }
         }
 
         binding.editEmail.editText?.doOnTextChanged { text, _, _, _ ->
@@ -53,22 +60,23 @@ class ForgotPassword : Fragment() {
             })
     }
 
-    private fun validateInput() {
+    private fun getFormattedUsername(): String {
         val input = binding.editEmail.editText?.text.toString().trim()
-
-        if (input.isBlank()) {
-            binding.editEmail.error = "*Required"
-            binding.editEmail.editText?.setBackgroundResource(R.drawable.error_prop) // Set custom drawable
+        return if (input.matches(Regex("^[0-9]{10}\$"))) {
+            "+91$input"
         } else {
-            val username = if (input.matches(Regex("^[0-9]{10}\$"))) {
-                "+91$input"
-            } else {
-                input
-            }
-
-            sharedViewModel.contact = username
-            sendForgotPasswordRequest(username)
+            input
         }
+    }
+
+    private fun isInputValid(): Boolean {
+        val input = binding.editEmail.editText?.text.toString().trim()
+        return input.isNotBlank()
+    }
+
+    private fun applyErrorToEmailField() {
+        binding.editEmail.error = "*Required"
+        binding.editEmail.editText?.setBackgroundResource(R.drawable.error_prop) // Set custom drawable
     }
 
     private fun sendForgotPasswordRequest(username: String) {
@@ -76,6 +84,8 @@ class ForgotPassword : Fragment() {
 
         RetrofitClient.instance.forgotPassword(request).enqueue(object : Callback<ForgotPasswordResponse> {
             override fun onResponse(call: Call<ForgotPasswordResponse>, response: Response<ForgotPasswordResponse>) {
+                binding.cnt.isEnabled = true
+
                 if (response.isSuccessful) {
                     response.body()?.let { forgotPasswordResponse ->
                         Toast.makeText(requireContext(), forgotPasswordResponse.message, Toast.LENGTH_SHORT).show()
@@ -84,16 +94,17 @@ class ForgotPassword : Fragment() {
                 } else {
                     val errorResponse = response.errorBody()?.string()
                     val errorMessage = parseErrorMessage(errorResponse ?: "Unknown error")
-                    binding.editEmail.error = errorMessage
-                    binding.editEmail.editText?.setBackgroundResource(R.drawable.error_prop)
+                    applyErrorToEmailField()
+                    Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
                     Log.e("ForgotPasswordError", "Response code: ${response.code()} - $errorMessage")
                 }
             }
 
             override fun onFailure(call: Call<ForgotPasswordResponse>, t: Throwable) {
-                val errorMessage = t.message ?: "Unknown error"
-                Toast.makeText(requireContext(), "Request failed: $errorMessage", Toast.LENGTH_SHORT).show()
-                Log.e("ForgotPasswordFailure", "Error: $errorMessage")
+                binding.cnt.isEnabled = true
+                applyErrorToEmailField()
+                Toast.makeText(requireContext(), "Request failed: ${t.message}", Toast.LENGTH_SHORT).show()
+                Log.e("ForgotPasswordFailure", "Error: ${t.message}")
             }
         })
     }

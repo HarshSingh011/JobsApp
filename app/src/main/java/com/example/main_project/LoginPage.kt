@@ -8,11 +8,11 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.main_project.databinding.FragmentLoginPageBinding
-import android.widget.Toast
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
@@ -40,6 +40,7 @@ class LoginPage : Fragment() {
 
         binding.loginBtn.setOnClickListener {
             if (isNetworkAvailable()) {
+                binding.loginBtn.isEnabled = false
                 validateInputs()
                 binding.progressBar.visibility = View.VISIBLE
             } else {
@@ -111,6 +112,7 @@ class LoginPage : Fragment() {
 
         if (hasError) {
             binding.progressBar.visibility = View.GONE
+            binding.loginBtn.isEnabled = true
             return
         }
 
@@ -124,6 +126,7 @@ class LoginPage : Fragment() {
         RetrofitClient.instance.login(request).enqueue(object : Callback<LoginResponse> {
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
                 binding.progressBar.visibility = View.GONE
+                binding.loginBtn.isEnabled = true
 
                 if (response.isSuccessful) {
                     response.body()?.let { loginResponse ->
@@ -146,6 +149,7 @@ class LoginPage : Fragment() {
 
             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
                 binding.progressBar.visibility = View.GONE
+                binding.loginBtn.isEnabled = true
                 val errorMessage = if (t is IOException) {
                     if (t.message?.contains("timeout") == true) {
                         "Network timeout. Please try again."

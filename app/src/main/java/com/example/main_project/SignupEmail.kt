@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.core.content.res.ResourcesCompat
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -85,6 +84,8 @@ class SignupEmail : Fragment() {
 
         if (!hasError) {
             sharedViewModel.email = email
+            sharedViewModel.password= password
+            binding.getOTP.isEnabled = false
             sendDataToApi(email, password)
         }
     }
@@ -101,6 +102,7 @@ class SignupEmail : Fragment() {
     }
 
     private fun sendDataToApi(email: String, password: String) {
+        binding.getOTP.isEnabled = false
         val firstName = sharedViewModel.firstName
         val lastName = sharedViewModel.lastName
 
@@ -108,6 +110,7 @@ class SignupEmail : Fragment() {
 
         RetrofitClient.instance.register(request).enqueue(object : Callback<RegisterResponse> {
             override fun onResponse(call: Call<RegisterResponse>, response: Response<RegisterResponse>) {
+                binding.getOTP.isEnabled = true
                 if (response.isSuccessful && response.body() != null) {
                     val responseMessage = response.body()?.message ?: "Registration successful"
                     Toast.makeText(requireContext(), responseMessage, Toast.LENGTH_SHORT).show()
@@ -121,6 +124,7 @@ class SignupEmail : Fragment() {
             }
 
             override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
+                binding.getOTP.isEnabled = true
                 val errorMessage = if (t is java.net.SocketTimeoutException) {
                     "Request timed out. Please try again."
                 } else {

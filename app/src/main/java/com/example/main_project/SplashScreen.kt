@@ -31,7 +31,7 @@ class SplashScreen : Fragment() {
             } else {
                 findNavController().navigate(R.id.loginPage)
             }
-        }, 3000)
+        }, 2000)
         return binding.root
     }
 

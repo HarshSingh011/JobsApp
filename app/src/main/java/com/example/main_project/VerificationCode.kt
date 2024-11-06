@@ -1,6 +1,7 @@
 package com.example.main_project
 
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -13,7 +14,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.main_project.databinding.FragmentVerificationCodeBinding
-import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -23,6 +23,8 @@ class VerificationCode : Fragment() {
     private var _binding: FragmentVerificationCodeBinding? = null
     private val binding get() = _binding!!
     private val sharedViewModel: RegisterViewModel by activityViewModels()
+    private lateinit var countdownTimer: CountDownTimer
+    private var timeLeftInMillis: Long = 30000 // 30 seconds in milliseconds
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,6 +38,7 @@ class VerificationCode : Fragment() {
                 sharedViewModel.email?.let { email ->
                     sendOtpToApi(email, otp)
                 }
+                binding.loginBtn.isEnabled = false
             } else {
                 clearAllEntries()
                 setEditTextErrorOutline()
@@ -51,9 +54,51 @@ class VerificationCode : Fragment() {
             }
         })
 
+
+
+
         setUpOtpEditTexts()
+        startTimer()
 
         return binding.root
+    }
+
+    private fun startTimer() {
+        countdownTimer = object : CountDownTimer(timeLeftInMillis, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                timeLeftInMillis = millisUntilFinished
+                updateTimerText()
+            }
+
+            override fun onFinish() {
+                binding.timer.text = "Didn’t receive any code?Resend code"
+                binding.timer.isEnabled = true
+                binding.timer.setTextColor(resources.getColor(R.color.background, null))
+                binding.timer.setOnClickListener {
+                    resendOtp()
+                }
+            }
+        }.start()
+    }
+
+    private fun updateTimerText() {
+        val seconds = (timeLeftInMillis / 1000).toInt()
+        binding.timer.text = "Resend code in $seconds s"
+        binding.timer.setTextColor(resources.getColor(R.color.background, null))
+    }
+
+    private fun resendOtp() {
+        sharedViewModel.sendDataToApi(
+            onSuccess = {
+                Toast.makeText(context, "OTP resent successfully", Toast.LENGTH_SHORT).show()
+                timeLeftInMillis = 30000
+                startTimer()
+            },
+            onError = {
+                Toast.makeText(context,"OTP not send successfully", Toast.LENGTH_SHORT).show()
+            }
+        )
+        binding.timer.isEnabled = false
     }
 
     private fun getEnteredOtp(): String {
@@ -71,6 +116,7 @@ class VerificationCode : Fragment() {
 
         call.enqueue(object : Callback<OtpResponse> {
             override fun onResponse(call: Call<OtpResponse>, response: Response<OtpResponse>) {
+                binding.loginBtn.isEnabled = true
                 if (response.isSuccessful && response.body() != null) {
                     response.body()?.token?.let {
                         Toast.makeText(context, response.body()!!.message, Toast.LENGTH_SHORT).show()
@@ -84,6 +130,7 @@ class VerificationCode : Fragment() {
             }
 
             override fun onFailure(call: Call<OtpResponse>, t: Throwable) {
+                binding.loginBtn.isEnabled = true
                 Toast.makeText(context, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
@@ -126,8 +173,8 @@ class VerificationCode : Fragment() {
                 override fun afterTextChanged(s: Editable?) {}
             })
 
-            editText.setOnKeyListener { v, keyCode, _ ->
-                if (keyCode == android.view.KeyEvent.KEYCODE_DEL && editText.text.isEmpty()) {
+            editText.setOnKeyListener { v, keyCode, event ->
+                if (keyCode == android.view.KeyEvent.KEYCODE_DEL && (editText.text.isEmpty() && editText.isFocused)) {
                     val previousIndex = editTexts.indexOf(editText) - 1
                     if (previousIndex >= 0) {
                         editTexts[previousIndex].requestFocus()
@@ -193,6 +240,7 @@ class VerificationCode : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        countdownTimer.cancel()
         _binding = null
     }
 }
