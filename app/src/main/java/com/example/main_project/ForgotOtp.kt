@@ -1,5 +1,6 @@
 package com.example.main_project
 
+import android.app.Dialog
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.text.Editable
@@ -24,7 +25,8 @@ class ForgotOtp : Fragment() {
     private val binding get() = _binding!!
     private val sharedViewModel: ForgotPasswordViewModel by activityViewModels()
     private lateinit var countdownTimer: CountDownTimer
-    private var timeLeftInMillis: Long = 30000 // 30 seconds in milliseconds
+    private var timeLeftInMillis: Long = 30000
+    private lateinit var loadingDialog: Dialog
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,9 +38,10 @@ class ForgotOtp : Fragment() {
             if (areAllDigitsEntered()) {
                 val otp = getEnteredOtp()
                 sharedViewModel.contact?.let { contact ->
-                    sendOtpToApi(contact, otp, sharedViewModel.newPassword, sharedViewModel.confirmPassword)
+                    sendOtpToApi(contact, otp,)
                 }
                 binding.loginBtn.isEnabled = false
+                showLoadingDialog()
             } else {
                 clearAllEntries()
                 setEditTextErrorOutline()
@@ -110,16 +113,20 @@ class ForgotOtp : Fragment() {
         }
     }
 
-    private fun sendOtpToApi(contact: String, otp: String, newPassword: String, confirmPassword: String) {
-        val request = ChangePasswordRequest(contact, otp, newPassword, confirmPassword)
-        val call = RetrofitClient.instance.changepassword(request)
+    private fun sendOtpToApi(contact: String, otp: String) {
+        val request = ChangePasswordRequest(contact, otp)
+        println(contact)
+        println(otp)
+        val call = RetrofitClient.instance.forgotPasswordOTP(request)
 
         call.enqueue(object : Callback<ChangePasswordResponse> {
             override fun onResponse(call: Call<ChangePasswordResponse>, response: Response<ChangePasswordResponse>) {
                 binding.loginBtn.isEnabled = true
+                loadingDialog.dismiss()
+
                 if (response.isSuccessful && response.body() != null) {
                     Toast.makeText(context, response.body()!!.message, Toast.LENGTH_SHORT).show()
-                    findNavController().navigate(R.id.verified)
+                    findNavController().navigate(R.id.newPassword)
                 } else {
                     handleInvalidOtp()
                 }
@@ -127,11 +134,18 @@ class ForgotOtp : Fragment() {
 
             override fun onFailure(call: Call<ChangePasswordResponse>, t: Throwable) {
                 binding.loginBtn.isEnabled = true
+                loadingDialog.dismiss()
                 Toast.makeText(context, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
     }
 
+    private fun showLoadingDialog() {
+        loadingDialog = Dialog(requireContext())
+        loadingDialog.setContentView(R.layout.loader)
+        loadingDialog.setCancelable(false)
+        loadingDialog.show()
+    }
     private fun handleInvalidOtp() {
         clearAllEntries()
         setEditTextErrorOutline()

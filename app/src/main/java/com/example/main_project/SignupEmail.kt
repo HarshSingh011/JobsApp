@@ -1,5 +1,6 @@
 package com.example.main_project
 
+import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -21,6 +22,7 @@ class SignupEmail : Fragment() {
     private var _binding: FragmentSignupEmailBinding? = null
     private val binding get() = _binding!!
     private val sharedViewModel: RegisterViewModel by activityViewModels()
+    private lateinit var loadingDialog: Dialog
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -86,8 +88,16 @@ class SignupEmail : Fragment() {
             sharedViewModel.email = email
             sharedViewModel.password= password
             binding.getOTP.isEnabled = false
+            showLoadingDialog()
             sendDataToApi(email, password)
         }
+    }
+
+    private fun showLoadingDialog() {
+        loadingDialog = Dialog(requireContext())
+        loadingDialog.setContentView(R.layout.loader)
+        loadingDialog.setCancelable(false)
+        loadingDialog.show()
     }
 
     private fun applyErrorBackground(editText: TextInputLayout, errorMessage: String) {
@@ -110,6 +120,7 @@ class SignupEmail : Fragment() {
 
         RetrofitClient.instance.register(request).enqueue(object : Callback<RegisterResponse> {
             override fun onResponse(call: Call<RegisterResponse>, response: Response<RegisterResponse>) {
+                loadingDialog.dismiss()
                 binding.getOTP.isEnabled = true
                 if (response.isSuccessful && response.body() != null) {
                     val responseMessage = response.body()?.message ?: "Registration successful"
@@ -124,6 +135,7 @@ class SignupEmail : Fragment() {
             }
 
             override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
+                loadingDialog.dismiss()
                 binding.getOTP.isEnabled = true
                 val errorMessage = if (t is java.net.SocketTimeoutException) {
                     "Request timed out. Please try again."

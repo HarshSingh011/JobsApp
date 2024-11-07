@@ -1,5 +1,6 @@
 package com.example.main_project
 
+import android.app.Dialog
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.text.Editable
@@ -24,8 +25,9 @@ class VerificationCode : Fragment() {
     private val binding get() = _binding!!
     private val sharedViewModel: RegisterViewModel by activityViewModels()
     private lateinit var countdownTimer: CountDownTimer
-    private var timeLeftInMillis: Long = 30000 // 30 seconds in milliseconds
+    private var timeLeftInMillis: Long = 30000
 
+    private lateinit var loadingDialog: Dialog
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -38,6 +40,7 @@ class VerificationCode : Fragment() {
                 sharedViewModel.email?.let { email ->
                     sendOtpToApi(email, otp)
                 }
+                showLoadingDialog()
                 binding.loginBtn.isEnabled = false
             } else {
                 clearAllEntries()
@@ -53,9 +56,6 @@ class VerificationCode : Fragment() {
                 }
             }
         })
-
-
-
 
         setUpOtpEditTexts()
         startTimer()
@@ -116,6 +116,7 @@ class VerificationCode : Fragment() {
 
         call.enqueue(object : Callback<OtpResponse> {
             override fun onResponse(call: Call<OtpResponse>, response: Response<OtpResponse>) {
+                loadingDialog.dismiss()
                 binding.loginBtn.isEnabled = true
                 if (response.isSuccessful && response.body() != null) {
                     response.body()?.token?.let {
@@ -130,6 +131,7 @@ class VerificationCode : Fragment() {
             }
 
             override fun onFailure(call: Call<OtpResponse>, t: Throwable) {
+                loadingDialog.dismiss()
                 binding.loginBtn.isEnabled = true
                 Toast.makeText(context, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
             }
@@ -209,6 +211,13 @@ class VerificationCode : Fragment() {
         for (editText in editTexts) {
             editText.setBackgroundResource(R.drawable.error_prop)
         }
+    }
+
+    private fun showLoadingDialog() {
+        loadingDialog = Dialog(requireContext())
+        loadingDialog.setContentView(R.layout.loader)
+        loadingDialog.setCancelable(false)
+        loadingDialog.show()
     }
 
     private fun clearAllEntries() {

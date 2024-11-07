@@ -22,7 +22,9 @@ interface ApiService {
     @POST("api/v1/auth/validate")
     fun validateOtp(@Body request: OtpRequest): Call<OtpResponse>
 
-    @PUT("api/v1/auth/verify-otp")
-    fun changepassword(@Body request: ChangePasswordRequest): Call<ChangePasswordResponse>
+    @POST("api/v1/auth/verify-otp-forgotpassword")
+    fun forgotPasswordOTP(@Body request: ChangePasswordRequest): Call<ChangePasswordResponse>
 
+    @PUT("api/v1/auth/change-password")
+    fun changePassword(@Body request: NewPasswordFormedRequest): Call<ChangePasswordResponse>
 }

@@ -1,5 +1,6 @@
 package com.example.main_project
 
+import android.app.Dialog
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -22,6 +23,7 @@ class ForgotPassword : Fragment() {
     private var _binding: FragmentForgotPasswordBinding? = null
     private val binding get() = _binding!!
     private val sharedViewModel: ForgotPasswordViewModel by activityViewModels()
+    private lateinit var loadingDialog: Dialog
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,6 +43,7 @@ class ForgotPassword : Fragment() {
                 val username = getFormattedUsername()
                 sharedViewModel.contact = username
                 sendForgotPasswordRequest(username)
+                showLoadingDialog()
             } else {
                 applyErrorToEmailField()
             }
@@ -76,7 +79,7 @@ class ForgotPassword : Fragment() {
 
     private fun applyErrorToEmailField() {
         binding.editEmail.error = "*Required"
-        binding.editEmail.editText?.setBackgroundResource(R.drawable.error_prop) // Set custom drawable
+        binding.editEmail.editText?.setBackgroundResource(R.drawable.error_prop)
     }
 
     private fun sendForgotPasswordRequest(username: String) {
@@ -85,6 +88,7 @@ class ForgotPassword : Fragment() {
         RetrofitClient.instance.forgotPassword(request).enqueue(object : Callback<ForgotPasswordResponse> {
             override fun onResponse(call: Call<ForgotPasswordResponse>, response: Response<ForgotPasswordResponse>) {
                 binding.cnt.isEnabled = true
+                loadingDialog.dismiss()
 
                 if (response.isSuccessful) {
                     response.body()?.let { forgotPasswordResponse ->
@@ -101,6 +105,7 @@ class ForgotPassword : Fragment() {
             }
 
             override fun onFailure(call: Call<ForgotPasswordResponse>, t: Throwable) {
+                loadingDialog.dismiss()
                 binding.cnt.isEnabled = true
                 applyErrorToEmailField()
                 Toast.makeText(requireContext(), "Request failed: ${t.message}", Toast.LENGTH_SHORT).show()
@@ -117,6 +122,13 @@ class ForgotPassword : Fragment() {
             Log.e("ParseError", "Failed to parse error message", e)
             "An error occurred"
         }
+    }
+
+    private fun showLoadingDialog() {
+        loadingDialog = Dialog(requireContext())
+        loadingDialog.setContentView(R.layout.loader)
+        loadingDialog.setCancelable(false)
+        loadingDialog.show()
     }
 
     private fun resetEmailField() {

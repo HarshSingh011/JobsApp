@@ -1,5 +1,6 @@
 package com.example.main_project
 
+import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -20,6 +21,7 @@ class SignupPhone : Fragment() {
 
     private var _binding: FragmentSignupPhoneBinding? = null
     private val binding get() = _binding!!
+    private lateinit var loadingDialog: Dialog
 
     private val sharedViewModel: RegisterViewModel by activityViewModels()
 
@@ -98,6 +100,7 @@ class SignupPhone : Fragment() {
             sharedViewModel.email = mobile
             binding.getOTP.isEnabled = false
             sendDataToApi(mobile, password)
+            showLoadingDialog()
         }
     }
 
@@ -112,6 +115,7 @@ class SignupPhone : Fragment() {
         RetrofitClient.instance.register(request).enqueue(object : Callback<RegisterResponse> {
             override fun onResponse(call: Call<RegisterResponse>, response: Response<RegisterResponse>) {
                 binding.getOTP.isEnabled = true
+                loadingDialog.dismiss()
 
                 if (response.isSuccessful && response.body() != null) {
                     val responseMessage = response.body()?.message ?: "Registration successful"
@@ -125,6 +129,7 @@ class SignupPhone : Fragment() {
 
             override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
                 binding.getOTP.isEnabled = true
+                loadingDialog.dismiss()
 
                 val errorMessage = if (t is java.net.SocketTimeoutException) {
                     "Request timed out. Please try again."
@@ -136,6 +141,12 @@ class SignupPhone : Fragment() {
         })
     }
 
+    private fun showLoadingDialog() {
+        loadingDialog = Dialog(requireContext())
+        loadingDialog.setContentView(R.layout.loader)
+        loadingDialog.setCancelable(false)
+        loadingDialog.show()
+    }
     private fun handleApiError(errorMessage: String) {
         Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
         binding.editEmail.error = errorMessage

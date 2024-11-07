@@ -1,5 +1,6 @@
 package com.example.main_project
 
+import android.app.Dialog
 import android.content.Context
 import android.net.ConnectivityManager
 import android.os.Bundle
@@ -11,8 +12,11 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.main_project.databinding.FragmentLoginPageBinding
+import com.google.android.material.textfield.TextInputLayout
+import kotlinx.coroutines.launch
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
@@ -24,14 +28,18 @@ class LoginPage : Fragment() {
     private var _binding: FragmentLoginPageBinding? = null
     private val binding get() = _binding!!
 
+    private lateinit var dataStoreManager: DataStoreManager
+    private lateinit var loadingDialog: Dialog
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentLoginPageBinding.inflate(inflater, container, false)
+        dataStoreManager = DataStoreManager(requireContext())
 
         binding.forgot.setOnClickListener {
-            findNavController().navigate(R.id.newPassword)
+            findNavController().navigate(R.id.forgotPassword)
         }
 
         binding.signup.setOnClickListener {
@@ -42,7 +50,6 @@ class LoginPage : Fragment() {
             if (isNetworkAvailable()) {
                 binding.loginBtn.isEnabled = false
                 validateInputs()
-                binding.progressBar.visibility = View.VISIBLE
             } else {
                 Toast.makeText(requireContext(), "No internet connection", Toast.LENGTH_SHORT).show()
             }
@@ -53,13 +60,13 @@ class LoginPage : Fragment() {
 
         binding.editEmail.editText?.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
-                resetToDefaultDrawable()
+                resetToDefaultDrawable(binding.editEmail)
             }
         }
 
         binding.editPassword.editText?.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
-                resetToDefaultDrawable()
+                resetToDefaultDrawable(binding.editPassword)
             }
         }
 
@@ -79,7 +86,8 @@ class LoginPage : Fragment() {
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         override fun afterTextChanged(s: Editable?) {
-            resetToDefaultDrawable()
+            resetToDefaultDrawable(binding.editEmail)
+            resetToDefaultDrawable(binding.editPassword)
         }
     }
 
@@ -111,31 +119,38 @@ class LoginPage : Fragment() {
         }
 
         if (hasError) {
-            binding.progressBar.visibility = View.GONE
             binding.loginBtn.isEnabled = true
             return
+        } else {
+            showLoadingDialog()
+            loginUser(input, password)
         }
-
-        loginUser(input, password)
+    }
+    private fun showLoadingDialog() {
+        loadingDialog = Dialog(requireContext())
+        loadingDialog.setContentView(R.layout.loader)
+        loadingDialog.setCancelable(false)
+        loadingDialog.show()
     }
 
     private fun loginUser(email: String, password: String) {
         val request = LoginRequest(contact = email, password = password)
 
-        binding.progressBar.visibility = View.VISIBLE
         RetrofitClient.instance.login(request).enqueue(object : Callback<LoginResponse> {
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
-                binding.progressBar.visibility = View.GONE
                 binding.loginBtn.isEnabled = true
+                loadingDialog.dismiss()
 
                 if (response.isSuccessful) {
                     response.body()?.let { loginResponse ->
                         val token = loginResponse.token
                         if (token != null) {
-                            val sharedPreferences = requireContext().getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE)
-                            sharedPreferences.edit().putString("user_token", token).apply()
-
                             findNavController().navigate(R.id.loginSuccessful)
+                            if (binding.chkbox.isChecked) {
+                                lifecycleScope.launch {
+                                    dataStoreManager.saveToken(token)
+                                }
+                            }
                         } else {
                             val errorMessage = parseErrorMessage(response.errorBody()?.string())
                             showError(errorMessage)
@@ -148,8 +163,9 @@ class LoginPage : Fragment() {
             }
 
             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-                binding.progressBar.visibility = View.GONE
                 binding.loginBtn.isEnabled = true
+                loadingDialog.dismiss()
+
                 val errorMessage = if (t is IOException) {
                     if (t.message?.contains("timeout") == true) {
                         "Network timeout. Please try again."
@@ -163,7 +179,6 @@ class LoginPage : Fragment() {
             }
         })
     }
-
     private fun parseErrorMessage(response: String?): String {
         return try {
             val jsonObject = JSONObject(response ?: "")
@@ -183,9 +198,9 @@ class LoginPage : Fragment() {
         binding.editPassword.editText?.clearFocus()
     }
 
-    private fun resetToDefaultDrawable() {
-        binding.editEmail.editText?.setBackgroundResource(R.drawable.edittext_prop)
-        binding.editPassword.editText?.setBackgroundResource(R.drawable.edittext_prop)
+    private fun resetToDefaultDrawable(editText: TextInputLayout) {
+        editText.editText?.setBackgroundResource(R.drawable.edittext_prop)
+        editText.error = null
     }
 
     private fun isNetworkAvailable(): Boolean {
