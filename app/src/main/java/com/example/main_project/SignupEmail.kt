@@ -34,29 +34,29 @@ class SignupEmail : Fragment() {
             validateInputs()
         }
 
-        setupTextWatchers()
-
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 findNavController().popBackStack()
             }
         })
 
+        binding.editEmail.editText?.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+                clearErrorBackground(binding.editEmail)
+            }
+        }
+
+        binding.editPassword.editText?.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+                clearErrorBackground(binding.editPassword)
+            }
+        }
+
         binding.signin.setOnClickListener {
             findNavController().navigate(R.id.loginPage)
         }
 
         return binding.root
-    }
-
-    private fun setupTextWatchers() {
-        binding.editEmail.editText?.doOnTextChanged { _, _, _, _ ->
-            clearErrorBackground(binding.editEmail)
-        }
-
-        binding.editPassword.editText?.doOnTextChanged { _, _, _, _ ->
-            clearErrorBackground(binding.editPassword)
-        }
     }
 
     private fun validateInputs() {
@@ -72,6 +72,7 @@ class SignupEmail : Fragment() {
 
         val passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,20}$".toRegex()
         if (!passwordRegex.matches(password)) {
+            binding.editEmail.clearFocus()
             binding.editPassword.error = "8-20 char, A-Z, a-z, 0-9, and symbol"
             binding.editPassword.editText?.setBackgroundResource(R.drawable.error_prop)
             hasError = true
@@ -82,6 +83,11 @@ class SignupEmail : Fragment() {
         if (password.isBlank()) {
             applyErrorBackground(binding.editPassword, "Password is required")
             hasError = true
+        }
+
+        if( !binding.chkbox.isChecked ){
+            Toast.makeText(requireContext(), "Terms and Conditions", Toast.LENGTH_SHORT).show()
+            hasError= true
         }
 
         if (!hasError) {
@@ -96,6 +102,11 @@ class SignupEmail : Fragment() {
     private fun showLoadingDialog() {
         loadingDialog = Dialog(requireContext())
         loadingDialog.setContentView(R.layout.loader)
+        loadingDialog.window?.setBackgroundDrawableResource(android.R.color.white)
+        loadingDialog.window?.setLayout(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT
+        )
         loadingDialog.setCancelable(false)
         loadingDialog.show()
     }
@@ -118,16 +129,18 @@ class SignupEmail : Fragment() {
 
         val request = RegisterRequestEmail(firstName, lastName, email, password)
 
-        RetrofitClient.instance.register(request).enqueue(object : Callback<RegisterResponse> {
+        RetrofitClient.instance.registerEmail(request).enqueue(object : Callback<RegisterResponse> {
             override fun onResponse(call: Call<RegisterResponse>, response: Response<RegisterResponse>) {
                 loadingDialog.dismiss()
                 binding.getOTP.isEnabled = true
                 if (response.isSuccessful && response.body() != null) {
+                    println("success")
                     val responseMessage = response.body()?.message ?: "Registration successful"
                     Toast.makeText(requireContext(), responseMessage, Toast.LENGTH_SHORT).show()
                     findNavController().navigate(R.id.verificationCode)
                 } else {
                     val errorResponse = response.errorBody()?.string()
+                    println("failer")
                     val errorMessage = errorResponse?.let { parseErrorMessage(it) } ?: "An error occurred"
                     Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
                     applyErrorBackground(binding.editEmail, errorMessage)

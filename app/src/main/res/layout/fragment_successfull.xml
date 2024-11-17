@@ -115,7 +115,22 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.85" />
+        app:layout_constraintGuide_percent="0.75" />
+
+    <Button
+        android:id="@+id/next"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/btn"
+        android:text="Next"
+        android:textSize="20sp"
+        android:textColor="@color/white"
+        app:cornerRadius="10dp"
+        app:layout_constraintBottom_toTopOf="@id/login_btn"
+        app:layout_constraintEnd_toStartOf="@id/guideline5"
+        app:layout_constraintStart_toEndOf="@id/guideline4"
+        app:layout_constraintTop_toBottomOf="@id/guideline8" />
+
 
     <Button
         android:id="@+id/login_btn"
@@ -129,7 +144,7 @@
         app:layout_constraintBottom_toTopOf="@id/guideline9"
         app:layout_constraintEnd_toStartOf="@id/guideline5"
         app:layout_constraintStart_toEndOf="@id/guideline4"
-        app:layout_constraintTop_toBottomOf="@id/guideline8" />
+        app:layout_constraintTop_toBottomOf="@id/next" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline9"

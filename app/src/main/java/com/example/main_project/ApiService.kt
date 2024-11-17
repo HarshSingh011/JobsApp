@@ -7,24 +7,24 @@ import retrofit2.http.PUT
 
 interface ApiService {
 
-    @POST("api/v1/auth/authenticate")
+    @POST("authenticate")
     fun login(@Body request: LoginRequest): Call<LoginResponse>
 
-    @POST("api/v1/auth/forgot-password")
+    @POST("forgot-password")
     fun forgotPassword(@Body request: ForgotPasswordRequest): Call<ForgotPasswordResponse>
 
-    @POST("api/v1/auth/register")
-    fun register(@Body request: RegisterRequestEmail): Call<RegisterResponse>
+    @POST("register")
+    fun registerEmail(@Body request: RegisterRequestEmail): Call<RegisterResponse>
 
-    @POST("api/v1/auth/register")
-    fun register(@Body request: RegisterRequestPhone): Call<RegisterResponse>
+    @POST("register")
+    fun registerPhone(@Body request: RegisterRequestPhone): Call<RegisterResponse>
 
-    @POST("api/v1/auth/validate")
+    @POST("validate")
     fun validateOtp(@Body request: OtpRequest): Call<OtpResponse>
 
-    @POST("api/v1/auth/verify-otp-forgotpassword")
+    @POST("verify-otp-forgotpassword")
     fun forgotPasswordOTP(@Body request: ChangePasswordRequest): Call<ChangePasswordResponse>
 
-    @PUT("api/v1/auth/change-password")
+    @PUT("change-password")
     fun changePassword(@Body request: NewPasswordFormedRequest): Call<ChangePasswordResponse>
 }

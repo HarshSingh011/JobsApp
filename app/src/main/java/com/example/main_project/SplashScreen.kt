@@ -32,7 +32,7 @@ class SplashScreen : Fragment() {
                     if (token != null) {
                         findNavController().navigate(R.id.loginSuccessful)
                     } else {
-                        findNavController().navigate(R.id.loginPage)
+                        findNavController().navigate(R.id.frontPage)
                     }
                 }
             }

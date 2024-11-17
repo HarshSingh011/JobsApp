@@ -14,7 +14,7 @@ class RegisterViewModel : ViewModel() {
     fun sendDataToApi(onSuccess: (() -> Unit)? = null, onError: ((String) -> Unit)? = null) {
         val request = RegisterRequestEmail(firstName, lastName, email, password)
 
-        RetrofitClient.instance.register(request).enqueue(object : Callback<RegisterResponse> {
+        RetrofitClient.instance.registerEmail(request).enqueue(object : Callback<RegisterResponse> {
             override fun onResponse(call: Call<RegisterResponse>, response: Response<RegisterResponse>) {
                 if (response.isSuccessful && response.body() != null) {
                     onSuccess?.invoke()

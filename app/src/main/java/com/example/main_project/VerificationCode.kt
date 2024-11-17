@@ -49,6 +49,9 @@ class VerificationCode : Fragment() {
             }
         }
 
+        val email = sharedViewModel.email
+        binding.todoText.text = "Please enter the verification code we have sent to\n$email"
+
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 if (findNavController().currentDestination?.id == R.id.verificationCode) {
@@ -76,6 +79,7 @@ class VerificationCode : Fragment() {
                 binding.timer.setTextColor(resources.getColor(R.color.background, null))
                 binding.timer.setOnClickListener {
                     resendOtp()
+                    showLoadingDialog()
                 }
             }
         }.start()
@@ -90,11 +94,13 @@ class VerificationCode : Fragment() {
     private fun resendOtp() {
         sharedViewModel.sendDataToApi(
             onSuccess = {
+                loadingDialog.dismiss()
                 Toast.makeText(context, "OTP resent successfully", Toast.LENGTH_SHORT).show()
                 timeLeftInMillis = 30000
                 startTimer()
             },
             onError = {
+                loadingDialog.dismiss()
                 Toast.makeText(context,"OTP not send successfully", Toast.LENGTH_SHORT).show()
             }
         )
@@ -141,7 +147,7 @@ class VerificationCode : Fragment() {
     private fun handleInvalidOtp() {
         clearAllEntries()
         setEditTextErrorOutline()
-        Toast.makeText(context, "Invalid OTP, please try again.", Toast.LENGTH_SHORT).show()
+        unfocusEditTexts()
     }
 
     private fun setUpOtpEditTexts() {
@@ -159,31 +165,32 @@ class VerificationCode : Fragment() {
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    if (s != null && s.isNotEmpty()) {
-                        editText.setBackgroundResource(R.drawable.edittext_prop)
-                    }
-
-                    if (s != null) {
-                        if (s.length == 1 && index < editTexts.size - 1) {
-                            editTexts[index + 1].requestFocus()
-                        } else if (s.isEmpty() && index > 0) {
-                            editTexts[index - 1].requestFocus()
-                        }
+                    if (!s.isNullOrEmpty() && index < editTexts.size - 1) {
+                        editTexts[index + 1].requestFocus()
+                        editTexts[index].setBackgroundResource(R.drawable.edittext_prop)
                     }
                 }
 
                 override fun afterTextChanged(s: Editable?) {}
             })
 
-            editText.setOnKeyListener { v, keyCode, event ->
-                if (keyCode == android.view.KeyEvent.KEYCODE_DEL && (editText.text.isEmpty() && editText.isFocused)) {
-                    val previousIndex = editTexts.indexOf(editText) - 1
-                    if (previousIndex >= 0) {
-                        editTexts[previousIndex].requestFocus()
+            editText.setOnKeyListener { _, keyCode, event ->
+                if (keyCode == android.view.KeyEvent.KEYCODE_DEL && event.action == android.view.KeyEvent.ACTION_DOWN) {
+                    if (editText.text.isEmpty() && index > 0) {
+                        editTexts[index - 1].text.clear()
+                        editTexts[index - 1].requestFocus()
+                    } else if (editText.text.isNotEmpty()) {
+                        editText.text.clear()
                     }
                     true
                 } else {
                     false
+                }
+            }
+
+            editText.setOnFocusChangeListener { _, hasFocus ->
+                if (hasFocus && editText.text.isNotEmpty() && index < editTexts.size - 1) {
+                    editTexts[index + 1].requestFocus()
                 }
             }
         }
@@ -216,6 +223,11 @@ class VerificationCode : Fragment() {
     private fun showLoadingDialog() {
         loadingDialog = Dialog(requireContext())
         loadingDialog.setContentView(R.layout.loader)
+        loadingDialog.window?.setBackgroundDrawableResource(android.R.color.white)
+        loadingDialog.window?.setLayout(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT
+        )
         loadingDialog.setCancelable(false)
         loadingDialog.show()
     }

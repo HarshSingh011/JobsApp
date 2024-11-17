@@ -33,8 +33,6 @@ class NewPassword : Fragment() {
         _binding = FragmentNewPasswordBinding.inflate(inflater, container, false)
         binding.loginBtn.isEnabled = true
 
-        setupTextWatchers()
-
         binding.loginBtn.setOnClickListener {
             validateInputs()
         }
@@ -45,21 +43,19 @@ class NewPassword : Fragment() {
             }
         })
 
-        return binding.root
-    }
-
-    private fun setupTextWatchers() {
-        binding.typePassword.editText?.doOnTextChanged { text, _, _, _ ->
-            if (!text.isNullOrEmpty()) {
+        binding.typePassword.editText?.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
                 resetTypePasswordField()
             }
         }
 
-        binding.editPassword.editText?.doOnTextChanged { text, _, _, _ ->
-            if (!text.isNullOrEmpty()) {
+        binding.editPassword.editText?.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
                 resetPasswordField()
             }
         }
+
+        return binding.root
     }
 
     private fun validateInputs() {
@@ -69,8 +65,8 @@ class NewPassword : Fragment() {
         var hasError = false
 
         if (type != password) {
-            binding.typePassword.error = "Not matched"
             binding.editPassword.error = "Not matched"
+            binding.editPassword.clearFocus()
             binding.typePassword.editText?.setBackgroundResource(R.drawable.error_prop)
             binding.editPassword.editText?.setBackgroundResource(R.drawable.error_prop)
             hasError = true
@@ -78,6 +74,8 @@ class NewPassword : Fragment() {
 
         val passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,20}$".toRegex()
         if (!passwordRegex.matches(type) || !passwordRegex.matches(password)) {
+            binding.editPassword.clearFocus()
+            binding.editPassword.clearFocus()
             binding.editPassword.error = "8-20 char, A-Z, a-z, 0-9, and symbol"
             binding.typePassword.error = "8-20 char, A-Z, a-z, 0-9, and symbol"
             binding.typePassword.editText?.setBackgroundResource(R.drawable.error_prop)
@@ -86,13 +84,13 @@ class NewPassword : Fragment() {
         }
 
         if (type.isBlank()) {
-            binding.typePassword.error = "*Required"
+            binding.typePassword.error = "Required"
             binding.typePassword.editText?.setBackgroundResource(R.drawable.error_prop)
             hasError = true
         }
 
         if (password.isBlank()) {
-            binding.editPassword.error = "*Required"
+            binding.editPassword.error = "Required"
             binding.editPassword.editText?.setBackgroundResource(R.drawable.error_prop)
             hasError = true
         }
@@ -110,9 +108,9 @@ class NewPassword : Fragment() {
     }
 
     private fun applyErrorBackground(editText1: TextInputLayout, editText2: TextInputLayout , errorMessage: String) {
-        editText1.editText?.setBackgroundResource(R.drawable.error_prop)
+//        editText1.editText?.setBackgroundResource(R.drawable.error_prop)
         editText2.editText?.setBackgroundResource(R.drawable.error_prop)
-        editText1.error = errorMessage
+//        editText1.error = errorMessage
         editText2.error = errorMessage
         editText1.editText?.clearFocus()
         editText2.editText?.clearFocus()
@@ -154,6 +152,11 @@ class NewPassword : Fragment() {
     private fun showLoadingDialog() {
         loadingDialog = Dialog(requireContext())
         loadingDialog.setContentView(R.layout.loader)
+        loadingDialog.window?.setBackgroundDrawableResource(android.R.color.white)
+        loadingDialog.window?.setLayout(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT
+        )
         loadingDialog.setCancelable(false)
         loadingDialog.show()
     }

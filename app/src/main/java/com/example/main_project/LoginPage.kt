@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -55,9 +56,6 @@ class LoginPage : Fragment() {
             }
         }
 
-        binding.editEmail.editText?.addTextChangedListener(resetErrorTextWatcher)
-        binding.editPassword.editText?.addTextChangedListener(resetErrorTextWatcher)
-
         binding.editEmail.editText?.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
                 resetToDefaultDrawable(binding.editEmail)
@@ -82,14 +80,6 @@ class LoginPage : Fragment() {
         return binding.root
     }
 
-    private val resetErrorTextWatcher = object : TextWatcher {
-        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-        override fun afterTextChanged(s: Editable?) {
-            resetToDefaultDrawable(binding.editEmail)
-            resetToDefaultDrawable(binding.editPassword)
-        }
-    }
 
     private fun validateInputs() {
         var input = binding.editEmail.editText?.text.toString().trim()
@@ -98,8 +88,9 @@ class LoginPage : Fragment() {
         var hasError = false
 
         if (input.isBlank()) {
-            binding.editEmail.error = "*Required"
+            binding.editEmail.error = "Required"
             binding.editEmail.editText?.setBackgroundResource(R.drawable.error_prop)
+            binding.editEmail.clearFocus()
             hasError = true
         } else {
             binding.editEmail.editText?.setBackgroundResource(R.drawable.edittext_prop)
@@ -111,6 +102,7 @@ class LoginPage : Fragment() {
 
         val passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,20}$".toRegex()
         if (!passwordRegex.matches(password)) {
+            binding.editEmail.clearFocus()
             binding.editPassword.error = "8-20 char, A-Z, a-z, 0-9, and symbol"
             binding.editPassword.editText?.setBackgroundResource(R.drawable.error_prop)
             hasError = true
@@ -129,6 +121,11 @@ class LoginPage : Fragment() {
     private fun showLoadingDialog() {
         loadingDialog = Dialog(requireContext())
         loadingDialog.setContentView(R.layout.loader)
+        loadingDialog.window?.setBackgroundDrawableResource(android.R.color.white)
+        loadingDialog.window?.setLayout(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT
+        )
         loadingDialog.setCancelable(false)
         loadingDialog.show()
     }
@@ -163,6 +160,7 @@ class LoginPage : Fragment() {
             }
 
             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
+                println("fail")
                 binding.loginBtn.isEnabled = true
                 loadingDialog.dismiss()
 
@@ -189,10 +187,14 @@ class LoginPage : Fragment() {
     }
 
     private fun showError(message: String) {
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
 
-        binding.editEmail.editText?.setBackgroundResource(R.drawable.error_prop)
-        binding.editPassword.editText?.setBackgroundResource(R.drawable.error_prop)
+        if( message == "Incorrect password"){
+            binding.editPassword.editText?.setBackgroundResource(R.drawable.error_prop)
+            binding.editPassword.error = message
+        }else{
+            binding.editEmail.editText?.setBackgroundResource(R.drawable.error_prop)
+            binding.editEmail.error = message
+        }
 
         binding.editEmail.editText?.clearFocus()
         binding.editPassword.editText?.clearFocus()

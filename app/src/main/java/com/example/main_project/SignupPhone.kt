@@ -13,6 +13,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.main_project.databinding.FragmentSignupPhoneBinding
 import com.google.android.material.textfield.TextInputLayout
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -39,7 +40,17 @@ class SignupPhone : Fragment() {
             findNavController().navigate(R.id.loginPage)
         }
 
-        setupTextWatchers()
+        binding.editEmail.editText?.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+                resetToDefaultDrawable(binding.editEmail)
+            }
+        }
+
+        binding.editPassword.editText?.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+                resetToDefaultDrawable(binding.editPassword)
+            }
+        }
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
@@ -50,20 +61,6 @@ class SignupPhone : Fragment() {
         return binding.root
     }
 
-    private fun setupTextWatchers() {
-        binding.editEmail.editText?.doOnTextChanged { text, _, _, _ ->
-            if (!text.isNullOrEmpty()) {
-                resetToDefaultDrawable(binding.editEmail)
-            }
-        }
-
-        binding.editPassword.editText?.doOnTextChanged { text, _, _, _ ->
-            if (!text.isNullOrEmpty()) {
-                resetToDefaultDrawable(binding.editPassword)
-            }
-        }
-    }
-
     private fun validateInputs() {
         val input = binding.editEmail.editText?.text.toString().trim()
         val password = binding.editPassword.editText?.text.toString().trim()
@@ -71,6 +68,8 @@ class SignupPhone : Fragment() {
         var hasError = false
 
         if (input.isBlank() || input.length != 10) {
+            binding.editEmail.clearFocus()
+            binding.editPassword.clearFocus()
             binding.editEmail.error = "10 digit mobile number required"
             binding.editEmail.editText?.setBackgroundResource(R.drawable.error_prop)
             hasError = true
@@ -80,6 +79,8 @@ class SignupPhone : Fragment() {
 
         val passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,20}$".toRegex()
         if (!passwordRegex.matches(password)) {
+            binding.editEmail.clearFocus()
+            binding.editPassword.clearFocus()
             binding.editPassword.error = "8-20 char, A-Z, a-z, 0-9, and symbol"
             binding.editPassword.editText?.setBackgroundResource(R.drawable.error_prop)
             hasError = true
@@ -88,7 +89,9 @@ class SignupPhone : Fragment() {
         }
 
         if (password.isBlank()) {
-            binding.editPassword.error = "*Required"
+            binding.editPassword.error = "Required"
+            binding.editEmail.clearFocus()
+            binding.editPassword.clearFocus()
             binding.editPassword.editText?.setBackgroundResource(R.drawable.error_prop)
             hasError = true
         } else {
@@ -112,7 +115,7 @@ class SignupPhone : Fragment() {
 
         val request = RegisterRequestPhone(firstName, lastName, mobile, password)
 
-        RetrofitClient.instance.register(request).enqueue(object : Callback<RegisterResponse> {
+        RetrofitClient.instance.registerPhone(request).enqueue(object : Callback<RegisterResponse> {
             override fun onResponse(call: Call<RegisterResponse>, response: Response<RegisterResponse>) {
                 binding.getOTP.isEnabled = true
                 loadingDialog.dismiss()
@@ -122,7 +125,8 @@ class SignupPhone : Fragment() {
                     Toast.makeText(requireContext(), responseMessage, Toast.LENGTH_SHORT).show()
                     findNavController().navigate(R.id.verificationCode)
                 } else {
-                    val errorMessage = response.errorBody()?.string() ?: "Invalid credentials"
+                    val errorResponse = response.errorBody()?.string()
+                    val errorMessage = errorResponse?.let { parseErrorMessage(it) } ?: "An error occurred"
                     handleApiError(errorMessage)
                 }
             }
@@ -141,17 +145,31 @@ class SignupPhone : Fragment() {
         })
     }
 
+    private fun parseErrorMessage(response: String): String {
+        return try {
+            val jsonObject = JSONObject(response)
+            jsonObject.getString("message")
+        } catch (e: Exception) {
+            "An error occurred"
+        }
+    }
+
     private fun showLoadingDialog() {
         loadingDialog = Dialog(requireContext())
         loadingDialog.setContentView(R.layout.loader)
+        loadingDialog.window?.setBackgroundDrawableResource(android.R.color.white)
+        loadingDialog.window?.setLayout(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT
+        )
         loadingDialog.setCancelable(false)
         loadingDialog.show()
     }
     private fun handleApiError(errorMessage: String) {
         Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
         binding.editEmail.error = errorMessage
+        binding.editEmail.clearFocus()
         binding.editEmail.editText?.setBackgroundResource(R.drawable.error_prop)
-        binding.editPassword.editText?.setBackgroundResource(R.drawable.error_prop)
     }
 
     private fun resetToDefaultDrawable(editTextLayout: TextInputLayout) {

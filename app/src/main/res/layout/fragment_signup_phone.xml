@@ -123,6 +123,7 @@
             android:textColorHint="@color/black"
             android:textColor="@color/black"
             android:hint="Enter your Phone Number"
+            android:inputType="phone"
             android:background="@drawable/edittext_prop"/>
     </com.google.android.material.textfield.TextInputLayout>
 

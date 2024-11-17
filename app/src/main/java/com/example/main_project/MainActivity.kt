@@ -1,5 +1,6 @@
 package com.example.main_project
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
@@ -14,5 +15,7 @@ class MainActivity : AppCompatActivity() {
         val navController = navHostFragment.navController
 
         navController.navigate(R.id.splashScreen)
+
     }
+
 }

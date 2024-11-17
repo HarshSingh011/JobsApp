@@ -49,6 +49,9 @@ class ForgotOtp : Fragment() {
             }
         }
 
+        val email = sharedViewModel.contact
+        binding.todoText.text = "Please enter the verification code we have sent to\n$email"
+
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 if (findNavController().currentDestination?.id == R.id.forgotOtp) {
@@ -71,10 +74,11 @@ class ForgotOtp : Fragment() {
             }
 
             override fun onFinish() {
-                binding.timer.text = "Didn’t receive any code? Resend code"
+                binding.timer.text = "Didn’t receive any code?  Resend code"
                 binding.timer.isEnabled = true
                 binding.timer.setTextColor(resources.getColor(R.color.background, null))
                 binding.timer.setOnClickListener {
+                    showLoadingDialog()
                     resendOtp()
                 }
             }
@@ -90,17 +94,18 @@ class ForgotOtp : Fragment() {
     private fun resendOtp() {
         sharedViewModel.sendForgotPasswordRequest(
             onSuccess = {
+                loadingDialog.dismiss()
                 Toast.makeText(context, "OTP resent successfully", Toast.LENGTH_SHORT).show()
-                timeLeftInMillis = 30000
+                timeLeftInMillis = 60000
                 startTimer()
             },
             onError = { errorMessage ->
+                loadingDialog.dismiss()
                 Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
             }
         )
         binding.timer.isEnabled = false
     }
-
 
     private fun getEnteredOtp(): String {
         return with(binding) {
@@ -128,6 +133,8 @@ class ForgotOtp : Fragment() {
                     Toast.makeText(context, response.body()!!.message, Toast.LENGTH_SHORT).show()
                     findNavController().navigate(R.id.newPassword)
                 } else {
+                    val errorMessage = response.body()?.message ?: "An error occurred. Please try again."
+                    Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
                     handleInvalidOtp()
                 }
             }
@@ -143,13 +150,18 @@ class ForgotOtp : Fragment() {
     private fun showLoadingDialog() {
         loadingDialog = Dialog(requireContext())
         loadingDialog.setContentView(R.layout.loader)
+        loadingDialog.window?.setBackgroundDrawableResource(android.R.color.white)
+        loadingDialog.window?.setLayout(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT
+        )
         loadingDialog.setCancelable(false)
         loadingDialog.show()
     }
     private fun handleInvalidOtp() {
         clearAllEntries()
         setEditTextErrorOutline()
-        Toast.makeText(context, "Invalid OTP, please try again.", Toast.LENGTH_SHORT).show()
+        unfocusEditTexts()
     }
 
     private fun setUpOtpEditTexts() {
@@ -167,31 +179,32 @@ class ForgotOtp : Fragment() {
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    if (s != null && s.isNotEmpty()) {
-                        editText.setBackgroundResource(R.drawable.edittext_prop)
-                    }
-
-                    if (s != null) {
-                        if (s.length == 1 && index < editTexts.size - 1) {
-                            editTexts[index + 1].requestFocus()
-                        } else if (s.isEmpty() && index > 0) {
-                            editTexts[index - 1].requestFocus()
-                        }
+                    if (!s.isNullOrEmpty() && index < editTexts.size - 1) {
+                        editTexts[index + 1].requestFocus()
+                        editTexts[index].setBackgroundResource(R.drawable.edittext_prop)
                     }
                 }
 
                 override fun afterTextChanged(s: Editable?) {}
             })
 
-            editText.setOnKeyListener { v, keyCode, event ->
-                if (keyCode == android.view.KeyEvent.KEYCODE_DEL && (editText.text.isEmpty() && editText.isFocused)) {
-                    val previousIndex = editTexts.indexOf(editText) - 1
-                    if (previousIndex >= 0) {
-                        editTexts[previousIndex].requestFocus()
+            editText.setOnKeyListener { _, keyCode, event ->
+                if (keyCode == android.view.KeyEvent.KEYCODE_DEL && event.action == android.view.KeyEvent.ACTION_DOWN) {
+                    if (editText.text.isEmpty() && index > 0) {
+                        editTexts[index - 1].text.clear()
+                        editTexts[index - 1].requestFocus()
+                    } else if (editText.text.isNotEmpty()) {
+                        editText.text.clear()
                     }
                     true
                 } else {
                     false
+                }
+            }
+
+            editText.setOnFocusChangeListener { _, hasFocus ->
+                if (hasFocus && editText.text.isNotEmpty() && index < editTexts.size - 1) {
+                    editTexts[index + 1].requestFocus()
                 }
             }
         }

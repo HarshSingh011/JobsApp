@@ -49,18 +49,11 @@ class ForgotPassword : Fragment() {
             }
         }
 
-        binding.editEmail.editText?.doOnTextChanged { text, _, _, _ ->
-            if (!text.isNullOrEmpty()) {
+        binding.editEmail.editText?.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
                 resetEmailField()
             }
         }
-
-        requireActivity().onBackPressedDispatcher.addCallback(
-            viewLifecycleOwner, object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    findNavController().navigate(R.id.loginPage)
-                }
-            })
     }
 
     private fun getFormattedUsername(): String {
@@ -78,7 +71,8 @@ class ForgotPassword : Fragment() {
     }
 
     private fun applyErrorToEmailField() {
-        binding.editEmail.error = "*Required"
+        binding.editEmail.error = "Required"
+        binding.editEmail.clearFocus()
         binding.editEmail.editText?.setBackgroundResource(R.drawable.error_prop)
     }
 
@@ -127,6 +121,11 @@ class ForgotPassword : Fragment() {
     private fun showLoadingDialog() {
         loadingDialog = Dialog(requireContext())
         loadingDialog.setContentView(R.layout.loader)
+        loadingDialog.window?.setBackgroundDrawableResource(android.R.color.white)
+        loadingDialog.window?.setLayout(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT
+        )
         loadingDialog.setCancelable(false)
         loadingDialog.show()
     }

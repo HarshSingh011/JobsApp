@@ -6,4 +6,9 @@
         <item name="android:textSize">52sp</item>
         <item name="android:textColor">#FFFFFF</item>
     </style>
+
+    <string-array name="role">
+        <item>Candidate</item>
+        <item>Recruiter</item>
+    </string-array>
 </resources>

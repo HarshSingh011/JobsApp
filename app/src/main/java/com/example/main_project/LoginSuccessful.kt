@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import kotlinx.coroutines.launch
@@ -28,6 +29,20 @@ class LoginSuccessful : Fragment() {
                 findNavController().navigate(R.id.loginPage)
             }
         }
+
+        val nextbtn: Button = view.findViewById(R.id.next)
+        nextbtn.setOnClickListener {
+            findNavController().navigate(R.id.yourProfile)
+        }
+
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    activity?.finish()
+                }
+            }
+        )
 
         return view
     }
