@@ -13,8 +13,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
-        tools:context=".Certificates"
-        >
+        tools:context=".Certificates">
+
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline1"
             android:layout_width="wrap_content"
@@ -34,77 +34,128 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="53dp"
+            android:clickable="true"
             android:gravity="end"
             android:text="NEXT"
             android:textColor="@color/background"
             android:textSize="24sp"
             android:textStyle="bold"
-            android:clickable="true"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/guideline3"/>
+            app:layout_constraintEnd_toEndOf="@id/guideline3"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/loc"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:src="@drawable/profile3"
             android:layout_marginTop="88dp"
-            app:layout_constraintTop_toTopOf="parent"
+            android:src="@drawable/profile3"
             app:layout_constraintEnd_toEndOf="@id/guideline3"
-            app:layout_constraintStart_toStartOf="@id/guideline1" />
+            app:layout_constraintStart_toStartOf="@id/guideline1"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/field1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Certificate"
             android:layout_marginTop="138dp"
+            android:text="Certificate"
             android:textColor="@color/background"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="@id/guideline3"
             app:layout_constraintStart_toStartOf="@id/guideline1"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/certificatepdf_preview"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:scaleType="centerInside"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/field1"
+            app:layout_constraintBottom_toTopOf="@id/certi_pdf"/>
+
+        <TextView
+            android:id="@+id/certi_pdf"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:layout_marginTop="15dp"
+            android:textColor="@color/background"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@id/certificate"
+            app:layout_constraintEnd_toEndOf="@id/guideline3"
+            app:layout_constraintStart_toStartOf="@id/guideline1"
+            app:layout_constraintTop_toBottomOf="@id/certificatepdf_preview"
+            app:layout_constraintVertical_chainStyle="packed" />
 
 
         <Button
+            android:id="@+id/certificate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/background"
-            android:layout_marginTop="175dp"
             android:layout_marginBottom="60dp"
-            android:text="Add Certificate"
-            app:cornerRadius="10dp"
-            android:textSize="18sp"
+            android:backgroundTint="@color/background"
             android:drawableEnd="@drawable/plus"
+            android:text="Add Certificate"
+            android:textSize="18sp"
+            app:cornerRadius="10dp"
             app:layout_constraintStart_toEndOf="@id/guideline1"
-            app:layout_constraintTop_toTopOf="parent"
-            />
+            app:layout_constraintTop_toBottomOf="@id/certi_pdf"
+            app:layout_constraintBottom_toTopOf="@id/field2"/>
 
         <TextView
             android:id="@+id/field2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="257dp"
+            android:layout_marginTop="20dp"
             android:gravity="start"
             android:text="Resume"
             android:textColor="@color/background"
             android:textSize="20sp"
             app:layout_constraintEnd_toStartOf="@id/guideline3"
             app:layout_constraintStart_toEndOf="@id/guideline1"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/certificate"
+            app:layout_constraintBottom_toTopOf="@id/resumepdf_preview"/>
+
+        <ImageView
+            android:id="@+id/resumepdf_preview"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:layout_marginTop="16dp"
+            android:scaleType="centerInside"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/field2"
+            app:layout_constraintBottom_toTopOf="@id/resume_pdf"/>
+
+        <TextView
+            android:id="@+id/resume_pdf"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="294dp"
+            android:text=""
+            android:textColor="@color/background"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@id/resume"
+            app:layout_constraintEnd_toEndOf="@id/guideline3"
+            app:layout_constraintStart_toStartOf="@id/guideline1"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
 
         <Button
+            android:id="@+id/resume"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/background"
-            android:layout_marginTop="294dp"
-            android:text="Add Resume"
-            app:cornerRadius="10dp"
-            android:textSize="18sp"
             android:drawableEnd="@drawable/plus"
+            android:text="Add Resume"
+            android:textSize="18sp"
+            app:cornerRadius="10dp"
             app:layout_constraintStart_toEndOf="@id/guideline1"
-            app:layout_constraintTop_toTopOf="parent"
-            />
+            app:layout_constraintTop_toBottomOf="@id/resume_pdf" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

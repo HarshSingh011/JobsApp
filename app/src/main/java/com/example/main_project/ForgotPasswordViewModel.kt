@@ -1,5 +1,7 @@
 package com.example.main_project
 
+import AuthDataClasses.ForgotPasswordRequest
+import AuthDataClasses.ForgotPasswordResponse
 import androidx.lifecycle.ViewModel
 import retrofit2.Call
 import retrofit2.Callback

@@ -1,5 +1,7 @@
-package com.example.main_project
+package AuthPages
 
+import AuthDataClasses.ChangePasswordRequest
+import AuthDataClasses.ChangePasswordResponse
 import android.app.Dialog
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -14,34 +16,37 @@ import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.example.main_project.databinding.FragmentVerificationCodeBinding
+import com.example.main_project.ForgotPasswordViewModel
+import com.example.main_project.R
+import com.example.main_project.RetrofitClient
+import com.example.main_project.databinding.FragmentForgotOtpBinding
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class VerificationCode : Fragment() {
+class ForgotOtp : Fragment() {
 
-    private var _binding: FragmentVerificationCodeBinding? = null
+    private var _binding: FragmentForgotOtpBinding? = null
     private val binding get() = _binding!!
-    private val sharedViewModel: RegisterViewModel by activityViewModels()
+    private val sharedViewModel: ForgotPasswordViewModel by activityViewModels()
     private lateinit var countdownTimer: CountDownTimer
     private var timeLeftInMillis: Long = 30000
-
     private lateinit var loadingDialog: Dialog
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        _binding = FragmentVerificationCodeBinding.inflate(inflater, container, false)
+    ): View {
+        _binding = FragmentForgotOtpBinding.inflate(inflater, container, false)
 
         binding.loginBtn.setOnClickListener {
             if (areAllDigitsEntered()) {
                 val otp = getEnteredOtp()
-                sharedViewModel.email?.let { email ->
-                    sendOtpToApi(email, otp)
+                sharedViewModel.contact?.let { contact ->
+                    sendOtpToApi(contact, otp,)
                 }
-                showLoadingDialog()
                 binding.loginBtn.isEnabled = false
+                showLoadingDialog()
             } else {
                 clearAllEntries()
                 setEditTextErrorOutline()
@@ -49,12 +54,12 @@ class VerificationCode : Fragment() {
             }
         }
 
-        val email = sharedViewModel.email
+        val email = sharedViewModel.contact
         binding.todoText.text = "Please enter the verification code we have sent to\n$email"
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                if (findNavController().currentDestination?.id == R.id.verificationCode) {
+                if (findNavController().currentDestination?.id == R.id.forgotOtp) {
                     findNavController().navigate(R.id.loginPage)
                 }
             }
@@ -74,12 +79,12 @@ class VerificationCode : Fragment() {
             }
 
             override fun onFinish() {
-                binding.timer.text = "Didn’t receive any code?Resend code"
+                binding.timer.text = "Didn’t receive any code?  Resend code"
                 binding.timer.isEnabled = true
                 binding.timer.setTextColor(resources.getColor(R.color.background, null))
                 binding.timer.setOnClickListener {
-                    resendOtp()
                     showLoadingDialog()
+                    resendOtp()
                 }
             }
         }.start()
@@ -92,58 +97,72 @@ class VerificationCode : Fragment() {
     }
 
     private fun resendOtp() {
-        sharedViewModel.sendDataToApi(
+        sharedViewModel.sendForgotPasswordRequest(
             onSuccess = {
                 loadingDialog.dismiss()
                 Toast.makeText(context, "OTP resent successfully", Toast.LENGTH_SHORT).show()
-                timeLeftInMillis = 30000
+                timeLeftInMillis = 60000
                 startTimer()
             },
-            onError = {
+            onError = { errorMessage ->
                 loadingDialog.dismiss()
-                Toast.makeText(context,"OTP not send successfully", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
             }
         )
         binding.timer.isEnabled = false
     }
 
     private fun getEnteredOtp(): String {
-        return binding.digitOne.text.toString() +
-                binding.digitTwo.text.toString() +
-                binding.digitThree.text.toString() +
-                binding.digitFour.text.toString() +
-                binding.digitFive.text.toString() +
-                binding.digitSix.text.toString()
+        return with(binding) {
+            digitOne.text.toString() +
+                    digitTwo.text.toString() +
+                    digitThree.text.toString() +
+                    digitFour.text.toString() +
+                    digitFive.text.toString() +
+                    digitSix.text.toString()
+        }
     }
 
     private fun sendOtpToApi(contact: String, otp: String) {
-        val request = OtpRequest(contact = contact, otp = otp)
-        val call = RetrofitClient.instance.validateOtp(request)
+        val request = ChangePasswordRequest(contact, otp)
+        println(contact)
+        println(otp)
+        val call = RetrofitClient.instance.forgotPasswordOTP(request)
 
-        call.enqueue(object : Callback<OtpResponse> {
-            override fun onResponse(call: Call<OtpResponse>, response: Response<OtpResponse>) {
-                loadingDialog.dismiss()
+        call.enqueue(object : Callback<ChangePasswordResponse> {
+            override fun onResponse(call: Call<ChangePasswordResponse>, response: Response<ChangePasswordResponse>) {
                 binding.loginBtn.isEnabled = true
+                loadingDialog.dismiss()
+
                 if (response.isSuccessful && response.body() != null) {
-                    response.body()?.token?.let {
-                        Toast.makeText(context, response.body()!!.message, Toast.LENGTH_SHORT).show()
-                        findNavController().navigate(R.id.verified)
-                    } ?: run {
-                        handleInvalidOtp()
-                    }
+                    Toast.makeText(context, response.body()!!.message, Toast.LENGTH_SHORT).show()
+                    findNavController().navigate(R.id.newPassword)
                 } else {
+                    val errorMessage = response.body()?.message ?: "An error occurred. Please try again."
+                    Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
                     handleInvalidOtp()
                 }
             }
 
-            override fun onFailure(call: Call<OtpResponse>, t: Throwable) {
-                loadingDialog.dismiss()
+            override fun onFailure(call: Call<ChangePasswordResponse>, t: Throwable) {
                 binding.loginBtn.isEnabled = true
+                loadingDialog.dismiss()
                 Toast.makeText(context, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
     }
 
+    private fun showLoadingDialog() {
+        loadingDialog = Dialog(requireContext())
+        loadingDialog.setContentView(R.layout.loader)
+        loadingDialog.window?.setBackgroundDrawableResource(android.R.color.white)
+        loadingDialog.window?.setLayout(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT
+        )
+        loadingDialog.setCancelable(false)
+        loadingDialog.show()
+    }
     private fun handleInvalidOtp() {
         clearAllEntries()
         setEditTextErrorOutline()
@@ -218,18 +237,6 @@ class VerificationCode : Fragment() {
         for (editText in editTexts) {
             editText.setBackgroundResource(R.drawable.error_prop)
         }
-    }
-
-    private fun showLoadingDialog() {
-        loadingDialog = Dialog(requireContext())
-        loadingDialog.setContentView(R.layout.loader)
-        loadingDialog.window?.setBackgroundDrawableResource(android.R.color.white)
-        loadingDialog.window?.setLayout(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.MATCH_PARENT
-        )
-        loadingDialog.setCancelable(false)
-        loadingDialog.show()
     }
 
     private fun clearAllEntries() {

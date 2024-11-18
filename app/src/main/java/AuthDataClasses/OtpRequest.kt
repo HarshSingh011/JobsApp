@@ -1,4 +1,4 @@
-package com.example.main_project
+package AuthDataClasses
 
 class OtpRequest (
     val contact: String,

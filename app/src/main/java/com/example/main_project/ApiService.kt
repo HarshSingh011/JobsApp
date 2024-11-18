@@ -1,5 +1,17 @@
 package com.example.main_project
 
+import AuthDataClasses.ChangePasswordRequest
+import AuthDataClasses.ChangePasswordResponse
+import AuthDataClasses.ForgotPasswordRequest
+import AuthDataClasses.ForgotPasswordResponse
+import AuthDataClasses.LoginRequest
+import AuthDataClasses.LoginResponse
+import AuthDataClasses.NewPasswordFormedRequest
+import AuthDataClasses.OtpRequest
+import AuthDataClasses.OtpResponse
+import AuthDataClasses.RegisterRequestEmail
+import AuthDataClasses.RegisterRequestPhone
+import AuthDataClasses.RegisterResponse
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.POST

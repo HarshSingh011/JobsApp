@@ -1,4 +1,4 @@
-package com.example.main_project
+package AuthPages
 
 import android.os.Bundle
 import android.os.Handler
@@ -9,6 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.example.main_project.DataStoreManager
+import com.example.main_project.R
 import com.example.main_project.databinding.FragmentSplashScreenBinding
 import kotlinx.coroutines.launch
 

@@ -1,4 +1,4 @@
-package com.example.main_project
+package AuthDataClasses
 
 data class ChangePasswordResponse(
     val message:String =""

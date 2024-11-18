@@ -1,5 +1,7 @@
-package com.example.main_project
+package AuthPages
 
+import AuthDataClasses.ChangePasswordResponse
+import AuthDataClasses.NewPasswordFormedRequest
 import android.app.Dialog
 import android.os.Bundle
 import android.util.Log
@@ -9,9 +11,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.example.main_project.ForgotPasswordViewModel
+import com.example.main_project.R
+import com.example.main_project.RetrofitClient
 import com.example.main_project.databinding.FragmentNewPasswordBinding
 import com.google.android.material.textfield.TextInputLayout
 import org.json.JSONObject

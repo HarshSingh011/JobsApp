@@ -7,17 +7,17 @@
 
     <fragment
         android:id="@+id/loginPage"
-        android:name="com.example.main_project.LoginPage"
+        android:name="AuthPages.LoginPage"
         android:label="fragment_login_page"
         tools:layout="@layout/fragment_login_page" />
     <fragment
         android:id="@+id/forgotPassword"
-        android:name="com.example.main_project.ForgotPassword"
+        android:name="AuthPages.ForgotPassword"
         android:label="fragment_forgot_password"
         tools:layout="@layout/fragment_forgot_password" />
     <fragment
         android:id="@+id/splashScreen"
-        android:name="com.example.main_project.SplashScreen"
+        android:name="AuthPages.SplashScreen"
         android:label="fragment_splash_screen"
         tools:layout="@layout/fragment_splash_screen" >
     </fragment>
@@ -28,47 +28,47 @@
         tools:layout="@layout/activity_main" />
     <fragment
         android:id="@+id/verificationCode"
-        android:name="com.example.main_project.VerificationCode"
+        android:name="AuthPages.VerificationCode"
         android:label="fragment_verification_code"
         tools:layout="@layout/fragment_verification_code" />
     <fragment
         android:id="@+id/verified"
-        android:name="com.example.main_project.Verified"
+        android:name="AuthPages.Verified"
         android:label="fragment_verified"
         tools:layout="@layout/fragment_verified" />
     <fragment
         android:id="@+id/signUp"
-        android:name="com.example.main_project.SignUp"
+        android:name="AuthPages.SignUp"
         android:label="fragment_sign_up"
         tools:layout="@layout/fragment_sign_up" />
     <fragment
         android:id="@+id/signupEmail"
-        android:name="com.example.main_project.SignupEmail"
+        android:name="AuthPages.SignupEmail"
         android:label="fragment_signup_email"
         tools:layout="@layout/fragment_signup_email" />
     <fragment
         android:id="@+id/newPassword"
-        android:name="com.example.main_project.NewPassword"
+        android:name="AuthPages.NewPassword"
         android:label="fragment_new_password"
         tools:layout="@layout/fragment_new_password" />
     <fragment
         android:id="@+id/loginSuccessful"
-        android:name="com.example.main_project.LoginSuccessful"
+        android:name="AuthPages.LoginSuccessful"
         android:label="fragment_successfull"
         tools:layout="@layout/fragment_successfull" />
     <fragment
         android:id="@+id/signupPhone"
-        android:name="com.example.main_project.SignupPhone"
+        android:name="AuthPages.SignupPhone"
         android:label="fragment_signup_phone"
         tools:layout="@layout/fragment_signup_phone" />
     <fragment
         android:id="@+id/username"
-        android:name="com.example.main_project.Username"
+        android:name="AuthPages.Username"
         android:label="fragment_username"
         tools:layout="@layout/fragment_username" />
     <fragment
         android:id="@+id/forgotOtp"
-        android:name="com.example.main_project.ForgotOtp"
+        android:name="AuthPages.ForgotOtp"
         android:label="fragment_forgot_otp"
         tools:layout="@layout/fragment_forgot_otp" />
     <fragment
@@ -96,6 +96,11 @@
         android:name="com.example.main_project.RecuriterProfile"
         android:label="RecuriterProfile"
         tools:layout="@layout/fragment_recuriter_profile"/>
+    <fragment
+        android:id="@+id/searchJob"
+        android:name="com.example.main_project.SearchJob"
+        android:label="fragment_search_job"
+        tools:layout="@layout/fragment_search_job" />
 
 
 </navigation>

@@ -1,4 +1,4 @@
-package com.example.main_project
+package AuthPages
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -6,9 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
-import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.example.main_project.R
+import com.example.main_project.RegisterViewModel
 import com.example.main_project.databinding.FragmentUsernameBinding
 
 class Username : Fragment() {

@@ -1,8 +1,7 @@
-package com.example.main_project
+package AuthDataClasses
 
-data class ChangePasswordRequest(
+data class NewPasswordFormedRequest(
     val contact: String = "",
-    val otp: String = "",
     val newPassword: String = "",
     val confirmPassword: String = ""
 )

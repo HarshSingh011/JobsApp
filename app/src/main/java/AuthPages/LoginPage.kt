@@ -1,20 +1,22 @@
-package com.example.main_project
+package AuthPages
 
+import AuthDataClasses.LoginRequest
+import AuthDataClasses.LoginResponse
 import android.app.Dialog
 import android.content.Context
 import android.net.ConnectivityManager
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.example.main_project.DataStoreManager
+import com.example.main_project.R
+import com.example.main_project.RetrofitClient
 import com.example.main_project.databinding.FragmentLoginPageBinding
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.launch

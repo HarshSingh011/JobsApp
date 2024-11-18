@@ -1,4 +1,4 @@
-package com.example.main_project
+package AuthPages
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -9,6 +9,8 @@ import android.widget.Button
 import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.example.main_project.DataStoreManager
+import com.example.main_project.R
 import kotlinx.coroutines.launch
 
 class LoginSuccessful : Fragment() {
