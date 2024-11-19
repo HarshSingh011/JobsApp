@@ -78,7 +78,7 @@
         tools:layout="@layout/fragment_your_profile" />
     <fragment
         android:id="@+id/experience"
-        android:name="com.example.main_project.Experience"
+        android:name="com.example.main_project.ExprienceRecord"
         android:label="fragment_experience"
         tools:layout="@layout/fragment_experience" />
     <fragment

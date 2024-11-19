@@ -12,9 +12,8 @@
         <item>Recruiter</item>
     </string-array>
 
-    <string-array name="search_items">
-        <item>Item 1</item>
-        <item>Item 2</item>
-        <item>Item 3</item>
+    <string-array name="expri">
+        <item>Yes</item>
+        <item>No</item>
     </string-array>
 </resources>
