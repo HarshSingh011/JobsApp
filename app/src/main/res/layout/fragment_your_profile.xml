@@ -6,13 +6,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".YourProfile">
+    tools:context=".SettingProfile.Fragments.YourProfile">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
-        tools:context=".YourProfile">
+        tools:context=".SettingProfile.Fragments.YourProfile">
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline1"
@@ -297,20 +297,37 @@
             app:layout_constraintEnd_toStartOf="@+id/guideline3"
             app:layout_constraintStart_toEndOf="@+id/guideline1"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
             >
 
-            <com.google.android.material.textfield.TextInputEditText
+            <AutoCompleteTextView
+                android:id="@+id/autoCompleteDomain"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:padding="15dp"
                 android:background="@drawable/edittext_prop"
-                android:hint="domain"
+                android:hint="Domain"
                 android:inputType="textPersonName"
                 android:maxLength="20"
                 android:textColor="@color/black"
                 android:textColorHint="@color/black"
                 android:textSize="14sp" />
         </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/background"
+            android:layout_marginTop="1060dp"
+            android:layout_marginBottom="60dp"
+            android:text="Add Experience"
+            app:cornerRadius="10dp"
+            android:textSize="18sp"
+            android:dropDownHeight="200dp"
+            android:dropDownAnchor="@id/autoCompleteDomain"
+            android:drawableEnd="@drawable/plus"
+            app:layout_constraintStart_toEndOf="@id/guideline1"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
     
