@@ -6,13 +6,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
+    android:id="@+id/scrollView"
     tools:context=".SettingProfile.Fragments.YourProfile">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
-        tools:context=".SettingProfile.Fragments.YourProfile">
+        android:background="@color/white">
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline1"
@@ -41,16 +41,6 @@
             android:clickable="true"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="@id/guideline3"/>
-
-        <ImageView
-            android:id="@+id/loc"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:src="@drawable/profile1"
-            android:layout_marginTop="88dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/guideline3"
-            app:layout_constraintStart_toStartOf="@id/guideline1" />
 
         <TextView
             android:id="@+id/heading"
@@ -293,13 +283,16 @@
             app:endIconTintMode="@color/black"
             app:helperText="Can be more than 1"
             app:helperTextTextColor="@color/background"
+            app:endIconMode="custom"
             app:hintEnabled="false"
+            app:endIconDrawable="@drawable/baseline_check_24"
             app:layout_constraintEnd_toStartOf="@+id/guideline3"
             app:layout_constraintStart_toEndOf="@+id/guideline1"
             app:layout_constraintTop_toTopOf="parent"
             >
 
             <AutoCompleteTextView
+                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/autoCompleteDomain"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -314,22 +307,21 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
+            android:id="@+id/addEducation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/background"
             android:layout_marginTop="1060dp"
             android:layout_marginBottom="60dp"
-            android:text="Add Experience"
+            android:text="Add Education"
             app:cornerRadius="10dp"
             android:textSize="18sp"
-            android:dropDownHeight="200dp"
-            android:dropDownAnchor="@id/autoCompleteDomain"
             android:drawableEnd="@drawable/plus"
             app:layout_constraintStart_toEndOf="@id/guideline1"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-    
+
 </ScrollView>
 

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph4"
+    app:startDestination="@id/candidateProfile">
+
+    <activity
+        android:id="@+id/mainActivity42"
+        android:name="com.example.main_project.MainActivity4"
+        android:label="activity_main4"
+        tools:layout="@layout/activity_main4" />
+    <fragment
+        android:id="@+id/candidateProfile"
+        android:name="com.example.main_project.candidate.Fragments.CandidateProfile"
+        android:label="fragment_candidate_profile"
+        tools:layout="@layout/fragment_candidate_profile" />
+    <fragment
+        android:id="@+id/candidateEditDetail"
+        android:name="com.example.main_project.candidate.Fragments.CandidateEditDetail"
+        android:label="fragment_candidate_edit_detail"
+        tools:layout="@layout/fragment_candidate_edit_detail" />
+
+</navigation>

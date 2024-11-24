@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardElevation="5dp"
+    app:cardCornerRadius="10dp"
+    android:layout_margin="9dp"
+    android:id="@+id/RecentSearchJobElement">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="10dp">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.05" />
+
+
+        <TextView
+            android:id="@+id/institutionName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="Institute Name"
+            android:textColor="@color/background"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="@id/guideline1"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/institute_edit"
+            android:layout_width="0dp"
+            android:layout_marginLeft="5dp"
+            android:padding="10dp"
+            android:layout_marginHorizontal="10dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/edittext_prop"
+            android:text="Institute Name"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintStart_toEndOf="@id/guideline1"
+            app:layout_constraintTop_toBottomOf="@id/institutionName"/>
+
+
+        <TextView
+            android:id="@+id/degree"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Degree name"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/background"
+            android:textSize="16sp"
+            app:layout_constraintTop_toBottomOf="@id/institute_edit"
+            app:layout_constraintStart_toEndOf="@id/guideline1"
+            />
+
+        <EditText
+            android:id="@+id/Degree_edit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:padding="10dp"
+            android:layout_marginHorizontal="10dp"
+            android:text="Degree name"
+            android:textColor="@color/black"
+            android:background="@drawable/edittext_prop"
+            android:textSize="16sp"
+            app:layout_constraintStart_toEndOf="@id/guideline1"
+            app:layout_constraintTop_toBottomOf="@id/degree"/>
+
+        <TextView
+            android:id="@+id/completionYear"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="year of Completion"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/background"
+            android:textSize="16sp"
+            app:layout_constraintStart_toEndOf="@id/guideline1"
+            app:layout_constraintTop_toBottomOf="@id/Degree_edit"/>
+
+        <EditText
+            android:id="@+id/yearOfCompleletion_edit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edittext_prop"
+            android:layout_marginLeft="5dp"
+            android:padding="10dp"
+            android:layout_marginHorizontal="10dp"
+            android:text="Year of Completion"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintStart_toEndOf="@id/guideline1"
+            app:layout_constraintTop_toBottomOf="@id/completionYear"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

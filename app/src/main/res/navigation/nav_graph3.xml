@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph3"
+    app:startDestination="@id/recuriterProfile">
+
+    <fragment
+        android:id="@+id/recuriterProfile"
+        android:name="com.example.main_project.SettingProfile.Fragments.RecuriterProfile"
+        android:label="RecuriterProfile"
+        tools:layout="@layout/fragment_recuriter_profile"/>
+
+    <fragment
+        android:id="@+id/loginSuccessful"
+        android:name="com.example.main_project.Auth.Fragments.LoginSuccessful"
+        android:label="fragment_successfull"
+        tools:layout="@layout/fragment_successfull" />
+    <fragment
+        android:id="@+id/recruiterDetails"
+        android:name="com.example.main_project.Recruiter.Fragments.RecruiterDetails"
+        android:label="RecruiterDetails" />
+    <fragment
+        android:id="@+id/recruiterDetailsEdit"
+        android:name="com.example.main_project.Recruiter.Fragments.RecruiterDetailsEdit"
+        android:label="fragment_recruiter_details_edit"
+        tools:layout="@layout/fragment_recruiter_details_edit" />
+
+</navigation>

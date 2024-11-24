@@ -90,17 +90,40 @@
         app:layout_constraintGuide_percent="0.46" />
 
     <TextView
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:text="You are ready to go!"
+        android:text="Your Role"
         android:gravity="center"
-        android:textColor="@color/black"
+        android:textColor="@color/background"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@id/guideline6"
-        app:layout_constraintEnd_toStartOf="@id/guideline5"
         app:layout_constraintStart_toEndOf="@id/guideline4"
         app:layout_constraintTop_toBottomOf="@+id/guideline7"/>
     />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/role"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        app:hintEnabled="false"
+        app:layout_constraintEnd_toEndOf="@id/guideline5"
+        app:layout_constraintStart_toStartOf="@id/guideline4"
+        app:layout_constraintTop_toTopOf="@id/guideline6">
+
+        <AutoCompleteTextView
+            android:id="@+id/role_define"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edittext_prop"
+            android:hint="Your role"
+            android:inputType="none"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black"
+            android:textSize="14sp" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline6"
