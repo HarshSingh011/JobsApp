@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".candidate.Fragments.CandidateEditDetail">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.05"/>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.95"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="24dp"
+            android:gravity="center"
+            android:textSize="30sp"
+            android:text="Profile Update"
+            android:textColor="@color/background"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@id/guideline2"
+            app:layout_constraintStart_toStartOf="@id/guideline1"/>
+
+        <TextView
+            android:id="@+id/Education_detail"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Education Details"
+            android:layout_marginTop="100dp"
+            android:textColor="@color/background"
+            android:textSize="20sp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/guideline2"
+            app:layout_constraintStart_toStartOf="@id/guideline1"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewEducation"
+            android:layout_marginTop="10dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/Education_detail"
+            app:layout_constraintEnd_toEndOf="@id/guideline2"
+            app:layout_constraintStart_toStartOf="@id/guideline1"/>
+
+
+        <TextView
+            android:id="@+id/Experience_detail"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Experience Details"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/background"
+            android:textSize="20sp"
+            app:layout_constraintTop_toBottomOf="@id/recyclerViewEducation"
+            app:layout_constraintEnd_toEndOf="@id/guideline2"
+            app:layout_constraintStart_toStartOf="@id/guideline1"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewExperience"
+            android:layout_marginTop="10dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/Experience_detail"
+            app:layout_constraintEnd_toEndOf="@id/guideline2"
+            app:layout_constraintStart_toStartOf="@id/guideline1"/>
+
+        <TextView
+            android:id="@+id/Skill_detail"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Skills Details"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/background"
+            android:textSize="20sp"
+            app:layout_constraintTop_toBottomOf="@id/recyclerViewExperience"
+            app:layout_constraintEnd_toEndOf="@id/guideline2"
+            app:layout_constraintStart_toStartOf="@id/guideline1"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewSkill"
+            android:layout_marginTop="10dp"
+            android:layout_width="0dp"
+            android:layout_marginBottom="60dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/Skill_detail"
+            app:layout_constraintEnd_toEndOf="@id/guideline2"
+            app:layout_constraintStart_toStartOf="@id/guideline1"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="60dp"
+            android:layout_marginBottom="60dp"
+            android:text="Update"
+            android:padding="10dp"
+            app:cornerRadius="10dp"
+            android:backgroundTint="@color/background"
+            app:layout_constraintTop_toBottomOf="@id/recyclerViewSkill"
+            app:layout_constraintEnd_toEndOf="@id/guideline2"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

@@ -7,9 +7,9 @@ import android.graphics.pdf.PdfRenderer
 import android.net.Uri
 import android.os.Bundle
 import android.os.ParcelFileDescriptor
-import android.provider.OpenableColumns
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
@@ -17,41 +17,38 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.viewpager2.widget.ViewPager2
 import com.example.main_project.R
-import com.example.main_project.SettingProfile.CandidateProfileRetrofitClient
-import com.example.main_project.SettingProfile.CandidateInterface
+import com.example.main_project.CandidateProfileRetrofitClient
+import com.example.main_project.CandidateInterface
 import com.example.main_project.databinding.FragmentCertificatesBinding
 import kotlinx.coroutines.launch
-import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
-import java.io.FileInputStream
-import android.view.ViewGroup as ViewGroup1
 
 class Certificates : Fragment() {
 
     private var _binding: FragmentCertificatesBinding? = null
     private val binding get() = _binding!!
+    private var isApiSuccess = false
 
     private var isCertificate = true
     private var selectedFileUri: Uri? = null
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup1?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentCertificatesBinding.inflate(inflater, container, false)
 
-        // Handle back press to navigate to your profile
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                findNavController().navigate(R.id.yourProfile)
+                val viewPager = requireActivity().findViewById<ViewPager2>(R.id.viewPager)
+                viewPager.currentItem = 1
             }
         })
 
-        // Set listeners for certificate and resume
         binding.certificate.setOnClickListener {
             isCertificate = true
             openFilePicker()
@@ -63,11 +60,8 @@ class Certificates : Fragment() {
         }
 
         binding.nextFragment.setOnClickListener {
-            if (selectedFileUri != null) {
-                uploadCertificate()
-            } else {
-                Toast.makeText(requireContext(), "Please select a file", Toast.LENGTH_SHORT).show()
-            }
+            println("hello")
+            findNavController().navigate(R.id.mainActivity4)
         }
 
         return binding.root
@@ -100,16 +94,18 @@ class Certificates : Fragment() {
         if (isCertificate) {
             binding.certiPdf.text = fileName ?: "Certificate uploaded"
             renderPdfPreview(uri, binding.certificatepdfPreview)
+            uploadCertificate(uri)
         } else {
             binding.resumePdf.text = fileName ?: "Resume uploaded"
             renderPdfPreview(uri, binding.resumepdfPreview)
+            uploadResume(uri)
         }
     }
 
     private fun getFileName(uri: Uri): String? {
         val cursor = requireContext().contentResolver.query(uri, null, null, null, null)
         cursor?.use {
-            val nameIndex = it.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+            val nameIndex = it.getColumnIndex(android.provider.OpenableColumns.DISPLAY_NAME)
             if (nameIndex != -1 && it.moveToFirst()) {
                 return it.getString(nameIndex)
             }
@@ -134,48 +130,88 @@ class Certificates : Fragment() {
         }
     }
 
-    private fun uploadCertificate() {
-        selectedFileUri?.let { uri ->
-            val certificateName = binding.certiPdf.text.toString()
+    private fun uploadCertificate(uri: Uri) {
+        val certificateName = binding.certiPdf.text.toString()
 
-            val certificateNameRequestBody = RequestBody.create(
-                "text/plain".toMediaType(), certificateName
-            )
+        val certificateNameRequestBody = RequestBody.create(
+            "text/plain".toMediaType(), certificateName
+        )
 
-            val fileDescriptor = requireContext().contentResolver.openFileDescriptor(uri, "r")
-            val file = File(requireContext().cacheDir, "temp_certificate.pdf").apply {
-                outputStream().use { outputStream ->
-                    fileDescriptor?.fileDescriptor?.let { descriptor ->
-                        FileInputStream(descriptor).use { inputStream ->
-                            inputStream.copyTo(outputStream)
-                        }
-                    }
+        val file = getFileFromUri(uri, "temp_certificate.pdf")
+
+        val certificateDataRequestBody = RequestBody.create(
+            "application/pdf".toMediaType(), file
+        )
+        val certificateDataPart = MultipartBody.Part.createFormData("certificateData", file.name, certificateDataRequestBody)
+        println(certificateDataPart)
+
+        lifecycleScope.launch {
+            try {
+                val apiService = CandidateProfileRetrofitClient.instance(requireContext()).create(CandidateInterface::class.java)
+                val response = apiService.uploadCertificate(certificateNameRequestBody, certificateDataPart)
+
+                if (response.isSuccessful) {
+                    Toast.makeText(requireContext(), "Certificate uploaded successfully", Toast.LENGTH_SHORT).show()
+                    isApiSuccess = true
+                    restrictNavigation()
+                } else {
+                    val errorMessage = response.errorBody()?.string() ?: "Unknown error occurred"
+                    println(errorMessage)
+                    Toast.makeText(requireContext(), "Upload failed: ${response.message()}", Toast.LENGTH_SHORT).show()
                 }
-            }
-
-            val certificateDataRequestBody = RequestBody.create(
-                "application/pdf".toMediaType(), file
-            )
-            val certificateDataPart = MultipartBody.Part.createFormData("certificateData", file.name, certificateDataRequestBody)
-
-            lifecycleScope.launch {
-                try {
-                    val apiService = CandidateProfileRetrofitClient.instance(requireContext()).create(CandidateInterface::class.java)
-                    val response = apiService.uploadCertificate(certificateNameRequestBody, certificateDataPart)
-
-                    if (response.isSuccessful) {
-                        Toast.makeText(requireContext(), "Certificate uploaded successfully", Toast.LENGTH_SHORT).show()
-                    } else {
-                        Toast.makeText(requireContext(), "Upload failed: ${response.message()}", Toast.LENGTH_SHORT).show()
-                    }
-                } catch (e: Exception) {
-                    Toast.makeText(requireContext(), "Error: ${e.message}", Toast.LENGTH_SHORT).show()
-                }
+            } catch (e: Exception) {
+                Toast.makeText(requireContext(), "Error Data: ${e.message}", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
+    private fun uploadResume(uri: Uri) {
+        val file = getFileFromUri(uri, "temp_resume.pdf")
 
+        val resumeDataRequestBody = RequestBody.create(
+            "application/pdf".toMediaType(), file
+        )
+        val resumeDataPart = MultipartBody.Part.createFormData("Resume", file.name, resumeDataRequestBody)
+
+        lifecycleScope.launch {
+            try {
+                val apiService = CandidateProfileRetrofitClient.instance(requireContext()).create(CandidateInterface::class.java)
+                val response = apiService.uploadResume(resumeDataPart)
+
+                if (response.isSuccessful) {
+                    Toast.makeText(requireContext(), "Resume uploaded successfully", Toast.LENGTH_SHORT).show()
+                } else {
+                    val errorMessage = response.errorBody()?.string() ?: "Unknown error occurred"
+                    println(errorMessage)
+                    Toast.makeText(requireContext(), "Upload failed: ${response.message()}", Toast.LENGTH_SHORT).show()
+                }
+            } catch (e: Exception) {
+                Toast.makeText(requireContext(), "Error data: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun getFileFromUri(uri: Uri, fileName: String): File {
+        val file = File(requireContext().cacheDir, fileName).apply {
+            outputStream().use { outputStream ->
+                requireContext().contentResolver.openInputStream(uri)?.use { inputStream ->
+                    inputStream.copyTo(outputStream)
+                }
+            }
+        }
+        return file
+    }
+
+    private fun restrictNavigation() {
+        if (isApiSuccess) {
+            val viewPager = requireActivity().findViewById<ViewPager2>(R.id.viewPager)
+            val tabLayout = requireActivity().findViewById<com.google.android.material.tabs.TabLayout>(R.id.tabLayout)
+
+            viewPager.isUserInputEnabled = false
+            tabLayout.getTabAt(1)?.view?.isEnabled = false
+            tabLayout.getTabAt(0)?.view?.isEnabled = false
+        }
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()

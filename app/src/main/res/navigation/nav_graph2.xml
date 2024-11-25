@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph2"
+    app:startDestination="@id/yourProfile">
+
+    <activity
+        android:id="@+id/mainActivity2"
+        android:name="com.example.main_project.SettingProfile.MainActivity2"
+        android:label="activity_main2"
+        tools:layout="@layout/activity_main2" />
+
+    <fragment
+        android:id="@+id/yourProfile"
+        android:name="com.example.main_project.SettingProfile.Fragments.YourProfile"
+        android:label="fragment_your_profile"
+        tools:layout="@layout/fragment_your_profile" />
+    <fragment
+        android:id="@+id/experience"
+        android:name="com.example.main_project.SettingProfile.Fragments.ExprienceRecord"
+        android:label="fragment_experience"
+        tools:layout="@layout/fragment_experience" />
+
+    <fragment
+        android:id="@+id/certificates"
+        android:name="com.example.main_project.SettingProfile.Fragments.Certificates"
+        android:label="fragment_certificates"
+        tools:layout="@layout/fragment_certificates" />
+
+    <fragment
+        android:id="@+id/searchJob"
+        android:name="com.example.main_project.SeeJobs.Fragments.SearchJob"
+        android:label="fragment_search_job"
+        tools:layout="@layout/fragment_search_job" />
+
+    <fragment
+        android:id="@+id/loginSuccessful"
+        android:name="com.example.main_project.Auth.Fragments.LoginSuccessful"
+        android:label="fragment_successfull"
+        tools:layout="@layout/fragment_successfull" />
+    <fragment
+        android:id="@+id/candidateProfile2"
+        android:name="com.example.main_project.candidate.Fragments.CandidateProfile"
+        android:label="fragment_candidate_profile"
+        tools:layout="@layout/fragment_candidate_profile" />
+    <activity
+        android:id="@+id/mainActivity4"
+        android:name="com.example.main_project.MainActivity4"
+        android:label="activity_main4"
+        tools:layout="@layout/activity_main4" />
+
+</navigation>

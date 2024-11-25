@@ -1,6 +1,7 @@
-package com.example.main_project.SettingProfile
+package com.example.main_project
 
 import android.content.Context
+import com.example.main_project.SettingProfile.AuthTokenInterceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

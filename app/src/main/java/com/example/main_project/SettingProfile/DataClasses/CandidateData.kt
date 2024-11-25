@@ -1,12 +1,8 @@
 package com.example.main_project.SettingProfile.DataClasses
 
-import com.example.main_project.SettingProfile.Fragments.ExprienceRecord
-
 data class CandidateData(
-    val education: List<Education>,
-    val experiences: List<Experience>,
-    val skill: String
+    var educations: MutableList<Educations> = mutableListOf(),
+    var experiences: MutableList<Experience> = mutableListOf(),
+    var skill: List<String>,
+    var DOB: String
 )
-
-
-

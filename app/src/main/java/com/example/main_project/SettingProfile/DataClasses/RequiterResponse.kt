@@ -1,7 +1,5 @@
 package com.example.main_project.SettingProfile.DataClasses
 
-data class CandidateDataResponse(
-    val message: String
+data class RequiterResponse(
+    var message: String?
 )
-
-
