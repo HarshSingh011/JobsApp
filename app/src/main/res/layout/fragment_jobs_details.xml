@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/background"
-    tools:context=".JobsDetails.Fragments.JobsDetails">
+    tools:context=".SeeJobs.Fragments.JobsDetails">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -32,7 +32,6 @@
             android:layout_height="wrap_content"
             app:layout_constraintGuide_percent="1"
             android:orientation="horizontal"/>
-
 
         <ImageView
             android:id="@+id/backbutton"
@@ -157,9 +156,6 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
-
-
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

@@ -1,5 +1,7 @@
 package com.example.main_project
 
+import com.example.main_project.Recruiter.DataClasses.JobRequest
+import com.example.main_project.Recruiter.DataClasses.JobResponse
 import com.example.main_project.Recruiter.DataClasses.RecruiterData
 import com.example.main_project.Recruiter.DataClasses.RecruiterUpdateData
 import com.example.main_project.Recruiter.DataClasses.RecruiterUpdateResponse
@@ -59,6 +61,10 @@ interface CandidateInterface {
     suspend fun updateRecruiter(
         @Body recruiterUpdateData: RecruiterUpdateData
     ): Response<RecruiterUpdateResponse>
+
+    @Headers("Content-Type: application/json")
+    @POST("jobs/create")
+    suspend fun postJob(@Body jobRequest: JobRequest): Response<JobResponse>
 
 }
 

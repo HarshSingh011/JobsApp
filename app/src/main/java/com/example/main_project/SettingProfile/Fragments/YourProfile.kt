@@ -151,7 +151,6 @@ class YourProfile : Fragment() {
         val DOB = binding.DateOfBirth.editText?.text.toString().trim()
         sharedViewModel.DOB = DOB
 
-
         if (institution.isNotEmpty() && degree.isNotEmpty() && yearOfCompletion != null) {
             val newEducation = Educations(institution, degree, yearOfCompletion)
             sharedViewModel.educationList.add(newEducation)

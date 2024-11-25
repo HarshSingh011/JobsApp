@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,216 +9,355 @@
     android:background="@color/white"
     tools:context=".Recruiter.Fragments.PostAJob">
 
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline1"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintGuide_percent="0.05"
-        android:orientation="vertical"/>
+        android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline2"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintGuide_percent="0.95"
-        android:orientation="vertical"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Post a Job"
-        android:textSize="30sp"
-        android:textStyle="bold"
-        android:textColor="@color/background"
-        android:layout_marginTop="43dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="@id/guideline1"
-        />
-
-    <TextView
-        android:id="@+id/Job_Title"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="132dp"
-        android:text="Job Title"
-        android:textSize="18sp"
-        android:textColor="@color/background"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="@id/guideline1"
-        app:layout_constraintEnd_toEndOf="@id/guideline2"
-        />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/job_title_input"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:textColor="@color/black"
-        android:layout_marginTop="169dp"
-        android:textSize="14sp"
-        app:hintEnabled="false"
-        app:layout_constraintEnd_toStartOf="@id/guideline2"
-        app:layout_constraintStart_toEndOf="@id/guideline1"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <com.google.android.material.textfield.TextInputEditText
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/edittext_prop"
-            android:hint="Job title"
-            android:inputType="textEmailAddress"
-            android:textColor="@color/black"
-            android:textColorHint="@color/black"
-            android:textSize="14sp" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_height="match_parent"
+            app:layout_constraintGuide_percent="0.05"
+            android:orientation="vertical"/>
 
-    <TextView
-        android:id="@+id/loc"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="250dp"
-        android:text="Location"
-        android:textSize="18sp"
-        android:textColor="@color/background"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="@id/guideline1"
-        app:layout_constraintEnd_toEndOf="@id/guideline2"
-        />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/loc_input"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:textColor="@color/black"
-        android:layout_marginTop="287dp"
-        android:textSize="14sp"
-        app:hintEnabled="false"
-        app:layout_constraintEnd_toStartOf="@id/guideline2"
-        app:layout_constraintStart_toEndOf="@id/guideline1"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <com.google.android.material.textfield.TextInputEditText
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline2"
             android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintGuide_percent="0.95"
+            android:orientation="vertical"/>
+
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/edittext_prop"
-            android:hint="location"
-            android:inputType="textEmailAddress"
-            android:textColor="@color/black"
-            android:textColorHint="@color/black"
-            android:textSize="14sp" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:text="Post a Job"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            android:textColor="@color/background"
+            android:layout_marginTop="43dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="@id/guideline1"
+            />
 
-
-    <TextView
-        android:id="@+id/Skill"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="368dp"
-        android:text="Skill"
-        android:textSize="18sp"
-        android:textColor="@color/background"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="@id/guideline1"
-        app:layout_constraintEnd_toEndOf="@id/guideline2"
-        />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/skill_input"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:textColor="@color/black"
-        android:textSize="14sp"
-        android:layout_marginTop="405dp"
-        app:hintEnabled="false"
-        app:endIconMode="custom"
-        app:endIconDrawable="@drawable/baseline_check_24"
-        app:layout_constraintEnd_toStartOf="@id/guideline2"
-        app:layout_constraintStart_toEndOf="@id/guideline1"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/JobTitle"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/edittext_prop"
-            android:hint="Job title"
-            android:inputType="textEmailAddress"
-            android:textColor="@color/black"
-            android:textColorHint="@color/black"
-            android:textSize="14sp" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_marginTop="132dp"
+            android:text="Job Title"
+            android:textSize="18sp"
+            android:textColor="@color/background"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="@id/guideline1"
+            app:layout_constraintEnd_toEndOf="@id/guideline2"
+            />
 
-    <TextView
-        android:id="@+id/Experience"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="486dp"
-        android:text="Experience needed "
-        android:textSize="18sp"
-        android:textColor="@color/background"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="@id/guideline1"
-        app:layout_constraintEnd_toEndOf="@id/guideline2"
-        />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/Experience_input"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:textColor="@color/black"
-        android:textSize="14sp"
-        android:layout_marginTop="523dp"
-        app:hintEnabled="false"
-        app:layout_constraintEnd_toStartOf="@id/guideline2"
-        app:layout_constraintStart_toEndOf="@id/guideline1"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/jobtitle_input"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/edittext_prop"
-            android:hint="Job title"
-            android:inputType="textEmailAddress"
             android:textColor="@color/black"
-            android:textColorHint="@color/black"
-            android:textSize="14sp" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_marginTop="169dp"
+            android:textSize="14sp"
+            app:hintEnabled="false"
+            app:layout_constraintEnd_toStartOf="@id/guideline2"
+            app:layout_constraintStart_toEndOf="@id/guideline1"
+            app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        android:id="@+id/JobDescription"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="486dp"
-        android:text="Experience needed "
-        android:textSize="18sp"
-        android:textColor="@color/background"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="@id/guideline1"
-        app:layout_constraintEnd_toEndOf="@id/guideline2"
-        />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/jobtitle_inputbox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edittext_prop"
+                android:hint="Job title"
+                android:inputType="textEmailAddress"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
+                android:textSize="14sp" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/Job_input"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:textColor="@color/black"
-        android:textSize="14sp"
-        android:layout_marginTop="523dp"
-        app:hintEnabled="false"
-        app:layout_constraintEnd_toStartOf="@id/guideline2"
-        app:layout_constraintStart_toEndOf="@id/guideline1"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/location"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/edittext_prop"
-            android:hint="experience"
-            android:inputType="textEmailAddress"
+            android:layout_marginTop="250dp"
+            android:text="Location"
+            android:textSize="18sp"
+            android:textColor="@color/background"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="@id/guideline1"
+            app:layout_constraintEnd_toEndOf="@id/guideline2"
+            />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/location_input"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:textColor="@color/black"
-            android:textColorHint="@color/black"
-            android:textSize="14sp" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_marginTop="287dp"
+            android:textSize="14sp"
+            app:hintEnabled="false"
+            app:layout_constraintEnd_toStartOf="@id/guideline2"
+            app:layout_constraintStart_toEndOf="@id/guideline1"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/location_inputbox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edittext_prop"
+                android:hint="location"
+                android:inputType="textEmailAddress"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
+                android:textSize="14sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <TextView
+            android:id="@+id/Skill"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="368dp"
+            android:text="Skill"
+            android:textSize="18sp"
+            android:textColor="@color/background"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="@id/guideline1"
+            app:layout_constraintEnd_toEndOf="@id/guideline2"
+            />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/skill_input"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:layout_marginTop="405dp"
+            app:hintEnabled="false"
+            app:endIconMode="custom"
+            app:endIconDrawable="@drawable/baseline_check_24"
+            app:layout_constraintEnd_toStartOf="@id/guideline2"
+            app:layout_constraintStart_toEndOf="@id/guideline1"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/skill_inputbox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edittext_prop"
+                android:hint="Job title"
+                android:inputType="textEmailAddress"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
+                android:textSize="14sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/Experience"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="486dp"
+            android:text="Experience needed"
+            android:textSize="18sp"
+            android:textColor="@color/background"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="@id/guideline1"
+            app:layout_constraintEnd_toEndOf="@id/guideline2"
+            />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/Experience_input"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:layout_marginTop="523dp"
+            app:hintEnabled="false"
+            app:layout_constraintEnd_toStartOf="@id/guideline2"
+            app:layout_constraintStart_toEndOf="@id/guideline1"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/Experience_inputbox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edittext_prop"
+                android:hint="Experience"
+                android:inputType="textEmailAddress"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
+                android:textSize="14sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/JobDescription"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="604dp"
+            android:text="Job Title"
+            android:textSize="18sp"
+            android:textColor="@color/background"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="@id/guideline1"
+            app:layout_constraintEnd_toEndOf="@id/guideline2"
+            />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/Job_input"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:layout_marginTop="641dp"
+            app:hintEnabled="false"
+            app:layout_constraintEnd_toStartOf="@id/guideline2"
+            app:layout_constraintStart_toEndOf="@id/guideline1"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/Job_inputbox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edittext_prop"
+                android:hint="Jog"
+                android:inputType="textEmailAddress"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
+                android:textSize="14sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <TextView
+            android:id="@+id/MinimumSalary"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="722dp"
+            android:text="Minimun Salary"
+            android:textSize="18sp"
+            android:textColor="@color/background"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="@id/guideline1"
+            app:layout_constraintEnd_toEndOf="@id/guideline2"
+            />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/MinimumSalary_input"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:layout_marginTop="759dp"
+            app:hintEnabled="false"
+            app:layout_constraintEnd_toStartOf="@id/guideline2"
+            app:layout_constraintStart_toEndOf="@id/guideline1"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/MinimumSalary_inputbox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edittext_prop"
+                android:hint="experience"
+                android:inputType="textEmailAddress"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
+                android:textSize="14sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/MaximumSalary"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="840dp"
+            android:text="Experience needed "
+            android:textSize="18sp"
+            android:textColor="@color/background"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="@id/guideline1"
+            app:layout_constraintEnd_toEndOf="@id/guideline2"
+            />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/MaximumSalary_input"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:layout_marginTop="877dp"
+            app:hintEnabled="false"
+            app:layout_constraintEnd_toStartOf="@id/guideline2"
+            app:layout_constraintStart_toEndOf="@id/guideline1"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/MaximumSalary_inputbox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edittext_prop"
+                android:hint="experience"
+                android:inputType="textEmailAddress"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
+                android:textSize="14sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/Description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="958dp"
+            android:text="Description"
+            android:textSize="18sp"
+            android:textColor="@color/background"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="@id/guideline1"
+            app:layout_constraintEnd_toEndOf="@id/guideline2"
+            />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/Description_input"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:layout_marginTop="995dp"
+            app:hintEnabled="false"
+            android:layout_marginBottom="60dp"
+            app:layout_constraintEnd_toStartOf="@id/guideline2"
+            app:layout_constraintStart_toEndOf="@id/guideline1"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/Description_inputbox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edittext_prop"
+                android:hint="experience"
+                android:inputType="text"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
+                android:textSize="14sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/submit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="60dp"
+            android:layout_marginBottom="60dp"
+            android:text="Update"
+            android:padding="10dp"
+            app:cornerRadius="10dp"
+            android:backgroundTint="@color/background"
+            app:layout_constraintTop_toBottomOf="@id/Description_input"
+            app:layout_constraintEnd_toEndOf="@id/guideline2"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>
 
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
