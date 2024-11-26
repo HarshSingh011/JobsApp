@@ -11,7 +11,9 @@ class CandidateProfileViewModel : ViewModel() {
 
     fun setCandidateData(candidateData: CandidateDataGet) {
         println("Setting candidate data in ViewModel: $candidateData")
+        println(candidateData)
         _candidateData.value = candidateData
+        println("Candidate data in ViewModel: ${_candidateData.value}")
     }
 
     fun getCandidateData(): CandidateDataGet? {

@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
@@ -47,7 +48,8 @@ class CandidateProfile : Fragment() {
     private var _binding: FragmentCandidateProfileBinding? = null
     private val binding get() = _binding!!
 
-    private val candidateViewModel: CandidateProfileViewModel by viewModels()
+//    private val candidateViewModel: CandidateProfileViewModel by viewModels()
+private val candidateViewModel: CandidateProfileViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

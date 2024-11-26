@@ -1,4 +1,4 @@
-package com.example.main_project.JobsDetails.Fragments
+package com.example.main_project.SeeJobs.Fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -16,8 +16,6 @@ class JobsDetails : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentJobsDetailsBinding.inflate(inflater, container, false)
-
-        
 
         return binding.root
     }
