@@ -1,36 +1,41 @@
 package com.example.main_project.SeeJobs.Adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.main_project.R
+import com.example.main_project.SeeJobs.DataClasses.Job
 import com.example.main_project.SeeJobs.DataClasses.SearchJobData
 import com.example.main_project.databinding.SearchJobElementBinding
 
-class JobAdapter(private val jobList: List<SearchJobData>) :
-    RecyclerView.Adapter<JobAdapter.JobViewHolder>() {
-
-    inner class JobViewHolder(private val binding: SearchJobElementBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-        fun bind(job: SearchJobData) {
-            binding.heading.text = job.title
-            binding.subheading.text = job.company
-            binding.textelementone.text = job.type
-            binding.textelementtwo.text = job.location
-            binding.textelementthree.text = job.experience
-            binding.Price.text = job.salary
-        }
-    }
+class JobAdapter(private val jobList: List<Job>) : RecyclerView.Adapter<JobAdapter.JobViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JobViewHolder {
-        val binding = SearchJobElementBinding.inflate(
-            LayoutInflater.from(parent.context), parent, false
-        )
-        return JobViewHolder(binding)
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.search_job_element, parent, false)
+        return JobViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: JobViewHolder, position: Int) {
-        holder.bind(jobList[position])
+        val job = jobList[position]
+        holder.title.text = job.title
+        holder.experience.text = "${job.experience} yr EXP"
+        holder.maxSalary.text = "$${job.maxSalary}/Month"
+        holder.location.text = job.location
+        holder.requiredSkills.text = job.requiredSkills.joinToString(", ")
     }
 
-    override fun getItemCount(): Int = jobList.size
+    override fun getItemCount(): Int {
+        return jobList.size
+    }
+
+    inner class JobViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val title: TextView = itemView.findViewById(R.id.Title)
+        val experience: TextView = itemView.findViewById(R.id.experience)
+        val maxSalary: TextView = itemView.findViewById(R.id.MaximumSalary)
+        val location: TextView = itemView.findViewById(R.id.location)
+        val requiredSkills: TextView = itemView.findViewById(R.id.requiredSkills)
+    }
 }

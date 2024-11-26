@@ -22,7 +22,7 @@ class SkillEditAdapter : ListAdapter<SkillShowDataClasses, SkillEditAdapter.Skil
 
     class SkillViewHolder(private val binding: SkillEditBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(skill: SkillShowDataClasses) {
-            binding.skillName.text = skill.skill
+            binding.skillEdit.setText(skill.skill)
             println("Binding skill item: $skill")
         }
     }

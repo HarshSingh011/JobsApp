@@ -61,6 +61,10 @@ class RecruiterDetails : Fragment() {
             findNavController().navigate(R.id.recruiterDetailsEdit)
         }
 
+        binding.PostJob.setOnClickListener(){
+            findNavController().navigate(R.id.postAJob)
+        }
+
         return binding.root
     }
 

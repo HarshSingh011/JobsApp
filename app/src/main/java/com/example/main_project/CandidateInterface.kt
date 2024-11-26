@@ -5,6 +5,7 @@ import com.example.main_project.Recruiter.DataClasses.JobResponse
 import com.example.main_project.Recruiter.DataClasses.RecruiterData
 import com.example.main_project.Recruiter.DataClasses.RecruiterUpdateData
 import com.example.main_project.Recruiter.DataClasses.RecruiterUpdateResponse
+import com.example.main_project.SeeJobs.DataClasses.Job
 import com.example.main_project.SettingProfile.DataClasses.CandidateData
 import com.example.main_project.candidate.DataClasses.CandidateDataResponse
 import com.example.main_project.SettingProfile.DataClasses.CertificateUploadResponse
@@ -49,7 +50,6 @@ interface CandidateInterface {
         @Body recruiterData: RequiterRequest
     ): Response<RequiterResponse>
 
-
     @GET("candidates/get-current")
     suspend fun getCurrentCandidate(): Response<CandidateDataGet>
 
@@ -63,8 +63,11 @@ interface CandidateInterface {
     ): Response<RecruiterUpdateResponse>
 
     @Headers("Content-Type: application/json")
-    @POST("jobs/create")
+    @POST("jobs/post")
     suspend fun postJob(@Body jobRequest: JobRequest): Response<JobResponse>
 
+    @Headers("Content-Type: application/json")
+    @GET("jobs/all-jobs")
+    suspend fun getJobs(): List<Job>
 }
 

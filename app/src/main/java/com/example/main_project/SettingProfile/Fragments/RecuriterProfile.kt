@@ -30,7 +30,8 @@ class RecuriterProfile : Fragment() {
         _binding = FragmentRecuriterProfileBinding.inflate(inflater, container, false)
 
         binding.nextFragment.setOnClickListener {
-            sendRecruiterData()
+            findNavController().navigate(R.id.recruiterDetails)
+//            sendRecruiterData()
         }
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
