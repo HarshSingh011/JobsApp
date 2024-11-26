@@ -28,5 +28,10 @@
         android:id="@+id/jobsSearch"
         android:name="com.example.main_project.SeeJobs.Fragments.JobsSearch"
         android:label="JobsSearch" />
+    <fragment
+        android:id="@+id/jobsDetails"
+        android:name="com.example.main_project.SeeJobs.Fragments.JobsDetails"
+        android:label="fragment_jobs_details"
+        tools:layout="@layout/fragment_jobs_details" />
 
 </navigation>

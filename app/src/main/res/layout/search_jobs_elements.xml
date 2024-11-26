@@ -71,7 +71,7 @@
             app:layout_constraintTop_toBottomOf="@id/Title" />
 
         <TextView
-            android:id="@+id/textelementone"
+            android:id="@+id/JobType"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="90dp"
@@ -80,12 +80,12 @@
             android:text="Full time"
             android:textColor="@color/black"
             android:textSize="10sp"
-            app:layout_constraintEnd_toStartOf="@id/textelementtwo"
+            app:layout_constraintEnd_toStartOf="@id/JobMode"
             app:layout_constraintStart_toEndOf="@id/guideline1"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textelementtwo"
+            android:id="@+id/JobMode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="90dp"
@@ -95,7 +95,7 @@
             android:textColor="@color/black"
             android:textSize="10sp"
             app:layout_constraintEnd_toStartOf="@id/experience"
-            app:layout_constraintStart_toEndOf="@id/textelementone"
+            app:layout_constraintStart_toEndOf="@id/JobType"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -109,7 +109,7 @@
             android:textColor="@color/black"
             android:textSize="10sp"
             app:layout_constraintEnd_toEndOf="@id/guideline2"
-            app:layout_constraintStart_toEndOf="@id/textelementtwo"
+            app:layout_constraintStart_toEndOf="@id/JobMode"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -125,17 +125,17 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/MaximumSalary"
+            android:id="@+id/Salary"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="$300/Month"
             android:textColor="@color/black"
-            android:textSize="16sp"
-            app:layout_constraintBaseline_toBaselineOf="@+id/Detail"
+            android:textSize="12sp"
+            app:layout_constraintBaseline_toBaselineOf="@+id/ViewMore"
             app:layout_constraintStart_toEndOf="@id/guideline1" />
 
         <Button
-            android:id="@+id/Detail"
+            android:id="@+id/ViewMore"
             android:layout_width="wrap_content"
             android:layout_height="35dp"
             android:layout_marginTop="150dp"

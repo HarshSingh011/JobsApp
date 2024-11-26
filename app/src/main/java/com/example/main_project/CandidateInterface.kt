@@ -5,7 +5,8 @@ import com.example.main_project.Recruiter.DataClasses.JobResponse
 import com.example.main_project.Recruiter.DataClasses.RecruiterData
 import com.example.main_project.Recruiter.DataClasses.RecruiterUpdateData
 import com.example.main_project.Recruiter.DataClasses.RecruiterUpdateResponse
-import com.example.main_project.SeeJobs.DataClasses.Job
+import com.example.main_project.SeeJobs.Adapter.JobShowResponse
+import com.example.main_project.SeeJobs.DataClasses.JobApplyResponse
 import com.example.main_project.SettingProfile.DataClasses.CandidateData
 import com.example.main_project.candidate.DataClasses.CandidateDataResponse
 import com.example.main_project.SettingProfile.DataClasses.CertificateUploadResponse
@@ -19,9 +20,11 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.Multipart
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Part
+import retrofit2.http.Path
 
 interface CandidateInterface {
 
@@ -44,7 +47,7 @@ interface CandidateInterface {
         @Part resumeData: MultipartBody.Part
     ): Response<CertificateUploadResponse>
 
-    @Headers("Content-Type: application/json")
+//    @Headers("Content-Type: application/json")
     @POST("recruiter/create")
     suspend fun createRecruiter(
         @Body recruiterData: RequiterRequest
@@ -56,18 +59,25 @@ interface CandidateInterface {
     @GET("recruiter/current-recruiter")
     suspend fun getCurrentRecruiter(): Response<RecruiterData>
 
-    @Headers("Content-Type: application/json")
+//    @Headers("Content-Type: application/json")
     @PUT("recruiter/update")
     suspend fun updateRecruiter(
         @Body recruiterUpdateData: RecruiterUpdateData
     ): Response<RecruiterUpdateResponse>
 
-    @Headers("Content-Type: application/json")
+//    @Headers("Content-Type: application/json")
     @POST("jobs/post")
     suspend fun postJob(@Body jobRequest: JobRequest): Response<JobResponse>
 
-    @Headers("Content-Type: application/json")
+//    @Headers("Content-Type: application/json")
     @GET("jobs/all-jobs")
-    suspend fun getJobs(): List<Job>
+    suspend fun getJobs(): Response<JobShowResponse>
+
+//    @Headers("Content-Type: application/json")
+    @PATCH("candidates/update")
+    suspend fun updateCandidate(@Body data: Map<String, Any>): Response<CandidateDataResponse>
+//    @Headers("Content-Type: application/json")
+    @POST("jobs/apply/applications/{id}")
+    suspend fun applyForJob(@Path("id") id: String): Response<JobApplyResponse>
 }
 

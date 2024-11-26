@@ -1,5 +1,6 @@
 package com.example.main_project.candidate.Fragments
 
+import android.app.Dialog
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.pdf.PdfRenderer
@@ -14,8 +15,6 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -47,15 +46,15 @@ class CandidateProfile : Fragment() {
 
     private var _binding: FragmentCandidateProfileBinding? = null
     private val binding get() = _binding!!
+    private lateinit var loadingDialog: Dialog
 
-private val candidateViewModel: CandidateProfileViewModel by activityViewModels()
+    private val candidateViewModel: CandidateProfileViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentCandidateProfileBinding.inflate(inflater, container, false)
-
 
         setupRecyclerViews(emptyList(), emptyList(), emptyList(), emptyList())
 
@@ -72,12 +71,13 @@ private val candidateViewModel: CandidateProfileViewModel by activityViewModels(
             findNavController().navigate(R.id.candidateEditDetail)
         }
 
-        binding.nextFragment.setOnClickListener(){
+        binding.nextFragment.setOnClickListener {
             findNavController().navigate(R.id.searchJob)
         }
 
         return binding.root
     }
+
     private fun setupRecyclerViews(
         educationList: List<Educations>,
         experienceList: List<Experience>,
@@ -116,11 +116,13 @@ private val candidateViewModel: CandidateProfileViewModel by activityViewModels(
     private fun fetchCurrentCandidate() {
         val apiService = CandidateProfileRetrofitClient.instance(requireContext())
             .create(CandidateInterface::class.java)
+        showLoadingDialog()
 
         viewLifecycleOwner.lifecycleScope.launch {
             try {
                 val response = apiService.getCurrentCandidate()
                 if (response.isSuccessful && response.body() != null) {
+                    loadingDialog.dismiss()
                     val candidateData = response.body() as CandidateDataGet
                     println("Fetched candidate data: $candidateData")
                     candidateViewModel.setCandidateData(candidateData)
@@ -128,10 +130,28 @@ private val candidateViewModel: CandidateProfileViewModel by activityViewModels(
                     println("Error fetching data: ${response.errorBody()?.string()}")
                 }
             } catch (e: Exception) {
+                loadingDialog.dismiss()
                 println("Exception in fetchCurrentCandidate: ${e.message}")
+            } finally {
+                loadingDialog.dismiss()
             }
         }
     }
+
+    private fun showLoadingDialog() {
+        if (!::loadingDialog.isInitialized) {
+            loadingDialog = Dialog(requireContext())
+            loadingDialog.setContentView(R.layout.loader)
+            loadingDialog.window?.setBackgroundDrawableResource(android.R.color.white)
+            loadingDialog.window?.setLayout(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+            )
+            loadingDialog.setCancelable(false)
+            loadingDialog.show()
+        }
+    }
+
     private fun updateUI(candidateData: CandidateDataGet) {
         binding.firstname.text = candidateData.firstName ?: "N/A"
         binding.lastname.text = candidateData.lastName ?: "N/A"
@@ -152,6 +172,7 @@ private val candidateViewModel: CandidateProfileViewModel by activityViewModels(
             candidateData.certificate ?: emptyList()
         )
     }
+
     private fun handleProfileImage(profileImageUrl: String) {
         if (profileImageUrl.isNotEmpty()) {
             Glide.with(this)
@@ -163,6 +184,7 @@ private val candidateViewModel: CandidateProfileViewModel by activityViewModels(
             binding.profileImageView.setImageResource(R.drawable.ic_launcher_background)
         }
     }
+
     private fun handleResume(resumeUrl: String?) {
         if (resumeUrl.isNullOrEmpty()) {
             binding.resumeImageView.setImageResource(R.drawable.ic_launcher_background)
@@ -174,6 +196,7 @@ private val candidateViewModel: CandidateProfileViewModel by activityViewModels(
             }
         }
     }
+
     private fun loadPdfThumbnail(pdfUrl: String, imageView: ImageView) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
@@ -199,6 +222,7 @@ private val candidateViewModel: CandidateProfileViewModel by activityViewModels(
             }
         }
     }
+
     private fun downloadFile(fileUrl: String): File {
         val file = File(requireContext().cacheDir, "temp_resume.pdf")
         URL(fileUrl).openStream().use { input ->
@@ -208,6 +232,7 @@ private val candidateViewModel: CandidateProfileViewModel by activityViewModels(
         }
         return file
     }
+
     private fun openResume(resumeUrl: String) {
         val intent = Intent(Intent.ACTION_VIEW).apply {
             data = Uri.parse(resumeUrl)
@@ -215,6 +240,7 @@ private val candidateViewModel: CandidateProfileViewModel by activityViewModels(
         }
         startActivity(intent)
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

@@ -22,3 +22,22 @@ data class Certificate(
     val issuedBy: String?,
     val fileKey: String?
 )
+
+
+data class UpdateCandidateRequest(
+    val education: List<UpdateEducation>,
+    val experiences: List<UpdateExperience>,
+    val skill: List<String>
+)
+
+data class UpdateEducation(
+    val institution: String,
+    val degree: String,
+    val yearOfCompletion: Int
+)
+
+data class UpdateExperience(
+    val companyName: String,
+    val yearsWorked: Int,
+    val position: String
+)
