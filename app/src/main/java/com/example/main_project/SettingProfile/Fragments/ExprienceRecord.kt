@@ -1,5 +1,6 @@
 package com.example.main_project.SettingProfile.Fragments
 
+import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -19,6 +20,7 @@ import com.example.main_project.SettingProfile.DataClasses.CandidateData
 import com.example.main_project.SettingProfile.DataClasses.Experience
 import com.example.main_project.SettingProfile.ViewModels.CandidateViewModel
 import com.example.main_project.databinding.FragmentExperienceBinding
+import com.example.main_project.databinding.SettingprofiledialogBinding
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.launch
 
@@ -27,6 +29,7 @@ class ExprienceRecord : Fragment() {
     private var _binding: FragmentExperienceBinding? = null
     private val binding get() = _binding!!
     private val sharedViewModel: CandidateViewModel by activityViewModels()
+    private lateinit var loadingDialog: Dialog
 
     override fun onResume() {
         super.onResume()
@@ -71,6 +74,7 @@ class ExprienceRecord : Fragment() {
         binding.nextFragment.setOnClickListener {
             if (validateInputs()) {
                 sendCandidateData()
+                showLoadingDialog()
                 val viewPager = requireActivity().findViewById<ViewPager2>(R.id.viewPager)
                 viewPager.currentItem = 2
             } else {
@@ -107,6 +111,18 @@ class ExprienceRecord : Fragment() {
         return isValid
     }
 
+    private fun showLoadingDialog() {
+        var loadingDialog = Dialog(requireContext())
+        loadingDialog.setContentView(R.layout.settingprofiledialog)
+        loadingDialog.window?.setBackgroundDrawableResource(android.R.color.white)
+        loadingDialog.window?.setLayout(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT
+        )
+        loadingDialog.setCancelable(false)
+        loadingDialog.show()
+    }
+
     private fun addExperienceDataToList() {
         val companyName = binding.companyName.editText?.text.toString().trim()
         val position = binding.position.editText?.text.toString().trim()
@@ -140,14 +156,17 @@ class ExprienceRecord : Fragment() {
 
                 val response = api.createCandidate(candidateData)
                 if (response.isSuccessful) {
+                    loadingDialog.dismiss()
                     Toast.makeText(context, "Data submitted successfully!", Toast.LENGTH_SHORT).show()
                     sharedViewModel.isApiSuccess = true
                 } else {
+                    loadingDialog.dismiss()
                     val errorMessage = response.errorBody()?.string() ?: "Unknown error occurred"
                     println(errorMessage)
                     Toast.makeText(context, "Submission failed: ${response.errorBody()?.string()}", Toast.LENGTH_SHORT).show()
                 }
             } catch (e: Exception) {
+                loadingDialog.dismiss()
                 println(e.message);
                 Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
             }
