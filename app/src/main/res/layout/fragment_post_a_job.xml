@@ -142,11 +142,13 @@
             app:layout_constraintStart_toEndOf="@id/guideline1"
             app:layout_constraintTop_toTopOf="parent">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <AutoCompleteTextView
+                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/skill_inputbox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/edittext_prop"
+                android:padding="15dp"
                 android:hint="Job title"
                 android:inputType="textEmailAddress"
                 android:textColor="@color/black"
@@ -185,18 +187,18 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/edittext_prop"
                 android:hint="Experience"
-                android:inputType="textEmailAddress"
+                android:inputType="number"
                 android:textColor="@color/black"
                 android:textColorHint="@color/black"
                 android:textSize="14sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
-            android:id="@+id/JobDescription"
+            android:id="@+id/JobType"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="604dp"
-            android:text="Job Title"
+            android:text="Job Type"
             android:textSize="18sp"
             android:textColor="@color/background"
             app:layout_constraintTop_toTopOf="parent"
@@ -205,8 +207,9 @@
             />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/Job_input"
+            android:id="@+id/JobType_input"
             android:layout_width="0dp"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
             android:textSize="14sp"
@@ -216,12 +219,12 @@
             app:layout_constraintStart_toEndOf="@id/guideline1"
             app:layout_constraintTop_toTopOf="parent">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/Job_inputbox"
+            <AutoCompleteTextView
+                android:id="@+id/JobType_inputbox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/edittext_prop"
-                android:hint="Jog"
+                android:hint="Job Type"
                 android:inputType="textEmailAddress"
                 android:textColor="@color/black"
                 android:textColorHint="@color/black"
@@ -230,11 +233,49 @@
 
 
         <TextView
-            android:id="@+id/MinimumSalary"
+            android:id="@+id/Mode"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="722dp"
-            android:text="Minimun Salary"
+            android:text="Mode"
+            android:textSize="18sp"
+            android:textColor="@color/background"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="@id/guideline1"
+            app:layout_constraintEnd_toEndOf="@id/guideline2"
+            />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/Mode_input"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:layout_marginTop="759dp"
+            app:hintEnabled="false"
+            app:layout_constraintEnd_toStartOf="@id/guideline2"
+            app:layout_constraintStart_toEndOf="@id/guideline1"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <AutoCompleteTextView
+                android:id="@+id/Mode_inputbox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edittext_prop"
+                android:hint="Mode"
+                android:inputType="textEmailAddress"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
+                android:textSize="14sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/MinimumSalary"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="840dp"
+            android:text="Minimum Salary"
             android:textSize="18sp"
             android:textColor="@color/background"
             app:layout_constraintTop_toTopOf="parent"
@@ -248,7 +289,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/black"
             android:textSize="14sp"
-            android:layout_marginTop="759dp"
+            android:layout_marginTop="877dp"
             app:hintEnabled="false"
             app:layout_constraintEnd_toStartOf="@id/guideline2"
             app:layout_constraintStart_toEndOf="@id/guideline1"
@@ -259,8 +300,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/edittext_prop"
-                android:hint="experience"
-                android:inputType="textEmailAddress"
+                android:hint="Minimum Salary"
+                android:inputType="numberDecimal"
                 android:textColor="@color/black"
                 android:textColorHint="@color/black"
                 android:textSize="14sp" />
@@ -270,8 +311,8 @@
             android:id="@+id/MaximumSalary"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="840dp"
-            android:text="Experience needed "
+            android:layout_marginTop="958dp"
+            android:text="Maximum Salary"
             android:textSize="18sp"
             android:textColor="@color/background"
             app:layout_constraintTop_toTopOf="parent"
@@ -285,8 +326,9 @@
             android:layout_height="wrap_content"
             android:textColor="@color/black"
             android:textSize="14sp"
-            android:layout_marginTop="877dp"
+            android:layout_marginTop="995dp"
             app:hintEnabled="false"
+            android:layout_marginBottom="60dp"
             app:layout_constraintEnd_toStartOf="@id/guideline2"
             app:layout_constraintStart_toEndOf="@id/guideline1"
             app:layout_constraintTop_toTopOf="parent">
@@ -296,8 +338,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/edittext_prop"
-                android:hint="experience"
-                android:inputType="textEmailAddress"
+                android:hint="Maximum Salary"
+                android:inputType="numberDecimal"
                 android:textColor="@color/black"
                 android:textColorHint="@color/black"
                 android:textSize="14sp" />
@@ -307,7 +349,7 @@
             android:id="@+id/Description"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="958dp"
+            android:layout_marginTop="1076dp"
             android:text="Description"
             android:textSize="18sp"
             android:textColor="@color/background"
@@ -322,7 +364,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/black"
             android:textSize="14sp"
-            android:layout_marginTop="995dp"
+            android:layout_marginTop="1113dp"
             app:hintEnabled="false"
             android:layout_marginBottom="60dp"
             app:layout_constraintEnd_toStartOf="@id/guideline2"

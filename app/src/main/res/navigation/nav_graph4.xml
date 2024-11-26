@@ -20,5 +20,13 @@
         android:name="com.example.main_project.candidate.Fragments.CandidateEditDetail"
         android:label="fragment_candidate_edit_detail"
         tools:layout="@layout/fragment_candidate_edit_detail" />
+    <fragment
+        android:id="@+id/searchJob"
+        android:name="com.example.main_project.SeeJobs.Fragments.SearchJob"
+        android:label="SearchJobFragment" />
+    <fragment
+        android:id="@+id/jobsSearch"
+        android:name="com.example.main_project.SeeJobs.Fragments.JobsSearch"
+        android:label="JobsSearch" />
 
 </navigation>

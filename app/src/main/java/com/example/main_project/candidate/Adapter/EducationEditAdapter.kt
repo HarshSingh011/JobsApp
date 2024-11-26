@@ -22,9 +22,9 @@ class EducationEditAdapter : ListAdapter<EducationShowDataClasses, EducationEdit
 
     class EducationViewHolder(private val binding: EducationEditBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(education: EducationShowDataClasses) {
-            binding.institutionName.text = education.IntituteName
-            binding.degree.text = education.Degree
-            binding.completionYear.text = education.DateOfCompletion?.toString() ?: "N/A"
+            binding.instituteEdit.setText(education.IntituteName)
+            binding.DegreeEdit.setText(education.Degree)
+            binding.yearOfCompleletionEdit.setText(education.DateOfCompletion?.toString() ?: "N/A")
             println("Binding education item: $education")
         }
     }

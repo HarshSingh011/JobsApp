@@ -22,9 +22,9 @@ class ExperienceEditAdapter : ListAdapter<ExperienceShowDataClasses, ExperienceE
 
     class ExperienceViewHolder(private val binding: ExperienceEditBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(experience: ExperienceShowDataClasses) {
-            binding.companyName.text = experience.CompanyName
-            binding.yearOfWork.text = experience.YearOfWork
-            binding.position.text = experience.Date
+            binding.CompanyEdit.setText(experience.CompanyName)
+            binding.yearOfWorkEdit.setText(experience.YearOfWork)
+            binding.positionEdit.setText(experience.Date)
             println("Binding experience item: $experience")
         }
     }

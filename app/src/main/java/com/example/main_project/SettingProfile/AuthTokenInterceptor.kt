@@ -1,6 +1,7 @@
 package com.example.main_project.SettingProfile
 
 import android.content.Context
+import android.util.Log
 import com.example.main_project.DataStoreManager
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
@@ -25,4 +26,5 @@ class AuthTokenInterceptor(private val context: Context) : Interceptor {
         return chain.proceed(newRequest)
     }
 }
+
 

@@ -48,7 +48,6 @@ class CandidateProfile : Fragment() {
     private var _binding: FragmentCandidateProfileBinding? = null
     private val binding get() = _binding!!
 
-//    private val candidateViewModel: CandidateProfileViewModel by viewModels()
 private val candidateViewModel: CandidateProfileViewModel by activityViewModels()
 
     override fun onCreateView(
@@ -71,6 +70,10 @@ private val candidateViewModel: CandidateProfileViewModel by activityViewModels(
 
         binding.editdetails.setOnClickListener {
             findNavController().navigate(R.id.candidateEditDetail)
+        }
+
+        binding.nextFragment.setOnClickListener(){
+            findNavController().navigate(R.id.searchJob)
         }
 
         return binding.root

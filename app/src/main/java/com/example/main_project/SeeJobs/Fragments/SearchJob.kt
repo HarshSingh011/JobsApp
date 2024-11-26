@@ -1,66 +1,57 @@
 package com.example.main_project.SeeJobs.Fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.main_project.CandidateInterface
+import com.example.main_project.CandidateProfileRetrofitClient
 import com.example.main_project.SeeJobs.Adapter.JobAdapter
 import com.example.main_project.SeeJobs.Adapter.RecentJobAdapter
+import com.example.main_project.SeeJobs.DataClasses.Job
 import com.example.main_project.SettingProfile.DataClasses.RecentJobsData
 import com.example.main_project.SeeJobs.DataClasses.SearchJobData
 import com.example.main_project.databinding.FragmentSearchJobBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class SearchJob : Fragment() {
 
-    private var _binding: FragmentSearchJobBinding? = null
-    private val binding get() = _binding!!
-
     private lateinit var jobAdapter: JobAdapter
-    private lateinit var recentJobsAdapter: RecentJobAdapter
-    private lateinit var jobList: List<SearchJobData>
-    private lateinit var recentJobsList: List<RecentJobsData>
+    private lateinit var jobList: List<Job>
+    private lateinit var jobRecyclerView: RecyclerView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentSearchJobBinding.inflate(inflater, container, false)
+        val binding = FragmentSearchJobBinding.inflate(inflater, container, false)
 
-        setupRecyclerViews()
+        jobRecyclerView = binding.jobsearch
+        jobRecyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+
+        fetchJobs()
 
         return binding.root
     }
 
-    private fun setupRecyclerViews() {
-        jobList = listOf(
-            SearchJobData("Analytic Data", "Apple Inc.", "Full time", "Offline", "1yr EXP", "$300/Month"),
-            SearchJobData("Software Engineer", "Google", "Full time", "Remote", "2yr EXP", "$500/Month"),
-            SearchJobData("UI/UX Designer", "Microsoft", "Part time", "Hybrid", "1yr EXP", "$400/Month")
-        )
+    private fun fetchJobs() {
+        val retrofit = CandidateProfileRetrofitClient.instance(requireContext())
+        val apiService = retrofit.create(CandidateInterface::class.java)
 
-        jobAdapter = JobAdapter(jobList)
-        binding.jobsearch.apply {
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            adapter = jobAdapter
+        CoroutineScope(Dispatchers.Main).launch {
+            try {
+                val jobs = apiService.getJobs()
+                jobAdapter = JobAdapter(jobs)
+                jobRecyclerView.adapter = jobAdapter
+            } catch (e: Exception) {
+                Log.e("API Error", "Error fetching jobs: ${e.message}")
+            }
         }
-
-        recentJobsList = listOf(
-            RecentJobsData("Analyst", "Analyze data and generate reports"),
-            RecentJobsData("Developer", "Develop software applications"),
-            RecentJobsData("Designer", "Design user interfaces and experiences")
-        )
-
-        recentJobsAdapter = RecentJobAdapter(recentJobsList)
-        binding.recentJobsSearch.apply {
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-            adapter = recentJobsAdapter
-        }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }
