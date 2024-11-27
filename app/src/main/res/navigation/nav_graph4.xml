@@ -33,5 +33,10 @@
         android:name="com.example.main_project.SeeJobs.Fragments.JobsDetails"
         android:label="fragment_jobs_details"
         tools:layout="@layout/fragment_jobs_details" />
+    <fragment
+        android:id="@+id/jobFilter"
+        android:name="com.example.main_project.SeeJobs.Fragments.JobFilter"
+        android:label="fragment_job_filter"
+        tools:layout="@layout/fragment_job_filter" />
 
 </navigation>

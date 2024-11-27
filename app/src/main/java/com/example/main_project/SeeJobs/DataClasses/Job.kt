@@ -16,3 +16,8 @@ data class Job(
 data class JobApplyResponse(
     val message: String
 )
+
+data class FilterItem(
+    val id: Int,
+    val name: String
+)

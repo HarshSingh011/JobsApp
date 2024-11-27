@@ -39,6 +39,10 @@ class SearchJob : Fragment() {
 
         fetchJobs()
 
+        binding.filter.setOnClickListener(){
+            findNavController().navigate(R.id.jobFilter)
+        }
+
         return binding.root
     }
 

@@ -25,10 +25,12 @@ import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Part
 import retrofit2.http.Path
+import retrofit2.http.QueryMap
 
 interface CandidateInterface {
 
     @Headers("Content-Type: application/json")
+
     @POST("candidates/create")
     suspend fun createCandidate(
         @Body candidateData: CandidateData
@@ -46,8 +48,6 @@ interface CandidateInterface {
     suspend fun uploadResume(
         @Part resumeData: MultipartBody.Part
     ): Response<CertificateUploadResponse>
-
-//    @Headers("Content-Type: application/json")
     @POST("recruiter/create")
     suspend fun createRecruiter(
         @Body recruiterData: RequiterRequest
@@ -58,26 +58,21 @@ interface CandidateInterface {
 
     @GET("recruiter/current-recruiter")
     suspend fun getCurrentRecruiter(): Response<RecruiterData>
-
-//    @Headers("Content-Type: application/json")
     @PUT("recruiter/update")
     suspend fun updateRecruiter(
         @Body recruiterUpdateData: RecruiterUpdateData
     ): Response<RecruiterUpdateResponse>
-
-//    @Headers("Content-Type: application/json")
     @POST("jobs/post")
     suspend fun postJob(@Body jobRequest: JobRequest): Response<JobResponse>
-
-//    @Headers("Content-Type: application/json")
     @GET("jobs/all-jobs")
     suspend fun getJobs(): Response<JobShowResponse>
-
-//    @Headers("Content-Type: application/json")
     @PATCH("candidates/update")
     suspend fun updateCandidate(@Body data: Map<String, Any>): Response<CandidateDataResponse>
-//    @Headers("Content-Type: application/json")
     @POST("jobs/apply/applications/{id}")
     suspend fun applyForJob(@Path("id") id: String): Response<JobApplyResponse>
+
+    @GET("jobs/filter")
+    suspend fun getJobsWithFilters(@QueryMap filters: Map<String, String>): Response<JobShowResponse>
 }
+
 
