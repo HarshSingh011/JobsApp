@@ -22,7 +22,6 @@ class RecuriterProfile : Fragment() {
     private var _binding: FragmentRecuriterProfileBinding? = null
     private val binding get() = _binding!!
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -30,7 +29,8 @@ class RecuriterProfile : Fragment() {
         _binding = FragmentRecuriterProfileBinding.inflate(inflater, container, false)
 
         binding.nextFragment.setOnClickListener {
-            sendRecruiterData()
+            findNavController().navigate(R.id.mainActivity5)
+//            sendRecruiterData()
         }
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {

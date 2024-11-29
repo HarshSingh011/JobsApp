@@ -92,7 +92,7 @@
     <TextView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:text="Continue to change your password"
+        android:text="Account have been Created Successfully"
         android:gravity="center"
         android:textColor="@color/black"
         android:textSize="20sp"

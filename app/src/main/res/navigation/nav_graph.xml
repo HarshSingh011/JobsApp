@@ -88,5 +88,16 @@
         android:name="com.example.main_project.MainActivity3"
         android:label="activity_main3"
         tools:layout="@layout/activity_main3" />
+    <activity
+        android:id="@+id/mainActivity4"
+        android:name="com.example.main_project.MainActivity4"
+        android:label="activity_main4"
+        tools:layout="@layout/activity_main4" />
+    <activity
+        android:id="@+id/mainActivity5"
+        android:name="com.example.main_project.MainActivity5"
+        android:label="activity_main5"
+        tools:layout="@layout/activity_main5" />
+
 
 </navigation>

@@ -1,6 +1,4 @@
-package com.example.main_project.SeeJobs.Adapter
-
-import com.example.main_project.SeeJobs.DataClasses.Job
+package com.example.main_project.SeeJobs.DataClasses
 
 data class JobShowResponse(
     val content: List<Job>,
@@ -16,17 +14,18 @@ data class JobShowResponse(
     val empty: Boolean
 )
 
-data class Pageable(
-    val pageNumber: Int,
-    val pageSize: Int,
-    val sort: Sort,
-    val offset: Long,
-    val paged: Boolean,
-    val unpaged: Boolean
-)
-
 data class Sort(
     val empty: Boolean,
     val sorted: Boolean,
     val unsorted: Boolean
+)
+
+data class JobApiResponse(
+    val content: List<Job>,
+    val pageable: Pageable,
+    val totalPages: Int
+)
+
+data class Pageable(
+    val totalPages: Int
 )

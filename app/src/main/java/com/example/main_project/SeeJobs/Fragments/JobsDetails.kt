@@ -6,9 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.example.main_project.CandidateInterface
 import com.example.main_project.CandidateProfileRetrofitClient
+import com.example.main_project.R
 import com.example.main_project.SeeJobs.DataClasses.JobApplyResponse
 import com.example.main_project.databinding.FragmentJobsDetailsBinding
 import kotlinx.coroutines.CoroutineScope
@@ -27,7 +30,6 @@ class JobsDetails : Fragment() {
     ): View? {
         _binding = FragmentJobsDetailsBinding.inflate(inflater, container, false)
 
-        // Set up the job details
         val jobDescription = arguments?.getString("job_description")
         binding.Description.text = jobDescription
 
@@ -53,6 +55,15 @@ class JobsDetails : Fragment() {
                 applyForJob(it)
             }
         }
+
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    findNavController().navigate(R.id.searchJob)
+                }
+            }
+        )
 
 
         return binding.root

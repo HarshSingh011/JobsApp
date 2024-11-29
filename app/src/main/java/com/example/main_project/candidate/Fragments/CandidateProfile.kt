@@ -71,8 +71,8 @@ class CandidateProfile : Fragment() {
             findNavController().navigate(R.id.candidateEditDetail)
         }
 
-        binding.nextFragment.setOnClickListener {
-            findNavController().navigate(R.id.searchJob)
+        binding.editdocuments.setOnClickListener(){
+            findNavController().navigate(R.id.deleteCertificates)
         }
 
         return binding.root

@@ -81,7 +81,6 @@ class RecruiterDetailsEdit : Fragment() {
                 println(updateData)
 
                 withContext(Dispatchers.Main) {
-                    // If the response is successful, show the message
                     if (response.isSuccessful) {
                         val message = response.body()?.message
                         Toast.makeText(context, message ?: "Recruiter updated successfully!", Toast.LENGTH_SHORT).show()

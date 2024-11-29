@@ -143,12 +143,19 @@ class LoginPage : Fragment() {
                 if (response.isSuccessful) {
                     response.body()?.let { loginResponse ->
                         val token = loginResponse.token
-                        if (token != null) {
-                            findNavController().navigate(R.id.loginSuccessful)
-                            if (binding.chkbox.isChecked) {
-                                lifecycleScope.launch {
-                                    dataStoreManager.saveToken(token)
-                                }
+                        val role = loginResponse.user?.role // Safely access user and role
+
+                        if (token != null && role != null) {
+                            lifecycleScope.launch {
+                                dataStoreManager.saveToken(token)
+                                dataStoreManager.saveRole(role)  // Save role in DataStore
+                            }
+
+                            // Navigate based on role
+                            when (role) {
+                                "CANDIDATE" -> findNavController().navigate(R.id.mainActivity4)
+                                "RECRUITER" -> findNavController().navigate(R.id.mainActivity5)
+                                else -> findNavController().navigate(R.id.loginSuccessful)
                             }
                         } else {
                             val errorMessage = parseErrorMessage(response.errorBody()?.string())
@@ -162,7 +169,6 @@ class LoginPage : Fragment() {
             }
 
             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-                println("fail")
                 binding.loginBtn.isEnabled = true
                 loadingDialog.dismiss()
 
@@ -179,6 +185,9 @@ class LoginPage : Fragment() {
             }
         })
     }
+
+
+
     private fun parseErrorMessage(response: String?): String {
         return try {
             val jsonObject = JSONObject(response ?: "")

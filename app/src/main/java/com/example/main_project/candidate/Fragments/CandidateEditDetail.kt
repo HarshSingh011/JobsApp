@@ -35,13 +35,6 @@ class CandidateEditDetail : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentCandidateEditDetailBinding.inflate(inflater, container, false)
-        observeViewModel()
-
-        binding.buttonUpdate.setOnClickListener {
-            val data = collectDataFromRecyclerViews()
-            updateCandidateData(data)
-        }
-
         return binding.root
     }
 
@@ -49,6 +42,7 @@ class CandidateEditDetail : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerViews()
         observeViewModel()
+        setupClickListeners()
     }
 
     private fun setupRecyclerViews() {
@@ -57,17 +51,17 @@ class CandidateEditDetail : Fragment() {
         skillAdapter = SkillEditAdapter()
 
         binding.recyclerViewEducation.apply {
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            layoutManager = LinearLayoutManager(context)
             adapter = educationAdapter
         }
 
         binding.recyclerViewExperience.apply {
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            layoutManager = LinearLayoutManager(context)
             adapter = experienceAdapter
         }
 
         binding.recyclerViewSkill.apply {
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            layoutManager = LinearLayoutManager(context)
             adapter = skillAdapter
         }
     }
@@ -83,63 +77,76 @@ class CandidateEditDetail : Fragment() {
     }
 
     private fun updateUI(candidateData: CandidateDataGet) {
-        candidateData.education.let { educationList ->
-            val mappedEducationList = educationList.map { education ->
-                EducationShowDataClasses(
-                    IntituteName = education.institution?.trim() ?: "Unknown",
-                    Degree = education.degree?.trim() ?: "Unknown",
-                    DateOfCompletion = education.yearOfCompletion
-                )
-            }
-            educationAdapter.submitList(mappedEducationList)
+        val educationList = candidateData.education.map { education ->
+            EducationShowDataClasses(
+                IntituteName = education.institution?.trim() ?: "",
+                Degree = education.degree?.trim() ?: "",
+                DateOfCompletion = education.yearOfCompletion
+            )
+        }
+        educationAdapter.submitList(educationList)
+
+        val experienceList = candidateData.experience.map { experience ->
+            ExperienceShowDataClasses(
+                CompanyName = experience.companyName?.trim() ?: "",
+                YearOfWork = experience.yearsWorked?.toString()?.trim() ?: "",
+                Date = experience.position?.trim() ?: ""
+            )
+        }
+        experienceAdapter.submitList(experienceList)
+
+        val skillList = candidateData.skill.map { skill ->
+            SkillShowDataClasses(skill = skill.trim())
+        }
+        skillAdapter.submitList(skillList)
+    }
+
+    private fun setupClickListeners() {
+        binding.addEducation.setOnClickListener {
+            val currentList = educationAdapter.currentList.toMutableList()
+            currentList.add(EducationShowDataClasses("", "", null))
+            educationAdapter.submitList(currentList)
         }
 
-        candidateData.experience.let { experienceList ->
-            val mappedExperienceList = experienceList.map { experience ->
-                ExperienceShowDataClasses(
-                    CompanyName = experience.companyName?.trim() ?: "Unknown",
-                    YearOfWork = experience.yearsWorked?.toString()?.trim() ?: "Unknown",
-                    Date = experience.position?.trim() ?: "Unknown"
-                )
-            }
-            experienceAdapter.submitList(mappedExperienceList)
+        binding.addExperience.setOnClickListener {
+            val currentList = experienceAdapter.currentList.toMutableList()
+            currentList.add(ExperienceShowDataClasses("", "", ""))
+            experienceAdapter.submitList(currentList)
         }
 
-        candidateData.skill.let { skillList ->
-            val mappedSkillList = skillList.map { skill ->
-                SkillShowDataClasses(skill = skill.trim())
-            }
-            skillAdapter.submitList(mappedSkillList)
+        binding.buttonUpdate.setOnClickListener {
+            val data = collectDataFromRecyclerViews()
+            updateCandidateData(data)
         }
     }
 
-    private fun collectDataFromRecyclerViews(): Map<String, Any> {
-        val educationList = (binding.recyclerViewEducation.adapter as EducationEditAdapter).currentList.map { education ->
-            mapOf(
-                "institution" to (education.IntituteName ?: ""),
-                "degree" to (education.Degree ?: ""),
-                "yearOfCompletion" to (education.DateOfCompletion ?: 0)
+    private fun collectDataFromRecyclerViews(): UpdateCandidateRequest {
+        val educationList = (binding.recyclerViewEducation.adapter as EducationEditAdapter).getUpdatedList().map { education ->
+            UpdateEducation(
+                institution = education.IntituteName ?: "",
+                degree = education.Degree ?: "",
+                yearOfCompletion = education.DateOfCompletion ?: 0
             )
         }
 
-        val experienceList = (binding.recyclerViewExperience.adapter as ExperienceEditAdapter).currentList.map { experience ->
-            mapOf(
-                "companyName" to (experience.CompanyName ?: ""),
-                "yearsWorked" to (experience.YearOfWork?.toIntOrNull() ?: 0),
-                "position" to (experience.Date ?: "")
+        val experienceList = (binding.recyclerViewExperience.adapter as ExperienceEditAdapter).getUpdatedList().map { experience ->
+            UpdateExperience(
+                companyName = experience.CompanyName ?: "",
+                yearsWorked = experience.YearOfWork?.toIntOrNull() ?: 0,
+                position = experience.Date ?: ""
             )
         }
 
-        val skillList = (binding.recyclerViewSkill.adapter as SkillEditAdapter).currentList.mapNotNull { it.skill }
+        val skillList = (binding.recyclerViewSkill.adapter as SkillEditAdapter).getUpdatedList().mapNotNull { it.skill }
 
-        return mapOf(
-            "education" to educationList,
-            "experiences" to experienceList,
-            "skill" to skillList
+        return UpdateCandidateRequest(
+            education = educationList,
+            experiences = experienceList,
+            skill = skillList
         )
     }
 
-    private fun updateCandidateData(data: Map<String, Any>) {
+    private fun updateCandidateData(data: UpdateCandidateRequest) {
         viewLifecycleOwner.lifecycleScope.launch {
             try {
                 val response = CandidateProfileRetrofitClient.instance(requireContext())

@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,8 +16,7 @@ import com.example.main_project.CandidateProfileRetrofitClient
 import com.example.main_project.DataStoreManager
 import com.example.main_project.R
 import com.example.main_project.SeeJobs.Adapter.FilterAdapter
-import com.example.main_project.SeeJobs.Adapter.JobAdapter
-import com.example.main_project.SeeJobs.Adapter.JobShowResponse
+import com.example.main_project.SeeJobs.DataClasses.JobShowResponse
 import com.example.main_project.SeeJobs.DataClasses.FilterItem
 import com.example.main_project.SeeJobs.DataClasses.Job
 import com.example.main_project.databinding.FragmentJobFilterBinding
@@ -31,7 +31,7 @@ class JobFilter : Fragment() {
     private var _binding: FragmentJobFilterBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var jobAdapter: JobAdapter
+    private lateinit var FilteredJobAdapter: FilteredJobAdapter
     private lateinit var loadingDialog: Dialog
     private lateinit var filterAdapter: FilterAdapter
 
@@ -73,6 +73,15 @@ class JobFilter : Fragment() {
             }
         }
 
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    findNavController().navigate(R.id.searchJob)
+                }
+            }
+        )
+
         return binding.root
     }
 
@@ -86,17 +95,18 @@ class JobFilter : Fragment() {
                 Log.d("JobFilter", "Token before API call: $token")
 
                 Log.d("JobFilter", "Sending filters to API: $filters")
-                val response: Response<JobShowResponse> = apiService.getJobsWithFilters(filters)
+                val response: Response<List<Job>> = apiService.getJobsWithFilters(filters)
 
                 if (response.isSuccessful) {
                     loadingDialog.dismiss()
-                    val jobResponse = response.body()
-                    jobResponse?.let {
-                        jobAdapter = JobAdapter(it.content) { job ->
+                    val jobList = response.body()
+                    jobList?.let {
+                        FilteredJobAdapter = FilteredJobAdapter(it.toMutableList()) { job ->
                             navigateToJobDetails(job)
                         }
-                        binding.Jobfilter.adapter = jobAdapter
-                        Log.d("JobFilter", "Jobs fetched successfully: ${it.content.size} jobs")
+
+                        binding.Jobfilter.adapter = FilteredJobAdapter
+                        Log.d("JobFilter", "Jobs fetched successfully: ${it.size} jobs")
                     }
                 } else {
                     loadingDialog.dismiss()

@@ -19,10 +19,16 @@
         android:theme="@style/Theme.Main_Project"
         tools:targetApi="31">
         <activity
+            android:name=".MainActivity5"
+            android:windowSoftInputMode="adjustResize"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity4"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false" />
         <activity
             android:name=".MainActivity3"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false" />
         <activity
             android:name=".SettingProfile.MainActivity2"

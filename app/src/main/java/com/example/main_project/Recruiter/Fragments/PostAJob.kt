@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.example.main_project.CandidateInterface
 import com.example.main_project.CandidateProfileRetrofitClient
 import com.example.main_project.R
@@ -22,20 +23,23 @@ class PostAJob : Fragment() {
     private var _binding: FragmentPostAJobBinding? = null
     private val binding get() = _binding!!
 
-    private var requiredSkills = mutableListOf<String>() // To store skills
+    private var requiredSkills = mutableListOf<String>()
 
     override fun onResume() {
         super.onResume()
 
-        // Set up job type dropdown
         val jobType = resources.getStringArray(R.array.JobType)
         val arrayAdapterJobType = ArrayAdapter(requireContext(), R.layout.dropdownmenu, jobType)
         binding.JobTypeInputbox.setAdapter(arrayAdapterJobType)
 
-        // Set up job mode dropdown
         val jobMode = resources.getStringArray(R.array.JobMode)
         val arrayAdapterJobMode = ArrayAdapter(requireContext(), R.layout.dropdownmenu, jobMode)
         binding.ModeInputbox.setAdapter(arrayAdapterJobMode)
+
+        binding.nextFragment.setOnClickListener {
+            findNavController().navigate(R.id.jobPosted)
+        }
+
     }
 
     override fun onCreateView(
@@ -86,6 +90,7 @@ class PostAJob : Fragment() {
         val jobMode = binding.ModeInputbox.text.toString()
 
         if (title.isBlank() || description.isBlank() || location.isBlank() || jobType.isBlank() || requiredSkills.isEmpty()) {
+            println("Title: $title, Description: $description, Location: $location, Job Type: $jobType, Required Skills: $requiredSkills")
             Toast.makeText(requireContext(), "Please fill all required fields", Toast.LENGTH_SHORT).show()
             return
         }

@@ -6,3 +6,7 @@ data class CandidateData(
     var skill: List<String>,
     var DOB: String
 )
+
+data class ProfilePictureUploadResponse(
+    val message: String
+)

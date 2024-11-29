@@ -17,7 +17,7 @@ data class CandidateDataGet(
     val dob: String?
 )
 data class Certificate(
-    val certificateId: String?,
+    val id: String?,
     val certificateName: String?,
     val issuedBy: String?,
     val fileKey: String?
@@ -40,4 +40,15 @@ data class UpdateExperience(
     val companyName: String,
     val yearsWorked: Int,
     val position: String
+)
+
+data class NotificationModel(
+    val id: Long,
+    val title: String,
+    val message: String
+)
+
+
+data class ResumeResponseBody(
+    val message: String
 )

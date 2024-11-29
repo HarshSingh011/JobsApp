@@ -32,10 +32,21 @@ class SplashScreen : Fragment() {
             lifecycleScope.launch {
                 dataStoreManager.getToken().collect { token ->
                     if (token != null) {
-                        println("token is:")
-                        println(token)
-                        findNavController().navigate(R.id.loginSuccessful)
+                        dataStoreManager.getRole().collect { role ->
+                            when (role) {
+                                "CANDIDATE" -> {
+                                    findNavController().navigate(R.id.mainActivity4)
+                                }
+                                "RECRUITER" -> {
+                                    findNavController().navigate(R.id.mainActivity5)
+                                }
+                                else -> {
+                                    findNavController().navigate(R.id.frontPage)
+                                }
+                            }
+                        }
                     } else {
+                        // Token doesn't exist, navigate to login
                         findNavController().navigate(R.id.frontPage)
                     }
                 }

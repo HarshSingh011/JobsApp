@@ -44,6 +44,16 @@ class ExprienceRecord : Fragment() {
     ): View? {
         _binding = FragmentExperienceBinding.inflate(inflater, container, false)
 
+        // Initialize loadingDialog here
+        loadingDialog = Dialog(requireContext())
+        loadingDialog.setContentView(R.layout.settingprofiledialog)
+        loadingDialog.window?.setBackgroundDrawableResource(android.R.color.white)
+        loadingDialog.window?.setLayout(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT
+        )
+        loadingDialog.setCancelable(false)
+
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 val viewPager = requireActivity().findViewById<ViewPager2>(R.id.viewPager)
@@ -82,44 +92,10 @@ class ExprienceRecord : Fragment() {
             }
         }
 
-
         return binding.root
     }
 
-    private fun validateInputs(): Boolean {
-        val companyName = binding.companyName.editText?.text.toString().trim()
-        val position = binding.position.editText?.text.toString().trim()
-        val yearOfWork = binding.yearOfWork.editText?.text.toString().trim()
-
-        var isValid = true
-
-        if (companyName.isBlank()) {
-            setToErrorDrawable(binding.companyName)
-            isValid = false
-        }
-
-        if (position.isBlank()) {
-            setToErrorDrawable(binding.position)
-            isValid = false
-        }
-
-        if (yearOfWork.isBlank()) {
-            setToErrorDrawable(binding.yearOfWork)
-            isValid = false
-        }
-
-        return isValid
-    }
-
     private fun showLoadingDialog() {
-        var loadingDialog = Dialog(requireContext())
-        loadingDialog.setContentView(R.layout.settingprofiledialog)
-        loadingDialog.window?.setBackgroundDrawableResource(android.R.color.white)
-        loadingDialog.window?.setLayout(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.MATCH_PARENT
-        )
-        loadingDialog.setCancelable(false)
         loadingDialog.show()
     }
 
@@ -127,7 +103,6 @@ class ExprienceRecord : Fragment() {
         val companyName = binding.companyName.editText?.text.toString().trim()
         val position = binding.position.editText?.text.toString().trim()
         val yearOfWork = binding.yearOfWork.editText?.text.toString().trim()
-
 
         Toast.makeText(requireContext(), "Experience added", Toast.LENGTH_SHORT).show()
         val experience = Experience(companyName, yearOfWork.toInt(), position)
@@ -163,14 +138,39 @@ class ExprienceRecord : Fragment() {
                     loadingDialog.dismiss()
                     val errorMessage = response.errorBody()?.string() ?: "Unknown error occurred"
                     println(errorMessage)
-                    Toast.makeText(context, "Submission failed: ${response.errorBody()?.string()}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Submission failed: $errorMessage", Toast.LENGTH_SHORT).show()
                 }
             } catch (e: Exception) {
                 loadingDialog.dismiss()
-                println(e.message);
+                println(e.message)
                 Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    private fun validateInputs(): Boolean {
+        val companyName = binding.companyName.editText?.text.toString().trim()
+        val position = binding.position.editText?.text.toString().trim()
+        val yearOfWork = binding.yearOfWork.editText?.text.toString().trim()
+
+        var isValid = true
+
+        if (companyName.isBlank()) {
+            setToErrorDrawable(binding.companyName)
+            isValid = false
+        }
+
+        if (position.isBlank()) {
+            setToErrorDrawable(binding.position)
+            isValid = false
+        }
+
+        if (yearOfWork.isBlank()) {
+            setToErrorDrawable(binding.yearOfWork)
+            isValid = false
+        }
+
+        return isValid
     }
 
     private fun resetToDefaultDrawable(editText: TextInputLayout) {

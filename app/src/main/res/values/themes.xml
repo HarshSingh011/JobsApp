@@ -4,7 +4,20 @@
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
         <item name="android:statusBarColor">@color/background</item>
+        <item name="android:navigationBarColor">@android:color/black</item>
+        <item name="bottomNavigationStyle">@android:color/black</item>
     </style>
 
     <style name="Theme.Main_Project" parent="Base.Theme.Main_Project" />
+
+    <style name="BottomNavigationStyle" parent="Widget.MaterialComponents.BottomNavigationView">
+        <item name="itemIconSize">24dp</item>
+        <item name="itemTextAppearanceActive">@style/BottomNavTextAppearance</item>
+        <item name="itemTextAppearanceInactive">@style/BottomNavTextAppearance</item>
+    </style>
+
+    <style name="BottomNavTextAppearance" parent="TextAppearance.MaterialComponents.Caption">
+        <item name="android:textSize">12sp</item>
+    </style>
+
 </resources>

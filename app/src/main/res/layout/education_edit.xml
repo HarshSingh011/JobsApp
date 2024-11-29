@@ -21,6 +21,13 @@
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.05" />
 
+        <androidx.constraintlayout.widget.Guideline
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/guideline2"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.95" />
+
 
         <TextView
             android:id="@+id/institutionName"
@@ -31,12 +38,12 @@
             android:textColor="@color/background"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="@id/guideline1"
+            app:layout_constraintEnd_toEndOf="@+id/guideline2"
             app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
             android:id="@+id/institute_edit"
             android:layout_width="wrap_content"
-            android:layout_marginLeft="5dp"
             android:padding="10dp"
             android:layout_marginHorizontal="10dp"
             android:layout_height="wrap_content"
@@ -45,6 +52,7 @@
             android:text="Institute Name"
             android:textColor="@color/black"
             android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="@+id/guideline2"
             app:layout_constraintStart_toEndOf="@id/guideline1"
             app:layout_constraintTop_toBottomOf="@id/institutionName"/>
 
@@ -57,21 +65,22 @@
             android:layout_marginTop="10dp"
             android:textColor="@color/background"
             android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="@+id/guideline2"
             app:layout_constraintTop_toBottomOf="@id/institute_edit"
             app:layout_constraintStart_toEndOf="@id/guideline1"
             />
 
         <EditText
             android:id="@+id/Degree_edit"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:padding="10dp"
-            android:layout_marginHorizontal="10dp"
             android:text="Degree name"
             android:textColor="@color/black"
             android:background="@drawable/edittext_prop"
             android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="@+id/guideline2"
             app:layout_constraintStart_toEndOf="@id/guideline1"
             app:layout_constraintTop_toBottomOf="@id/degree"/>
 
@@ -83,20 +92,20 @@
             android:layout_marginTop="10dp"
             android:textColor="@color/background"
             android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="@+id/guideline2"
             app:layout_constraintStart_toEndOf="@id/guideline1"
             app:layout_constraintTop_toBottomOf="@id/Degree_edit"/>
 
         <EditText
             android:id="@+id/yearOfCompleletion_edit"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@drawable/edittext_prop"
-            android:layout_marginLeft="5dp"
             android:padding="10dp"
-            android:layout_marginHorizontal="10dp"
             android:text="Year of Completion"
             android:textColor="@color/black"
             android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="@+id/guideline2"
             app:layout_constraintStart_toEndOf="@id/guideline1"
             app:layout_constraintTop_toBottomOf="@id/completionYear"/>
 

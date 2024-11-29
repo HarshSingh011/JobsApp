@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph5"
+    app:startDestination="@id/jobPosted">
+
+
+    <fragment
+        android:id="@+id/recruiterDetailsEdit"
+        android:name="com.example.main_project.Recruiter.Fragments.RecruiterDetailsEdit"
+        android:label="fragment_recruiter_details_edit"
+        tools:layout="@layout/fragment_recruiter_details_edit" />
+    <fragment
+        android:id="@+id/postAJob"
+        android:name="com.example.main_project.Recruiter.Fragments.PostAJob"
+        android:label="fragment_post_a_job"
+        tools:layout="@layout/fragment_post_a_job" />
+    <fragment
+        android:id="@+id/jobPosted"
+        android:name="com.example.main_project.Recruiter.Fragments.JobPosted"
+        android:label="fragment_job_posted"
+        tools:layout="@layout/fragment_job_posted" />
+    <fragment
+        android:id="@+id/applicants"
+        android:name="com.example.main_project.Recruiter.Fragments.Applicants"
+        android:label="fragment_applicants"
+        tools:layout="@layout/fragment_applicants" />
+    <fragment
+        android:id="@+id/recruiterDetails"
+        android:name="com.example.main_project.Recruiter.Fragments.RecruiterDetails"
+        android:label="fragment_recruiter_details"
+        tools:layout="@layout/fragment_recruiter_details" />
+
+</navigation>
