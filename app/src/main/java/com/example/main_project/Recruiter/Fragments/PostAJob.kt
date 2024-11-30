@@ -7,8 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.example.main_project.CandidateInterface
 import com.example.main_project.CandidateProfileRetrofitClient
 import com.example.main_project.R
@@ -22,20 +24,29 @@ class PostAJob : Fragment() {
     private var _binding: FragmentPostAJobBinding? = null
     private val binding get() = _binding!!
 
-    private var requiredSkills = mutableListOf<String>() // To store skills
+    private var requiredSkills = mutableListOf<String>()
 
     override fun onResume() {
         super.onResume()
 
-        // Set up job type dropdown
         val jobType = resources.getStringArray(R.array.JobType)
         val arrayAdapterJobType = ArrayAdapter(requireContext(), R.layout.dropdownmenu, jobType)
         binding.JobTypeInputbox.setAdapter(arrayAdapterJobType)
 
-        // Set up job mode dropdown
         val jobMode = resources.getStringArray(R.array.JobMode)
         val arrayAdapterJobMode = ArrayAdapter(requireContext(), R.layout.dropdownmenu, jobMode)
         binding.ModeInputbox.setAdapter(arrayAdapterJobMode)
+
+        binding.nextFragment.setOnClickListener {
+            findNavController().navigate(R.id.jobPosted)
+        }
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                findNavController().navigate(R.id.postAJob)
+            }
+        })
+
     }
 
     override fun onCreateView(
@@ -86,6 +97,7 @@ class PostAJob : Fragment() {
         val jobMode = binding.ModeInputbox.text.toString()
 
         if (title.isBlank() || description.isBlank() || location.isBlank() || jobType.isBlank() || requiredSkills.isEmpty()) {
+            println("Title: $title, Description: $description, Location: $location, Job Type: $jobType, Required Skills: $requiredSkills")
             Toast.makeText(requireContext(), "Please fill all required fields", Toast.LENGTH_SHORT).show()
             return
         }
@@ -117,19 +129,22 @@ class PostAJob : Fragment() {
             if (response.isSuccessful) {
                 Toast.makeText(requireContext(), response.body()?.message ?: "Success", Toast.LENGTH_SHORT).show()
             } else {
-                val errorBody = response.errorBody()?.string()
-                Log.e("PostAJob", "Error Body: $errorBody")
-                val errorMessage = try {
-                    JSONObject(errorBody ?: "").getString("message")
-                } catch (e: Exception) {
-                    "Unknown error occurred: ${response.code()}"
-                }
-                Log.e("PostAJob", "API Error: $errorMessage")
-                Toast.makeText(requireContext(), "Error: $errorMessage", Toast.LENGTH_SHORT).show()
+                val errorResponse = response.errorBody()?.string()
+                println("failer")
+                val errorMessage = errorResponse?.let { parseErrorMessage(it) } ?: "An error occurred"
+                Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
             }
         } catch (e: Exception) {
             Log.e("PostAJob", "Exception: ${e.message}", e)
             Toast.makeText(requireContext(), "Exception: ${e.message}", Toast.LENGTH_LONG).show()
+        }
+    }
+    private fun parseErrorMessage(response: String?): String {
+        return try {
+            val jsonObject = JSONObject(response ?: "")
+            jsonObject.getString("message")
+        } catch (e: Exception) {
+            "An error occurred"
         }
     }
 }

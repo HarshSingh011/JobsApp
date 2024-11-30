@@ -11,6 +11,7 @@
     >
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:background="@drawable/gradient_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -19,14 +20,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.05" />
+            app:layout_constraintGuide_percent="0.05"/>
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.95" />
+            app:layout_constraintGuide_percent="0.95"/>
 
         <ImageView
             android:id="@+id/bookmark"
@@ -47,73 +48,73 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/heading"
+            android:id="@+id/Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="32dp"
             android:text="Analytic Data"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@id/image"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/subheading"
+            android:id="@+id/location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:text="Apple Officer"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="10sp"
             app:layout_constraintStart_toEndOf="@id/image"
-            app:layout_constraintTop_toBottomOf="@id/heading" />
+            app:layout_constraintTop_toBottomOf="@id/Title" />
 
         <TextView
-            android:id="@+id/textelementone"
+            android:id="@+id/JobType"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="90dp"
-            android:background="@drawable/element_bg"
-            android:padding="5dp"
+            android:background="@drawable/element2_bg"
+            android:padding="6dp"
             android:text="Full time"
             android:textColor="@color/black"
             android:textSize="10sp"
-            app:layout_constraintEnd_toStartOf="@id/textelementtwo"
+            app:layout_constraintEnd_toStartOf="@id/JobMode"
             app:layout_constraintStart_toEndOf="@id/guideline1"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textelementtwo"
+            android:id="@+id/JobMode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="90dp"
-            android:background="@drawable/element_bg"
-            android:padding="5dp"
+            android:background="@drawable/element2_bg"
+            android:padding="6dp"
             android:text="Offline"
             android:textColor="@color/black"
             android:textSize="10sp"
-            app:layout_constraintEnd_toStartOf="@id/textelementthree"
-            app:layout_constraintStart_toEndOf="@id/textelementone"
+            app:layout_constraintEnd_toStartOf="@id/experience"
+            app:layout_constraintStart_toEndOf="@id/JobType"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textelementthree"
+            android:id="@+id/experience"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="90dp"
-            android:background="@drawable/element_bg"
-            android:padding="5dp"
+            android:background="@drawable/element2_bg"
+            android:padding="6dp"
             android:text="1yr EXP"
             android:textColor="@color/black"
             android:textSize="10sp"
             app:layout_constraintEnd_toEndOf="@id/guideline2"
-            app:layout_constraintStart_toEndOf="@id/textelementtwo"
+            app:layout_constraintStart_toEndOf="@id/JobMode"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textContent"
+            android:id="@+id/requiredSkills"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="120dp"
@@ -125,23 +126,24 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/Price"
+            android:id="@+id/Salary"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="$300/Month"
+            android:text="$300"
             android:textColor="@color/black"
-            android:textSize="16sp"
-            app:layout_constraintBaseline_toBaselineOf="@+id/Detail"
+            android:textSize="12sp"
+            app:layout_constraintBaseline_toBaselineOf="@+id/ViewMore"
+            app:layout_constraintEnd_toStartOf="@id/ViewMore"
             app:layout_constraintStart_toEndOf="@id/guideline1" />
 
         <Button
-            android:id="@+id/Detail"
+            android:id="@+id/ViewMore"
             android:layout_width="wrap_content"
             android:layout_height="35dp"
             android:layout_marginTop="150dp"
             android:backgroundTint="@color/previous"
             android:text="View more"
-            android:textColor="@color/black"
+            android:textColor="@color/background"
             android:textSize="10sp"
             app:cornerRadius="10dp"
             app:layout_constraintEnd_toEndOf="@id/guideline2"

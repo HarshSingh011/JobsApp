@@ -51,11 +51,7 @@
         android:name="com.example.main_project.Auth.Fragments.NewPassword"
         android:label="fragment_new_password"
         tools:layout="@layout/fragment_new_password" />
-    <fragment
-        android:id="@+id/loginSuccessful"
-        android:name="com.example.main_project.Auth.Fragments.LoginSuccessful"
-        android:label="fragment_successfull"
-        tools:layout="@layout/fragment_successfull" />
+
     <fragment
         android:id="@+id/signupPhone"
         android:name="com.example.main_project.Auth.Fragments.SignupPhone"
@@ -88,5 +84,11 @@
         android:name="com.example.main_project.MainActivity3"
         android:label="activity_main3"
         tools:layout="@layout/activity_main3" />
+    <activity
+        android:id="@+id/mainActivity6"
+        android:name="com.example.main_project.MainActivity6"
+        android:label="activity_main6"
+        tools:layout="@layout/activity_main6" />
+
 
 </navigation>

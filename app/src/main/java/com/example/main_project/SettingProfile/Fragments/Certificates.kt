@@ -26,6 +26,7 @@ import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import org.json.JSONObject
 import java.io.File
 
 class Certificates : Fragment() {
@@ -155,9 +156,10 @@ class Certificates : Fragment() {
                     isApiSuccess = true
                     restrictNavigation()
                 } else {
-                    val errorMessage = response.errorBody()?.string() ?: "Unknown error occurred"
-                    println(errorMessage)
-                    Toast.makeText(requireContext(), "Upload failed: ${response.message()}", Toast.LENGTH_SHORT).show()
+                    val errorResponse = response.errorBody()?.string()
+                    println("failer")
+                    val errorMessage = errorResponse?.let { parseErrorMessage(it) } ?: "An error occurred"
+                    Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
                 }
             } catch (e: Exception) {
                 Toast.makeText(requireContext(), "Error Data: ${e.message}", Toast.LENGTH_SHORT).show()
@@ -200,6 +202,15 @@ class Certificates : Fragment() {
             }
         }
         return file
+    }
+
+    private fun parseErrorMessage(response: String?): String {
+        return try {
+            val jsonObject = JSONObject(response ?: "")
+            jsonObject.getString("message")
+        } catch (e: Exception) {
+            "An error occurred"
+        }
     }
 
     private fun restrictNavigation() {

@@ -26,19 +26,25 @@ class FilterAdapter(private val filterItems: List<FilterItem>) :
         val filterItem = filterItems[position]
         holder.bind(filterItem)
 
-        holder.textInputEditText.addTextChangedListener(object : TextWatcher {
+        // Remove any existing TextWatchers to prevent duplicate listeners
+        holder.textInputEditText.removeTextChangedListener(holder.textWatcher)
+
+        // Create a new TextWatcher for this specific EditText
+        holder.textWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable?) {
                 val input = s.toString().trim()
-                if (input.isNotEmpty()) {
-                    filterValues[filterItem.id] = input
-                } else {
-                    filterValues.remove(filterItem.id)
-                }
-                Log.d("FilterAdapter", "Current filters: $filterValues")
+                filterValues[filterItem.id] = input
+                Log.d("FilterAdapter", "Filter ${filterItem.name} updated: $input")
             }
-        })
+        }
+
+        // Add the new TextWatcher
+        holder.textInputEditText.addTextChangedListener(holder.textWatcher)
+
+        // Set the current value for this filter item
+        holder.textInputEditText.setText(filterValues[filterItem.id] ?: "")
     }
 
     override fun getItemCount(): Int = filterItems.size
@@ -47,7 +53,7 @@ class FilterAdapter(private val filterItems: List<FilterItem>) :
         val formattedFilters = mutableMapOf<String, String>()
         filterItems.forEach { filterItem ->
             val value = filterValues[filterItem.id]
-            if (value != null) {
+            if (!value.isNullOrEmpty()) {
                 when (filterItem.name.toLowerCase()) {
                     "title" -> formattedFilters["title"] = value
                     "location" -> formattedFilters["location"] = value
@@ -67,6 +73,7 @@ class FilterAdapter(private val filterItems: List<FilterItem>) :
 
     class FilterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val textInputEditText: TextInputEditText = itemView.findViewById(R.id.filterInputName)
+        var textWatcher: TextWatcher? = null
 
         fun bind(filterItem: FilterItem) {
             textInputEditText.hint = filterItem.name

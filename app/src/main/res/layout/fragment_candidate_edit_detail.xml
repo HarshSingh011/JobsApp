@@ -60,6 +60,19 @@
             app:layout_constraintEnd_toEndOf="@id/guideline2"
             app:layout_constraintStart_toStartOf="@id/guideline1"/>
 
+        <Button
+            android:id="@+id/addEducation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/background"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="60dp"
+            android:text="Add Education"
+            app:cornerRadius="10dp"
+            android:textSize="18sp"
+            android:drawableEnd="@drawable/plus"
+            app:layout_constraintStart_toEndOf="@id/guideline1"
+            app:layout_constraintTop_toBottomOf="@id/recyclerViewEducation"/>
 
         <TextView
             android:id="@+id/Experience_detail"
@@ -69,7 +82,7 @@
             android:layout_marginTop="20dp"
             android:textColor="@color/background"
             android:textSize="20sp"
-            app:layout_constraintTop_toBottomOf="@id/recyclerViewEducation"
+            app:layout_constraintTop_toBottomOf="@id/addEducation"
             app:layout_constraintEnd_toEndOf="@id/guideline2"
             app:layout_constraintStart_toStartOf="@id/guideline1"/>
 
@@ -82,6 +95,21 @@
             app:layout_constraintEnd_toEndOf="@id/guideline2"
             app:layout_constraintStart_toStartOf="@id/guideline1"/>
 
+        <Button
+            android:id="@+id/addExperience"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/background"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="60dp"
+            android:text="Add Experience"
+            app:cornerRadius="10dp"
+            android:textSize="18sp"
+            android:drawableEnd="@drawable/plus"
+            app:layout_constraintStart_toEndOf="@id/guideline1"
+            app:layout_constraintTop_toBottomOf="@id/recyclerViewExperience"/>
+
+
         <TextView
             android:id="@+id/Skill_detail"
             android:layout_width="0dp"
@@ -90,7 +118,7 @@
             android:layout_marginTop="20dp"
             android:textColor="@color/background"
             android:textSize="20sp"
-            app:layout_constraintTop_toBottomOf="@id/recyclerViewExperience"
+            app:layout_constraintTop_toBottomOf="@id/addExperience"
             app:layout_constraintEnd_toEndOf="@id/guideline2"
             app:layout_constraintStart_toStartOf="@id/guideline1"/>
 

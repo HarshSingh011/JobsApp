@@ -8,3 +8,12 @@ data class SearchJobData(
     val experience: String,
     val salary: String
 )
+
+
+data class JobApplication(
+    val id: Long,
+    val applicant: Applicant,
+    val job: Job,
+    val appliedAt: String?,
+    val status: String
+)

@@ -99,13 +99,37 @@
             android:orientation="horizontal"
             android:scrollbars="horizontal"
             android:layout_width="0dp"
-            android:layout_height="500dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             app:layout_constraintTop_toBottomOf="@id/jobs"
             app:layout_constraintStart_toStartOf="@id/guideline1"
             app:layout_constraintEnd_toEndOf="@id/guideline3"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/jobapplied"
             />
+
+        <TextView
+            android:id="@+id/jobapplied"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Your Applications"
+            android:layout_marginTop="15dp"
+            android:textColor="@color/background"
+            android:textSize="14sp"
+            app:layout_constraintTop_toBottomOf="@id/jobsearch"
+            app:layout_constraintStart_toStartOf="@id/guideline1"
+            app:layout_constraintEnd_toEndOf="@id/guideline3"
+            />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/Appliedjobsearch"
+            android:orientation="horizontal"
+            android:scrollbars="horizontal"
+            android:layout_width="0dp"
+            android:layout_height="350dp"
+            android:layout_marginTop="20dp"
+            app:layout_constraintTop_toBottomOf="@id/jobapplied"
+            app:layout_constraintStart_toStartOf="@id/guideline1"
+            app:layout_constraintEnd_toEndOf="@id/guideline3"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

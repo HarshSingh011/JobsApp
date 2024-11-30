@@ -28,19 +28,7 @@
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.95" />
 
-        <TextView
-            android:id="@+id/next_fragment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="53dp"
-            android:gravity="end"
-            android:text="NEXT"
-            android:textColor="@color/background"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:clickable="true"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/guideline3"/>
+
 
         <TextView
             android:id="@+id/heading"
@@ -315,11 +303,27 @@
             android:layout_marginBottom="60dp"
             android:text="Add Education"
             app:cornerRadius="10dp"
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:drawableEnd="@drawable/plus"
             app:layout_constraintStart_toEndOf="@id/guideline1"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <Button
+            android:id="@+id/next_fragment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="1060dp"
+            android:gravity="end"
+            android:backgroundTint="@color/background"
+            android:text="NEXT"
+            app:cornerRadius="10dp"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:clickable="true"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/guideline3"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

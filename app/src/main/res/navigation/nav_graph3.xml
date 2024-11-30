@@ -11,24 +11,15 @@
         android:label="RecuriterProfile"
         tools:layout="@layout/fragment_recuriter_profile"/>
 
-    <fragment
-        android:id="@+id/loginSuccessful"
-        android:name="com.example.main_project.Auth.Fragments.LoginSuccessful"
-        android:label="fragment_successfull"
-        tools:layout="@layout/fragment_successfull" />
-    <fragment
-        android:id="@+id/recruiterDetails"
-        android:name="com.example.main_project.Recruiter.Fragments.RecruiterDetails"
-        android:label="RecruiterDetails" />
-    <fragment
-        android:id="@+id/recruiterDetailsEdit"
-        android:name="com.example.main_project.Recruiter.Fragments.RecruiterDetailsEdit"
-        android:label="fragment_recruiter_details_edit"
-        tools:layout="@layout/fragment_recruiter_details_edit" />
-    <fragment
-        android:id="@+id/postAJob"
-        android:name="com.example.main_project.Recruiter.Fragments.PostAJob"
-        android:label="fragment_post_a_job"
-        tools:layout="@layout/fragment_post_a_job" />
+    <activity
+        android:id="@+id/mainActivity5"
+        android:name="com.example.main_project.MainActivity5"
+        android:label="activity_main5"
+        tools:layout="@layout/activity_main5" />
+    <activity
+        android:id="@+id/mainActivity2"
+        android:name="com.example.main_project.SettingProfile.MainActivity2"
+        android:label="activity_main2"
+        tools:layout="@layout/activity_main2" />
 
 </navigation>

@@ -14,7 +14,7 @@ class AuthTokenInterceptor(private val context: Context) : Interceptor {
         val token: String? = runBlocking {
             DataStoreManager(context).getToken().first()
         }
-        Log.d("AuthTokenInterceptor", "Token: ${token?.take(10)}...") // Log first 10 chars for security
+        Log.d("AuthTokenInterceptor", "Token: ${token?.take(10)}...")
 
         val originalRequest = chain.request()
         val newRequest: Request = originalRequest.newBuilder().apply {

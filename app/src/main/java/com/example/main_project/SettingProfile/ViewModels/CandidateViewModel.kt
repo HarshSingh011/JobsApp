@@ -1,7 +1,7 @@
 package com.example.main_project.SettingProfile.ViewModels
 
 import androidx.lifecycle.ViewModel
-import com.example.main_project.SettingProfile.DataClasses.Educations
+import com.example.main_project.SettingProfile.DataClasses.Education
 import com.example.main_project.SettingProfile.DataClasses.Experience
 
 class CandidateViewModel : ViewModel(){
@@ -14,7 +14,7 @@ class CandidateViewModel : ViewModel(){
     var company_name  : String = ""
     var position  : String = ""
     var year_of_Work : String = ""
-    var educationList = mutableListOf<Educations>()
+    var educationList = mutableListOf<Education>()
     var experienceList = mutableListOf<Experience>()
     var isApiSuccess = false
     var DOB : String = ""

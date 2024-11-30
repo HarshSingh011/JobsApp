@@ -14,6 +14,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.navOptions
 import com.example.main_project.DataStoreManager
 import com.example.main_project.R
 import com.example.main_project.Auth.RetrofitClient
@@ -138,16 +139,28 @@ class LoginPage : Fragment() {
         RetrofitClient.instance.login(request).enqueue(object : Callback<LoginResponse> {
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
                 binding.loginBtn.isEnabled = true
-                loadingDialog.dismiss()
+
 
                 if (response.isSuccessful) {
                     response.body()?.let { loginResponse ->
                         val token = loginResponse.token
-                        if (token != null) {
-                            findNavController().navigate(R.id.loginSuccessful)
-                            if (binding.chkbox.isChecked) {
-                                lifecycleScope.launch {
-                                    dataStoreManager.saveToken(token)
+                        val role = loginResponse.user?.role
+                        loadingDialog.dismiss()
+
+                        if (token != null && role != null) {
+                            lifecycleScope.launch {
+                                dataStoreManager.saveToken(token)
+                                dataStoreManager.saveRole(role)
+                                println(role)
+                            }
+
+                            println(role)
+                            when (role) {
+                                "CANDIDATE" -> findNavController().navigate(R.id.mainActivity4)
+                                "RECRUITER" -> findNavController().navigate(R.id.mainActivity5)
+                                "USER" -> findNavController().navigate(R.id.mainActivity6)
+                                else -> {
+                                    Toast.makeText(requireContext(), "Invalid role", Toast.LENGTH_SHORT).show()
                                 }
                             }
                         } else {
@@ -156,13 +169,13 @@ class LoginPage : Fragment() {
                         }
                     } ?: showError("Unexpected response structure")
                 } else {
+                    loadingDialog.dismiss()
                     val errorMessage = parseErrorMessage(response.errorBody()?.string())
                     showError(errorMessage)
                 }
             }
 
             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-                println("fail")
                 binding.loginBtn.isEnabled = true
                 loadingDialog.dismiss()
 
@@ -179,6 +192,7 @@ class LoginPage : Fragment() {
             }
         })
     }
+
     private fun parseErrorMessage(response: String?): String {
         return try {
             val jsonObject = JSONObject(response ?: "")

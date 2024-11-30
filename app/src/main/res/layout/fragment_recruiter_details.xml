@@ -7,6 +7,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Recruiter.Fragments.RecruiterDetails"
     android:layout_width="match_parent"
+    android:paddingVertical="10dp"
     android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -27,19 +28,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.95"/>
-
-        <TextView
-            android:id="@+id/PostJob"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="Next"
-            android:textStyle="bold"
-            android:textColor="@color/background"
-            android:textSize="24sp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/guideline2"/>
-
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/profileImage"
@@ -73,19 +61,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="29dp"
                     android:layout_marginTop="10dp"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
                     android:textColor="@color/background"
                     android:text="Basic Details"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageView
-                    android:id="@+id/firstname_icon"
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    android:layout_marginLeft="29dp"
-                    android:layout_marginTop="40dp"
-                    android:src="@drawable/fresher"
-                    app:layout_constraintEnd_toStartOf="@id/firstname"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -93,77 +72,44 @@
                     android:id="@+id/firstname"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
+                    android:layout_marginStart="29dp"
                     android:layout_marginTop="40dp"
                     android:text="First Name"
-                    android:textSize="14sp"
-                    app:layout_constraintStart_toEndOf="@id/firstname_icon"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageView
-                    android:id="@+id/lastname_icon"
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    android:layout_marginLeft="29dp"
-                    android:layout_marginTop="62dp"
-                    android:src="@drawable/institute"
-                    app:layout_constraintEnd_toStartOf="@id/lastname"
+                    android:textSize="16sp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/lastname"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
+                    android:layout_marginStart="29dp"
                     android:layout_marginTop="62dp"
                     android:text="Last Name"
-                    android:textSize="14sp"
-                    app:layout_constraintStart_toEndOf="@id/lastname_icon"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageView
-                    android:id="@+id/Email_icon"
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    android:layout_marginLeft="29dp"
-                    android:layout_marginTop="84dp"
-                    android:src="@drawable/calender"
-                    app:layout_constraintEnd_toStartOf="@id/Email"
+                    android:textSize="16sp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/Email"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
+                    android:layout_marginStart="29dp"
                     android:layout_marginTop="84dp"
                     android:text="Email"
-                    android:textSize="14sp"
-                    app:layout_constraintStart_toEndOf="@id/Email_icon"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageView
-                    android:id="@+id/mail_icon"
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    android:layout_marginLeft="29dp"
-                    android:layout_marginTop="106dp"
-                    android:src="@drawable/mail"
-                    app:layout_constraintEnd_toStartOf="@id/phonenumber"
+                    android:textSize="16sp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/phonenumber"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
+                    android:layout_marginStart="29dp"
                     android:layout_marginTop="106dp"
                     android:text="Phone Number"
-                    android:textSize="14sp"
-                    app:layout_constraintStart_toEndOf="@id/mail_icon"
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -189,6 +135,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="29dp"
                     android:layout_marginTop="10dp"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
                     android:textColor="@color/background"
                     android:text="Resume"
                     app:layout_constraintStart_toStartOf="parent"
@@ -205,136 +153,70 @@
                     app:layout_constraintTop_toTopOf="parent"
                     />
 
-                <ImageView
-                    android:id="@+id/CompanyEmail_icon"
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    android:layout_marginLeft="29dp"
-                    android:layout_marginTop="40dp"
-                    android:src="@drawable/mail"
-                    app:layout_constraintEnd_toStartOf="@id/CompanyEmail"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
-
                 <TextView
                     android:id="@+id/CompanyEmail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
-                    android:layout_marginTop="40dp"
+                    android:layout_marginStart="29dp"
+                    android:layout_marginTop="45dp"
                     android:text="Company Email"
-                    android:textSize="14sp"
-                    app:layout_constraintStart_toEndOf="@id/CompanyEmail_icon"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageView
-                    android:id="@+id/CompanyName_icon"
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    android:layout_marginLeft="29dp"
-                    android:layout_marginTop="84dp"
-                    android:src="@drawable/mail"
-                    app:layout_constraintEnd_toStartOf="@id/CompanyName"
+                    android:textSize="16sp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/CompanyName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
-                    android:layout_marginTop="62dp"
+                    android:layout_marginStart="29dp"
+                    android:layout_marginTop="67dp"
                     android:text="Company Name"
-                    android:textSize="14sp"
-                    app:layout_constraintStart_toEndOf="@id/CompanyEmail_icon"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageView
-                    android:id="@+id/JobTitle_icon"
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    android:layout_marginLeft="29dp"
-                    android:layout_marginTop="62dp"
-                    android:src="@drawable/mail"
-                    app:layout_constraintEnd_toStartOf="@id/JobTitle"
+                    android:textSize="16sp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/JobTitle"
                     android:layout_width="60dp"
                     android:layout_height="24dp"
-                    android:layout_marginStart="4dp"
-                    android:layout_marginTop="84dp"
+                    android:layout_marginStart="29dp"
+                    android:layout_marginTop="89dp"
                     android:text="Job Title"
-                    android:textSize="14sp"
-                    app:layout_constraintStart_toEndOf="@id/JobTitle_icon"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageView
-                    android:id="@+id/CompanyWebsite_icon"
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    android:layout_marginLeft="29dp"
-                    android:layout_marginTop="106dp"
-                    android:src="@drawable/mail"
-                    app:layout_constraintEnd_toStartOf="@id/CompanyWebsite"
+                    android:textSize="16sp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/CompanyWebsite"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
-                    android:layout_marginTop="106dp"
+                    android:layout_marginStart="29dp"
+                    android:layout_marginTop="111dp"
                     android:text="Company Website"
-                    android:textSize="14sp"
-                    app:layout_constraintStart_toEndOf="@id/CompanyWebsite_icon"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageView
-                    android:id="@+id/CompanyLocation_icon"
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    android:layout_marginLeft="29dp"
-                    android:layout_marginTop="128dp"
-                    android:src="@drawable/mail"
-                    app:layout_constraintEnd_toStartOf="@id/CompanyLocation"
+                    android:textSize="16sp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/CompanyLocation"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
-                    android:layout_marginTop="128dp"
+                    android:layout_marginStart="29dp"
+                    android:layout_marginTop="133dp"
                     android:text="Company Email"
-                    android:textSize="14sp"
-                    app:layout_constraintStart_toEndOf="@id/CompanyLocation_icon"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageView
-                    android:id="@+id/Industry_icon"
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    android:layout_marginLeft="29dp"
-                    android:layout_marginTop="150dp"
-                    android:src="@drawable/mail"
-                    app:layout_constraintEnd_toStartOf="@id/Industry"
+                    android:textSize="16sp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/Industry"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
-                    android:layout_marginTop="150dp"
+                    android:layout_marginStart="29dp"
+                    android:layout_marginTop="155dp"
                     android:text="Industry"
-                    android:textSize="14sp"
-                    app:layout_constraintStart_toEndOf="@id/Industry_icon"
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     />
 

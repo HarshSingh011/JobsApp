@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,9 +14,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.main_project.CandidateInterface
 import com.example.main_project.CandidateProfileRetrofitClient
 import com.example.main_project.R
-import com.example.main_project.SeeJobs.Adapter.JobAdapter
-import com.example.main_project.SeeJobs.Adapter.JobShowResponse
+import com.example.main_project.SeeJobs.Adapters.JobApplicationAdapter
 import com.example.main_project.SeeJobs.DataClasses.Job
+import com.example.main_project.SeeJobs.DataClasses.JobApplication
 import com.example.main_project.databinding.FragmentSearchJobBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -25,7 +26,9 @@ import retrofit2.Response
 class SearchJob : Fragment() {
 
     private lateinit var jobAdapter: JobAdapter
+    private lateinit var jobApplicationAdapter: JobApplicationAdapter
     private lateinit var jobRecyclerView: RecyclerView
+    private lateinit var jobApplicationRecyclerView: RecyclerView
     private lateinit var loadingDialog: Dialog
 
     override fun onCreateView(
@@ -33,15 +36,26 @@ class SearchJob : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val binding = FragmentSearchJobBinding.inflate(inflater, container, false)
-
         jobRecyclerView = binding.jobsearch
-        jobRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+        jobApplicationRecyclerView = binding.Appliedjobsearch
+
+        jobRecyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        jobApplicationRecyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         fetchJobs()
 
-        binding.filter.setOnClickListener(){
+        binding.filter.setOnClickListener {
             findNavController().navigate(R.id.jobFilter)
         }
+
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    findNavController().navigate(R.id.mainActivity2)
+                }
+            }
+        )
 
         return binding.root
     }
@@ -53,24 +67,45 @@ class SearchJob : Fragment() {
 
         CoroutineScope(Dispatchers.Main).launch {
             try {
+                val jobResponse: Response<List<Job>> = apiService.getJobs()
 
-                val response: Response<JobShowResponse> = apiService.getJobs()
-                if (response.isSuccessful) {
+                if (jobResponse.isSuccessful) {
                     loadingDialog.dismiss()
-                    val jobResponse = response.body()
-                    jobResponse?.let {
-                        jobAdapter = JobAdapter(it.content) { job ->
-                            navigateToJobDetails(job)
+                    val jobList = jobResponse.body()
+
+                    jobList?.let {
+                        if (::jobAdapter.isInitialized) {
+                            jobAdapter.addJobs(it)
+                        } else {
+                            jobAdapter = JobAdapter(it.toMutableList()) { job ->
+                                navigateToJobDetails(job)
+                            }
+                            jobRecyclerView.adapter = jobAdapter
                         }
-                        jobRecyclerView.adapter = jobAdapter
                     }
                 } else {
                     loadingDialog.dismiss()
-                    Log.e("API Error", "Error fetching jobs: ${response.code()}")
+                    Log.e("API Error", "Error fetching jobs: ${jobResponse.code()}")
                 }
+
+                val jobApplicationResponse: Response<List<JobApplication>> = apiService.getJobApplications()
+
+                if (jobApplicationResponse.isSuccessful) {
+                    val jobApplicationList = jobApplicationResponse.body()
+
+                    jobApplicationList?.let {
+                        if (::jobApplicationAdapter.isInitialized) {
+                            jobApplicationAdapter.addApplications(it)
+                        } else {
+                            jobApplicationAdapter = JobApplicationAdapter(it.toMutableList())
+                            jobApplicationRecyclerView.adapter = jobApplicationAdapter
+                        }
+                    }
+                }
+
             } catch (e: Exception) {
                 loadingDialog.dismiss()
-                Log.e("API Error", "Error fetching jobs: ${e.message}")
+                Log.e("API Error", "Error fetching data: ${e.message}")
             }
         }
     }
@@ -94,7 +129,7 @@ class SearchJob : Fragment() {
             putString("job_id", job.id.toString())
             putString("job_title", job.title)
             putString("job_description", job.description)
-            putString("job_salary", job.maxSalary.toString()+" - "+job.minSalary.toString())
+            putString("job_salary", job.maxSalary.toString() + " - " + job.minSalary.toString())
             putString("job_location", job.location)
             putString("job_Mode", job.mode)
             putString("job_type", job.jobType)
@@ -102,6 +137,3 @@ class SearchJob : Fragment() {
         findNavController().navigate(R.id.jobsDetails, bundle)
     }
 }
-
-
-

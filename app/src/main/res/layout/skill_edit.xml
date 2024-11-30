@@ -34,9 +34,10 @@
 
         <EditText
             android:id="@+id/skill_edit"
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
+            android:singleLine="true"
             android:padding="5dp"
             android:background="@drawable/edittext_prop"
             android:text="Skill"
