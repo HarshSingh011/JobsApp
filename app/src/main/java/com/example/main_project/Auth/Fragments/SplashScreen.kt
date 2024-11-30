@@ -36,17 +36,24 @@ class SplashScreen : Fragment() {
                             when (role) {
                                 "CANDIDATE" -> {
                                     findNavController().navigate(R.id.mainActivity4)
+                                    println(role)
                                 }
                                 "RECRUITER" -> {
                                     findNavController().navigate(R.id.mainActivity5)
+                                    println(role)
+                                }
+                                "USER" -> {
+                                    findNavController().navigate(R.id.mainActivity6)
+                                    println(role)
                                 }
                                 else -> {
                                     findNavController().navigate(R.id.frontPage)
+                                    println(role)
                                 }
                             }
                         }
                     } else {
-                        // Token doesn't exist, navigate to login
+                        println("token not saved navigating to frontPage")
                         findNavController().navigate(R.id.frontPage)
                     }
                 }

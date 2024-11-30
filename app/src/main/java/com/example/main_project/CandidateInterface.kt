@@ -6,6 +6,7 @@ import com.example.main_project.Recruiter.DataClasses.ApplicantsResponse
 import com.example.main_project.Recruiter.DataClasses.JobContent
 import com.example.main_project.Recruiter.DataClasses.JobRequest
 import com.example.main_project.Recruiter.DataClasses.JobResponse
+import com.example.main_project.Recruiter.DataClasses.ProfilePictureResponse
 import com.example.main_project.Recruiter.DataClasses.RecruiterData
 import com.example.main_project.Recruiter.DataClasses.RecruiterSeeJobsResponse
 import com.example.main_project.Recruiter.DataClasses.RecruiterUpdateData
@@ -13,6 +14,7 @@ import com.example.main_project.Recruiter.DataClasses.RecruiterUpdateResponse
 import com.example.main_project.Recruiter.DataClasses.UpdateStatusBody
 import com.example.main_project.Recruiter.DataClasses.UpdateStatusResponse
 import com.example.main_project.SeeJobs.DataClasses.Job
+import com.example.main_project.SeeJobs.DataClasses.JobApplication
 import com.example.main_project.SeeJobs.DataClasses.JobShowResponse
 import com.example.main_project.SeeJobs.DataClasses.JobApplyResponse
 import com.example.main_project.SettingProfile.DataClasses.CandidateData
@@ -115,6 +117,15 @@ interface CandidateInterface {
 
     @GET("get-all")
     suspend fun getNotifications(): Response<List<NotificationModel>>
+
+    @GET("jobs/applications/candidate")
+    suspend fun getJobApplications(): Response<List<JobApplication>>
+
+    @Multipart
+    @POST("recruiter/Profile-picture")
+    suspend fun uploadProfileRecruiterPicture(
+        @Part image: MultipartBody.Part
+    ): Response<ProfilePictureResponse>
 
 }
 

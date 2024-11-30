@@ -21,8 +21,6 @@
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.0" />
 
-
-
         <ImageView
             android:id="@+id/CompanyNameIcon"
             android:layout_width="18dp"

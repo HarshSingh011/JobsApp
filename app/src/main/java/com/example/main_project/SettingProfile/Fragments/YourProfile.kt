@@ -1,5 +1,6 @@
 package com.example.main_project.SettingProfile.Fragments
 
+import android.app.Dialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -20,7 +21,7 @@ import com.example.main_project.CandidateInterface
 import com.example.main_project.CandidateProfileRetrofitClient
 import com.example.main_project.SettingProfile.ViewModels.CandidateViewModel
 import com.example.main_project.R
-import com.example.main_project.SettingProfile.DataClasses.Educations
+import com.example.main_project.SettingProfile.DataClasses.Education
 import com.example.main_project.databinding.FragmentYourProfileBinding
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.google.android.material.textfield.TextInputLayout
@@ -35,6 +36,7 @@ class YourProfile : Fragment() {
 
     private var _binding: FragmentYourProfileBinding? = null
     private val binding get() = _binding!!
+    private lateinit var loadingDialog: Dialog
     private val sharedViewModel: CandidateViewModel by activityViewModels()
 
     override fun onCreateView(
@@ -60,18 +62,24 @@ class YourProfile : Fragment() {
                     sharedViewModel.domain += ", $enteredDomain"
                     println(sharedViewModel)
                 }
+                binding.searchBox.editText?.text?.clear()
                 Toast.makeText(requireContext(), "Domain added: $enteredDomain", Toast.LENGTH_SHORT).show()
             } else {
                 Toast.makeText(requireContext(), "Please enter a domain to add", Toast.LENGTH_SHORT).show()
             }
         }
 
+        if (binding.roleDefine.text.toString() == "Candidate") {
+            findNavController().navigate(R.id.yourProfile)
+        }
+        if (binding.roleDefine.text.toString() == "Recruiter") {
+            findNavController().navigate(R.id.mainActivity3)
+        }
+
         binding.nextFragment.setOnClickListener {
             if (validateInputs()) {
                 val viewPager = requireActivity().findViewById<ViewPager2>(R.id.viewPager)
                 viewPager.currentItem = 1
-            } else {
-                Toast.makeText(requireContext(), "Please fill all required fields", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -82,7 +90,6 @@ class YourProfile : Fragment() {
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, domainSuggestions)
         binding.autoCompleteDomain.setAdapter(adapter)
 
-        // Set focus listeners on fields to reset to default drawable
         binding.role.editText?.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) resetToDefaultDrawable(binding.role)
         }
@@ -109,11 +116,27 @@ class YourProfile : Fragment() {
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                findNavController().navigate(R.id.loginSuccessful)
+                findNavController().navigate(R.id.yourProfile)
+                val viewPager = requireActivity().findViewById<ViewPager2>(R.id.viewPager)
+                viewPager.currentItem = 0
             }
         })
 
         return binding.root
+    }
+
+    private fun showLoadingDialog() {
+        if (!::loadingDialog.isInitialized) {
+            loadingDialog = Dialog(requireContext())
+            loadingDialog.setContentView(R.layout.loader)
+            loadingDialog.window?.setBackgroundDrawableResource(android.R.color.white)
+            loadingDialog.window?.setLayout(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+            )
+            loadingDialog.setCancelable(false)
+            loadingDialog.show()
+        }
     }
 
     private fun validateInputs(): Boolean {
@@ -147,22 +170,14 @@ class YourProfile : Fragment() {
         return isValid
     }
 
-    // Add education data
     private fun addDataToCandidateData() {
         val institution = binding.instituteName.editText?.text.toString().trim()
         val degree = binding.Degree.editText?.text.toString().trim()
         val yearOfCompletion = binding.yearOfCompleletion.editText?.text.toString().trim().toIntOrNull()
         val DOB = binding.DateOfBirth.editText?.text.toString().trim()
         sharedViewModel.DOB = DOB
-
-        if (institution.isNotEmpty() && degree.isNotEmpty() && yearOfCompletion != null) {
-            val newEducation = Educations(institution, degree, yearOfCompletion)
-            sharedViewModel.educationList.add(newEducation)
-            Toast.makeText(requireContext(), "Education added", Toast.LENGTH_SHORT).show()
-        } else {
-            Toast.makeText(requireContext(), "Please fill all education details", Toast.LENGTH_SHORT).show()
-            return
-        }
+        val newEducation = Education(institution, degree, yearOfCompletion)
+        sharedViewModel.educationList.add(newEducation)
 
         println(sharedViewModel.educationList)
         println(sharedViewModel.domain)
@@ -239,9 +254,10 @@ class YourProfile : Fragment() {
 
     private fun uploadImage(fileUri: Uri) {
         val context = requireContext()
-
+        showLoadingDialog()
         lifecycleScope.launch {
             try {
+                loadingDialog.dismiss()
                 Log.d("ProfilePictureUpload", "Original URI: $fileUri")
                 Log.d("ProfilePictureUpload", "URI Scheme: ${fileUri.scheme}")
                 Log.d("ProfilePictureUpload", "URI Path: ${fileUri.path}")
@@ -265,13 +281,11 @@ class YourProfile : Fragment() {
                     return@launch
                 }
 
-                // Content type detection
                 val contentResolver = context.contentResolver
                 val mimeType = contentResolver.getType(fileUri) ?: "image/jpeg"
 
                 Log.d("ProfilePictureUpload", "Detected MIME Type: $mimeType")
 
-                // Prepare multipart body
                 val requestFile = file.asRequestBody(mimeType.toMediaTypeOrNull())
                 val body = MultipartBody.Part.createFormData("image", file.name, requestFile)
 
@@ -284,6 +298,7 @@ class YourProfile : Fragment() {
                     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
                     Log.d("ProfilePictureUpload", "Response: $message")
                 } else {
+                    loadingDialog.dismiss()
                     val errorResponse = response.errorBody()?.string()
                     val errorMessage = try {
                         JSONObject(errorResponse).optString("message", "Failed to upload image")
@@ -295,6 +310,7 @@ class YourProfile : Fragment() {
                     Log.e("ProfilePictureUpload", "Error: $errorMessage")
                 }
             } catch (e: Exception) {
+                loadingDialog.dismiss()
                 Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_LONG).show()
                 Log.e("API Error", "Exception details", e)
             }

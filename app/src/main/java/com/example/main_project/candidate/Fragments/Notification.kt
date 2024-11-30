@@ -4,10 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.example.main_project.CandidateInterface
 import com.example.main_project.CandidateProfileRetrofitClient
+import com.example.main_project.R
 import com.example.main_project.databinding.FragmentNotificationBinding
 import kotlinx.coroutines.launch
 
@@ -23,6 +26,12 @@ class Notification : Fragment() {
         _binding = FragmentNotificationBinding.inflate(inflater, container, false)
 
         getNotifications()
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                findNavController().navigate(R.id.mainActivity2)
+            }
+        })
 
         return binding.root
     }

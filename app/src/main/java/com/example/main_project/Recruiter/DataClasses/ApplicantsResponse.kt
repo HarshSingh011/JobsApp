@@ -35,3 +35,8 @@ data class Applicant(
     val profileImageKey: String?,
     val dob: String?
 )
+
+
+data class ProfilePictureResponse(
+    val message: String
+)

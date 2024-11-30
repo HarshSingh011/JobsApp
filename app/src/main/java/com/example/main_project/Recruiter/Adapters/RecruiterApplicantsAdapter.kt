@@ -45,10 +45,9 @@ class RecruiterApplicantsAdapter(
         val applicantApplication = applicantList[position]
         val applicant = applicantApplication.applicant
 
-        // Set skills
         holder.binding.Skills.text = applicant.skills.joinToString(", ")
+        holder.binding.Status.text= applicantApplication.status
 
-        // Load resume
         val resumeUrl = applicant.resumeKey
         if (!resumeUrl.isNullOrEmpty()) {
             loadPdfThumbnail(resumeUrl, holder.binding.ResumeImage)
@@ -60,13 +59,11 @@ class RecruiterApplicantsAdapter(
             holder.binding.ResumeImage.setImageResource(R.drawable.ic_menu_report_image)
         }
 
-        // Handle Accept button
         holder.binding.Accept.setOnClickListener {
             val applicantId = applicantApplication.id
             val statusBody = UpdateStatusBody("Accepted")
             updateApplicationStatus(applicantId, statusBody)
         }
-
     }
 
     private fun loadProfileImage(imageUrl: String, imageView: ImageView) {

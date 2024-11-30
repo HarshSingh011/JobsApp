@@ -20,14 +20,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.05" />
+            app:layout_constraintGuide_percent="0.05"/>
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.95" />
+            app:layout_constraintGuide_percent="0.95"/>
 
         <ImageView
             android:id="@+id/bookmark"
@@ -129,10 +129,11 @@
             android:id="@+id/Salary"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="$300/Month"
+            android:text="$300"
             android:textColor="@color/black"
-            android:textSize="16sp"
+            android:textSize="12sp"
             app:layout_constraintBaseline_toBaselineOf="@+id/ViewMore"
+            app:layout_constraintEnd_toStartOf="@id/ViewMore"
             app:layout_constraintStart_toEndOf="@id/guideline1" />
 
         <Button

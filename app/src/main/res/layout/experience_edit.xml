@@ -21,6 +21,13 @@
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.05" />
 
+        <androidx.constraintlayout.widget.Guideline
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/guideline2"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.95" />
+
 
         <TextView
             android:id="@+id/companyName"
@@ -35,10 +42,9 @@
 
         <EditText
             android:id="@+id/Company_edit"
-            android:layout_width="wrap_content"
-            android:layout_marginLeft="5dp"
+            android:layout_width="200dp"
             android:padding="10dp"
-            android:layout_marginHorizontal="10dp"
+            android:singleLine="true"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:background="@drawable/edittext_prop"
@@ -46,7 +52,8 @@
             android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintStart_toEndOf="@id/guideline1"
-            app:layout_constraintTop_toBottomOf="@id/companyName"/>
+            app:layout_constraintTop_toBottomOf="@id/companyName"
+            app:layout_constraintEnd_toEndOf="@id/guideline2"/>
 
 
         <TextView
@@ -63,18 +70,18 @@
 
         <EditText
             android:id="@+id/yearOfWork_edit"
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:layout_marginLeft="5dp"
             android:padding="10dp"
-            android:layout_marginHorizontal="10dp"
+            android:singleLine="true"
             android:text="Year Of Work"
             android:textColor="@color/black"
             android:background="@drawable/edittext_prop"
             android:textSize="16sp"
             app:layout_constraintStart_toEndOf="@id/guideline1"
-            app:layout_constraintTop_toBottomOf="@id/yearOfWork"/>
+            app:layout_constraintTop_toBottomOf="@id/yearOfWork"
+            app:layout_constraintEnd_toEndOf="@id/guideline2"/>
 
         <TextView
             android:id="@+id/position"
@@ -89,17 +96,17 @@
 
         <EditText
             android:id="@+id/position_edit"
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:background="@drawable/edittext_prop"
-            android:layout_marginLeft="5dp"
+            android:singleLine="true"
             android:padding="10dp"
-            android:layout_marginHorizontal="10dp"
             android:text="Position"
             android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintStart_toEndOf="@id/guideline1"
-            app:layout_constraintTop_toBottomOf="@id/position"/>
+            app:layout_constraintTop_toBottomOf="@id/position"
+            app:layout_constraintEnd_toEndOf="@id/guideline2"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

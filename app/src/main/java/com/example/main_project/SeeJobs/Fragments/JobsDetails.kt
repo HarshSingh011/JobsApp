@@ -1,5 +1,6 @@
 package com.example.main_project.SeeJobs.Fragments
 
+import android.app.Dialog
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -23,6 +24,7 @@ class JobsDetails : Fragment() {
 
     private var _binding: FragmentJobsDetailsBinding? = null
     private val binding get() = _binding!!
+    private lateinit var loadingDialog: Dialog
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -65,17 +67,32 @@ class JobsDetails : Fragment() {
             }
         )
 
-
         return binding.root
+    }
+
+    private fun showLoadingDialog() {
+        if (!::loadingDialog.isInitialized) {
+            loadingDialog = Dialog(requireContext())
+            loadingDialog.setContentView(R.layout.loader)
+            loadingDialog.window?.setBackgroundDrawableResource(android.R.color.white)
+            loadingDialog.window?.setLayout(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+            )
+            loadingDialog.setCancelable(false)
+            loadingDialog.show()
+        }
     }
 
     private fun applyForJob(id: String) {
         println("Applying for job with ID: $id")
         val retrofit = CandidateProfileRetrofitClient.instance(requireContext())
         val apiService = retrofit.create(CandidateInterface::class.java)
+        showLoadingDialog()
 
         CoroutineScope(Dispatchers.Main).launch {
             try {
+                loadingDialog.dismiss()
                 val response: Response<JobApplyResponse> = apiService.applyForJob(id)
                 if (response.isSuccessful) {
                     val apiResponse = response.body()
@@ -84,10 +101,12 @@ class JobsDetails : Fragment() {
                     }
                     println("Applied for job successfully")
                 } else {
+                    loadingDialog.dismiss()
                     Log.e("API Error", "Error applying for job: ${response.code()}")
                     Toast.makeText(requireContext(), "Failed to apply for the job.", Toast.LENGTH_SHORT).show()
                 }
             } catch (e: Exception) {
+                loadingDialog.dismiss()
                 Log.e("API Error", "Exception: ${e.message}")
                 Toast.makeText(requireContext(), "An error occurred. Please try again.", Toast.LENGTH_SHORT).show()
             }

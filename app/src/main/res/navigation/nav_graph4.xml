@@ -44,5 +44,10 @@
         android:name="com.example.main_project.candidate.Fragments.Notification"
         android:label="fragment_notification"
         tools:layout="@layout/fragment_notification" />
+    <activity
+        android:id="@+id/mainActivity2"
+        android:name="com.example.main_project.SettingProfile.MainActivity2"
+        android:label="activity_main2"
+        tools:layout="@layout/activity_main2" />
 
 </navigation>

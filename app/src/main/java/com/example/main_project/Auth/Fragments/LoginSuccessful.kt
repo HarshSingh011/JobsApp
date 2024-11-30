@@ -21,44 +21,36 @@ class LoginSuccessful : Fragment() {
 
     private lateinit var dataStoreManager: DataStoreManager
 
-    override fun onResume() {
-        super.onResume()
-        val role = resources.getStringArray(R.array.role)
-        val arrayAdapter = ArrayAdapter(requireContext(), R.layout.dropdownmenu, role)
-        binding.roleDefine.setAdapter(arrayAdapter)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
+        println("LoginSuccessful fragment loaded")
         _binding = FragmentSuccessfullBinding.inflate(inflater, container, false)
         dataStoreManager = DataStoreManager(requireContext())
+        
 
-        // Logout Button Logic
-        binding.loginBtn.setOnClickListener {
-            lifecycleScope.launch {
-                dataStoreManager.deleteToken()
-                findNavController().navigate(R.id.loginPage)
-            }
-        }
+        val role = resources.getStringArray(R.array.role)
+        val arrayAdapter = ArrayAdapter(requireContext(), R.layout.dropdownmenu, role)
+        binding.roleDefine.setAdapter(arrayAdapter)
 
         binding.next.setOnClickListener {
             val selectedRole = binding.roleDefine.text.toString()
+            println("Selected role: $selectedRole")
             when (selectedRole) {
-                "Candidate" -> findNavController().navigate(R.id.mainActivity2)
-                "Recruiter" -> findNavController().navigate(R.id.mainActivity3)
+                "Candidate" -> {
+                    println("Navigating to mainActivity2")
+                    findNavController().navigate(R.id.mainActivity2)
+                }
+                "Recruiter" -> {
+                    println("Navigating to mainActivity3")
+                    findNavController().navigate(R.id.mainActivity3)
+                }
                 else -> {
-                    binding.roleDefine.error = "Please select a valid role"
+                    println("Staying in LoginSuccessful")
                 }
             }
         }
-
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                requireActivity().finish()
-            }
-        })
 
         return binding.root
     }

@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -39,6 +40,12 @@ class PostAJob : Fragment() {
         binding.nextFragment.setOnClickListener {
             findNavController().navigate(R.id.jobPosted)
         }
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                findNavController().navigate(R.id.postAJob)
+            }
+        })
 
     }
 
@@ -122,19 +129,22 @@ class PostAJob : Fragment() {
             if (response.isSuccessful) {
                 Toast.makeText(requireContext(), response.body()?.message ?: "Success", Toast.LENGTH_SHORT).show()
             } else {
-                val errorBody = response.errorBody()?.string()
-                Log.e("PostAJob", "Error Body: $errorBody")
-                val errorMessage = try {
-                    JSONObject(errorBody ?: "").getString("message")
-                } catch (e: Exception) {
-                    "Unknown error occurred: ${response.code()}"
-                }
-                Log.e("PostAJob", "API Error: $errorMessage")
-                Toast.makeText(requireContext(), "Error: $errorMessage", Toast.LENGTH_SHORT).show()
+                val errorResponse = response.errorBody()?.string()
+                println("failer")
+                val errorMessage = errorResponse?.let { parseErrorMessage(it) } ?: "An error occurred"
+                Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
             }
         } catch (e: Exception) {
             Log.e("PostAJob", "Exception: ${e.message}", e)
             Toast.makeText(requireContext(), "Exception: ${e.message}", Toast.LENGTH_LONG).show()
+        }
+    }
+    private fun parseErrorMessage(response: String?): String {
+        return try {
+            val jsonObject = JSONObject(response ?: "")
+            jsonObject.getString("message")
+        } catch (e: Exception) {
+            "An error occurred"
         }
     }
 }

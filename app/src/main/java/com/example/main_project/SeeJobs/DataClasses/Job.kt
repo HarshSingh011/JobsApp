@@ -21,3 +21,12 @@ data class FilterItem(
     val id: Int,
     val name: String
 )
+
+data class Applicant(
+    val id: Long,
+    val skills: List<String>,
+    val resumeKey: String?,
+    val portfolioKey: String?,
+    val profileImageKey: String?,
+    val dob: String?
+)

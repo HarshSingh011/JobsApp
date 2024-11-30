@@ -1,5 +1,6 @@
 package com.example.main_project.candidate.Fragments
 
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -13,9 +14,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.main_project.CandidateInterface
 import com.example.main_project.CandidateProfileRetrofitClient
@@ -35,6 +38,7 @@ class DeleteCertificates : Fragment() {
 
     private var _binding: FragmentDeleterCertificatesBinding? = null
     private val binding get() = _binding!!
+    private lateinit var loadingDialog: Dialog
 
     private val candidateViewModel: CandidateProfileViewModel by activityViewModels()
 
@@ -47,6 +51,12 @@ class DeleteCertificates : Fragment() {
         candidateViewModel.candidateData.observe(viewLifecycleOwner) { candidateData ->
             updateUI(candidateData)
         }
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                findNavController().navigate(R.id.candidateProfile)
+            }
+        })
 
         binding.delete.setOnClickListener {
             deleteResume()
@@ -83,10 +93,12 @@ class DeleteCertificates : Fragment() {
     }
 
     private fun loadPdfThumbnail(pdfUrl: String, imageView: ImageView) {
+        showLoadingDialog()
         lifecycleScope.launch {
             try {
                 val file = downloadFile(pdfUrl)
                 if (file.exists()) {
+                    loadingDialog.dismiss()
                     val pdfRenderer = PdfRenderer(ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY))
                     val page = pdfRenderer.openPage(0)
 
@@ -100,12 +112,14 @@ class DeleteCertificates : Fragment() {
                         imageView.setImageBitmap(bitmap)
                     }
                 } else {
+                    loadingDialog.dismiss()
                     Log.e("PDF Load Error", "File not found: $pdfUrl")
                     withContext(Dispatchers.Main) {
                         imageView.setImageResource(R.drawable.ic_launcher_background)
                     }
                 }
             } catch (e: Exception) {
+                loadingDialog.dismiss()
                 Log.e("PDF Load Error", "Failed to load PDF preview: ${e.message}")
                 withContext(Dispatchers.Main) {
                     imageView.setImageResource(R.drawable.ic_launcher_background)
@@ -113,6 +127,8 @@ class DeleteCertificates : Fragment() {
             }
         }
     }
+
+
 
     private fun downloadFile(fileUrl: String): File {
         val file = File(requireContext().cacheDir, "temp_resume.pdf")
@@ -126,6 +142,20 @@ class DeleteCertificates : Fragment() {
             Log.e("File Download", "Error downloading file: ${e.message}")
         }
         return file
+    }
+
+    private fun showLoadingDialog() {
+        if (!::loadingDialog.isInitialized) {
+            loadingDialog = Dialog(requireContext())
+            loadingDialog.setContentView(R.layout.loader)
+            loadingDialog.window?.setBackgroundDrawableResource(android.R.color.white)
+            loadingDialog.window?.setLayout(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+            )
+            loadingDialog.setCancelable(false)
+            loadingDialog.show()
+        }
     }
 
     private fun openFile(context: Context, fileUrl: String, mimeType: String) {

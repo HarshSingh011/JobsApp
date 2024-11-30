@@ -5,7 +5,6 @@
     android:id="@+id/nav_graph5"
     app:startDestination="@id/jobPosted">
 
-
     <fragment
         android:id="@+id/recruiterDetailsEdit"
         android:name="com.example.main_project.Recruiter.Fragments.RecruiterDetailsEdit"

@@ -1,13 +1,16 @@
 package com.example.main_project.Recruiter.Fragments
 
+import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.main_project.CandidateInterface
 import com.example.main_project.CandidateProfileRetrofitClient
+import com.example.main_project.R
 import com.example.main_project.Recruiter.DataClasses.ApplicantsResponse
 import com.example.main_project.adapters.RecruiterApplicantsAdapter
 import com.example.main_project.databinding.FragmentApplicantsBinding
@@ -15,6 +18,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.json.JSONObject
 
 class Applicants : Fragment() {
 
@@ -22,6 +26,7 @@ class Applicants : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var applicantsAdapter: RecruiterApplicantsAdapter
+    private lateinit var loadingDialog: Dialog
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,7 +36,6 @@ class Applicants : Fragment() {
 
         setupRecyclerView()
 
-        // Retrieve job ID from the arguments passed from the previous fragment
         val jobId = arguments?.getLong("jobId")
 
         jobId?.let {
@@ -48,6 +52,7 @@ class Applicants : Fragment() {
     }
 
     private fun fetchApplicants(jobId: Long) {
+        showLoadingDialog()
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val apiClient = CandidateProfileRetrofitClient.instance(requireContext())
@@ -56,24 +61,48 @@ class Applicants : Fragment() {
                 val response = apiClient.getJobApplications(jobId)
 
                 if (response.isSuccessful) {
+                    loadingDialog.dismiss()
                     val applicants = response.body() ?: emptyList()
 
                     withContext(Dispatchers.Main) {
-                        // Pass the context along with the applicants list to the adapter
                         applicantsAdapter = RecruiterApplicantsAdapter(applicants, requireContext())
                         binding.recyclerViewApplicants.adapter = applicantsAdapter
                     }
                 } else {
-                    // Handle API errors
+                    loadingDialog.dismiss()
+                    val errorResponse = response.errorBody()?.string()
+                    println("failer")
+                    val errorMessage = errorResponse?.let { parseErrorMessage(it) } ?: "An error occurred"
+                    Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
                 }
             } catch (e: Exception) {
-                // Handle exceptions, like network failures
+                loadingDialog.dismiss()
                 e.printStackTrace()
             }
         }
     }
 
-
+    private fun showLoadingDialog() {
+        if (!::loadingDialog.isInitialized) {
+            loadingDialog = Dialog(requireContext())
+            loadingDialog.setContentView(R.layout.loader)
+            loadingDialog.window?.setBackgroundDrawableResource(android.R.color.white)
+            loadingDialog.window?.setLayout(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+            )
+            loadingDialog.setCancelable(false)
+            loadingDialog.show()
+        }
+    }
+    private fun parseErrorMessage(response: String?): String {
+        return try {
+            val jsonObject = JSONObject(response ?: "")
+            jsonObject.getString("message")
+        } catch (e: Exception) {
+            "An error occurred"
+        }
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()

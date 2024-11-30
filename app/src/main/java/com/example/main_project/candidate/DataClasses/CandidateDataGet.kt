@@ -1,6 +1,6 @@
 package com.example.main_project.candidate.DataClasses
 
-import com.example.main_project.SettingProfile.DataClasses.Educations
+import com.example.main_project.SettingProfile.DataClasses.Education
 import com.example.main_project.SettingProfile.DataClasses.Experience
 
 data class CandidateDataGet(
@@ -8,7 +8,7 @@ data class CandidateDataGet(
     val lastName: String?,
     val email: String?,
     val phone: String?,
-    val education: List<Educations>,
+    val education: List<Education>,
     val experience: List<Experience>,
     val skill: List<String>,
     val certificate: List<Certificate>,
@@ -26,7 +26,7 @@ data class Certificate(
 
 data class UpdateCandidateRequest(
     val education: List<UpdateEducation>,
-    val experiences: List<UpdateExperience>,
+    val experience: List<UpdateExperience>,
     val skill: List<String>
 )
 

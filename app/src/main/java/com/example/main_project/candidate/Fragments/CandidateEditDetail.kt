@@ -1,16 +1,20 @@
 package com.example.main_project.candidate.Fragments
 
+import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.main_project.CandidateInterface
 import com.example.main_project.CandidateProfileRetrofitClient
+import com.example.main_project.R
 import com.example.main_project.candidate.Adapter.EducationEditAdapter
 import com.example.main_project.candidate.Adapter.ExperienceEditAdapter
 import com.example.main_project.candidate.Adapter.SkillEditAdapter
@@ -23,6 +27,7 @@ class CandidateEditDetail : Fragment() {
 
     private var _binding: FragmentCandidateEditDetailBinding? = null
     private val binding get() = _binding!!
+    private lateinit var loadingDialog: Dialog
 
     private val candidateViewModel: CandidateProfileViewModel by activityViewModels()
 
@@ -43,6 +48,12 @@ class CandidateEditDetail : Fragment() {
         setupRecyclerViews()
         observeViewModel()
         setupClickListeners()
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                findNavController().navigate(R.id.candidateProfile)
+            }
+        })
     }
 
     private fun setupRecyclerViews() {
@@ -51,17 +62,17 @@ class CandidateEditDetail : Fragment() {
         skillAdapter = SkillEditAdapter()
 
         binding.recyclerViewEducation.apply {
-            layoutManager = LinearLayoutManager(context)
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = educationAdapter
         }
 
         binding.recyclerViewExperience.apply {
-            layoutManager = LinearLayoutManager(context)
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = experienceAdapter
         }
 
         binding.recyclerViewSkill.apply {
-            layoutManager = LinearLayoutManager(context)
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = skillAdapter
         }
     }
@@ -141,27 +152,46 @@ class CandidateEditDetail : Fragment() {
 
         return UpdateCandidateRequest(
             education = educationList,
-            experiences = experienceList,
+            experience = experienceList,
             skill = skillList
         )
     }
 
     private fun updateCandidateData(data: UpdateCandidateRequest) {
+        showLoadingDialog()
         viewLifecycleOwner.lifecycleScope.launch {
             try {
                 val response = CandidateProfileRetrofitClient.instance(requireContext())
                     .create(CandidateInterface::class.java)
                     .updateCandidate(data)
+                println("now updated body: $data")
 
                 if (response.isSuccessful) {
+                    loadingDialog.dismiss()
                     Toast.makeText(context, "Candidate updated successfully", Toast.LENGTH_SHORT).show()
                 } else {
+                    loadingDialog.dismiss()
                     Toast.makeText(context, "Failed to update candidate: ${response.errorBody()?.string()}", Toast.LENGTH_SHORT).show()
                 }
             } catch (e: Exception) {
+                loadingDialog.dismiss()
                 println(e.message)
                 Toast.makeText(context, "Network error: ${e.message}", Toast.LENGTH_SHORT).show()
             }
+        }
+    }
+
+    private fun showLoadingDialog() {
+        if (!::loadingDialog.isInitialized) {
+            loadingDialog = Dialog(requireContext())
+            loadingDialog.setContentView(R.layout.loader)
+            loadingDialog.window?.setBackgroundDrawableResource(android.R.color.white)
+            loadingDialog.window?.setLayout(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+            )
+            loadingDialog.setCancelable(false)
+            loadingDialog.show()
         }
     }
 

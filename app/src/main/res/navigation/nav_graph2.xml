@@ -16,6 +16,7 @@
         android:name="com.example.main_project.SettingProfile.Fragments.YourProfile"
         android:label="fragment_your_profile"
         tools:layout="@layout/fragment_your_profile" />
+
     <fragment
         android:id="@+id/experience"
         android:name="com.example.main_project.SettingProfile.Fragments.ExprienceRecord"
@@ -28,26 +29,16 @@
         android:label="fragment_certificates"
         tools:layout="@layout/fragment_certificates" />
 
-    <fragment
-        android:id="@+id/searchJob"
-        android:name="com.example.main_project.SeeJobs.Fragments.SearchJob"
-        android:label="fragment_search_job"
-        tools:layout="@layout/fragment_search_job" />
-
-    <fragment
-        android:id="@+id/loginSuccessful"
-        android:name="com.example.main_project.Auth.Fragments.LoginSuccessful"
-        android:label="fragment_successfull"
-        tools:layout="@layout/fragment_successfull" />
-    <fragment
-        android:id="@+id/candidateProfile2"
-        android:name="com.example.main_project.candidate.Fragments.CandidateProfile"
-        android:label="fragment_candidate_profile"
-        tools:layout="@layout/fragment_candidate_profile" />
     <activity
         android:id="@+id/mainActivity4"
         android:name="com.example.main_project.MainActivity4"
         android:label="activity_main4"
         tools:layout="@layout/activity_main4" />
+
+    <activity
+        android:id="@+id/mainActivity3"
+        android:name="com.example.main_project.MainActivity3"
+        android:label="activity_main3"
+        tools:layout="@layout/activity_main3" />
 
 </navigation>

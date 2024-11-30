@@ -13,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -22,7 +23,7 @@ import com.bumptech.glide.Glide
 import com.example.main_project.CandidateInterface
 import com.example.main_project.CandidateProfileRetrofitClient
 import com.example.main_project.R
-import com.example.main_project.SettingProfile.DataClasses.Educations
+import com.example.main_project.SettingProfile.DataClasses.Education
 import com.example.main_project.SettingProfile.DataClasses.Experience
 import com.example.main_project.candidate.Adapter.CertificateShowAdapter
 import com.example.main_project.candidate.Adapter.EducationShowAdapter
@@ -63,13 +64,18 @@ class CandidateProfile : Fragment() {
             updateUI(candidateData)
         }
 
-        if (candidateViewModel.candidateData.value == null) {
-            fetchCurrentCandidate()
-        }
+        fetchCurrentCandidate()
 
         binding.editdetails.setOnClickListener {
             findNavController().navigate(R.id.candidateEditDetail)
         }
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                findNavController().navigate(R.id.mainActivity2)
+            }
+        })
+
 
         binding.editdocuments.setOnClickListener(){
             findNavController().navigate(R.id.deleteCertificates)
@@ -79,7 +85,7 @@ class CandidateProfile : Fragment() {
     }
 
     private fun setupRecyclerViews(
-        educationList: List<Educations>,
+        educationList: List<Education>,
         experienceList: List<Experience>,
         skillList: List<SkillShowDataClasses>,
         certificateList: List<Certificate>

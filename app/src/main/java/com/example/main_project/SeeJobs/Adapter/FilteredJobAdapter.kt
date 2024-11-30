@@ -9,7 +9,7 @@ import com.example.main_project.R
 import com.example.main_project.SeeJobs.DataClasses.Job
 
 class FilteredJobAdapter(
-    private var jobList: MutableList<Job>, // Using MutableList to allow adding more jobs dynamically
+    private var jobList: MutableList<Job>,
     private val onViewMoreClick: (Job) -> Unit
 ) : RecyclerView.Adapter<FilteredJobAdapter.JobViewHolder>() {
 
@@ -36,7 +36,6 @@ class FilteredJobAdapter(
 
     override fun getItemCount(): Int = jobList.size
 
-    // Method to add new jobs to the adapter
     fun addJobs(newJobs: List<Job>) {
         val startIndex = jobList.size
         jobList.addAll(newJobs)

@@ -51,6 +51,18 @@
             app:layout_constraintTop_toTopOf="@id/ResumeImage"
             />
 
+        <TextView
+            android:id="@+id/Status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:text="Status Update"
+            android:textColor="@color/background"
+            android:textSize="12sp"
+            app:layout_constraintStart_toEndOf="@id/ResumeImage"
+            app:layout_constraintTop_toBottomOf="@id/Skills"/>
+
         <Button
             android:id="@+id/Accept"
             android:layout_width="100dp"

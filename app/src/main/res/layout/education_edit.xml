@@ -43,13 +43,13 @@
 
         <EditText
             android:id="@+id/institute_edit"
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:padding="10dp"
-            android:layout_marginHorizontal="10dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:background="@drawable/edittext_prop"
             android:text="Institute Name"
+            android:singleLine="true"
             android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="@+id/guideline2"
@@ -72,10 +72,11 @@
 
         <EditText
             android:id="@+id/Degree_edit"
-            android:layout_width="0dp"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:padding="10dp"
+            android:singleLine="true"
             android:text="Degree name"
             android:textColor="@color/black"
             android:background="@drawable/edittext_prop"
@@ -98,10 +99,11 @@
 
         <EditText
             android:id="@+id/yearOfCompleletion_edit"
-            android:layout_width="0dp"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:background="@drawable/edittext_prop"
             android:padding="10dp"
+            android:singleLine="true"
             android:text="Year of Completion"
             android:textColor="@color/black"
             android:textSize="16sp"

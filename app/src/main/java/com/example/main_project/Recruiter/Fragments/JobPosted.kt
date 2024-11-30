@@ -5,11 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.main_project.CandidateProfileRetrofitClient
 import com.example.main_project.databinding.FragmentJobPostedBinding
 import com.example.main_project.CandidateInterface
+import com.example.main_project.R
 import com.example.main_project.Recruiter.DataClasses.JobContent
 import com.example.main_project.adapters.RecruiterSeeJobsAdapter
 import kotlinx.coroutines.CoroutineScope
@@ -34,6 +37,12 @@ class JobPosted : Fragment() {
         setupRecyclerView()
         fetchJobs()
 
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                findNavController().navigate(R.id.jobPosted)
+            }
+        })
+
         return binding.root
     }
 
@@ -50,29 +59,23 @@ class JobPosted : Fragment() {
             try {
                 val apiClient = CandidateProfileRetrofitClient.instance(requireContext())
                     .create(CandidateInterface::class.java)
-
-                // API call to fetch posted jobs for recruiter
                 val response = apiClient.getrecruiterpostedJobs()
 
                 if (response.isSuccessful) {
-                    // Directly accessing the list of jobs from the response body
                     val jobs = response.body() ?: emptyList()
 
                     withContext(Dispatchers.Main) {
-                        // Updating the UI on the main thread
                         jobList.clear()
                         jobList.addAll(jobs)
                         jobAdapter.notifyDataSetChanged()
                     }
                 } else {
                     withContext(Dispatchers.Main) {
-                        // Handle error
                         Toast.makeText(context, "Error fetching jobs", Toast.LENGTH_SHORT).show()
                     }
                 }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
-                    // Handle exception
                     Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
                 }
             }
