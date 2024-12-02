@@ -5,21 +5,24 @@
     android:id="@+id/nav_graph3"
     app:startDestination="@id/recuriterProfile">
 
-    <fragment
-        android:id="@+id/recuriterProfile"
-        android:name="com.example.main_project.SettingProfile.Fragments.RecuriterProfile"
-        android:label="RecuriterProfile"
-        tools:layout="@layout/fragment_recuriter_profile"/>
-
     <activity
         android:id="@+id/mainActivity5"
         android:name="com.example.main_project.MainActivity5"
         android:label="activity_main5"
         tools:layout="@layout/activity_main5" />
+
     <activity
         android:id="@+id/mainActivity2"
         android:name="com.example.main_project.SettingProfile.MainActivity2"
         android:label="activity_main2"
         tools:layout="@layout/activity_main2" />
+    <fragment
+        android:id="@+id/recuriterProfile"
+        android:name="com.example.main_project.SettingProfile.Fragments.RecuriterProfile"
+        android:label="fragment_recuriter_profile"
+        tools:layout="@layout/fragment_recuriter_profile">
+        <deepLink
+            app:uri="myapp://mainActivity3/recuriterProfile" />
+    </fragment>
 
 </navigation>

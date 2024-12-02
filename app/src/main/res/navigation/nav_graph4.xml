@@ -6,7 +6,7 @@
     app:startDestination="@id/notification">
 
     <activity
-        android:id="@+id/mainActivity42"
+        android:id="@+id/mainActivity4"
         android:name="com.example.main_project.MainActivity4"
         android:label="activity_main4"
         tools:layout="@layout/activity_main4" />
@@ -43,7 +43,10 @@
         android:id="@+id/notification"
         android:name="com.example.main_project.candidate.Fragments.Notification"
         android:label="fragment_notification"
-        tools:layout="@layout/fragment_notification" />
+        tools:layout="@layout/fragment_notification">
+        <deepLink
+            app:uri="myapp://mainActivity4/notification" />
+    </fragment>
     <activity
         android:id="@+id/mainActivity2"
         android:name="com.example.main_project.SettingProfile.MainActivity2"

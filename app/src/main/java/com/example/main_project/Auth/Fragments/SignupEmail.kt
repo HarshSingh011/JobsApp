@@ -72,6 +72,12 @@ class SignupEmail : Fragment() {
         if (email.isBlank()) {
             applyErrorBackground(binding.editEmail, "Email is required")
             hasError = true
+        } else {
+            val emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$".toRegex()
+            if (!emailRegex.matches(email)) {
+                applyErrorBackground(binding.editEmail, "Invalid email format")
+                hasError = true
+            }
         }
 
         val passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,20}$".toRegex()

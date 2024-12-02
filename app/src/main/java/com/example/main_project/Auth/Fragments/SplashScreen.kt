@@ -1,5 +1,7 @@
 package com.example.main_project.Auth.Fragments
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -35,12 +37,14 @@ class SplashScreen : Fragment() {
                         dataStoreManager.getRole().collect { role ->
                             when (role) {
                                 "CANDIDATE" -> {
-                                    findNavController().navigate(R.id.mainActivity4)
-                                    println(role)
+                                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse("myapp://mainActivity4/notification"))
+                                    startActivity(intent)
+                                    requireActivity().finish()
                                 }
                                 "RECRUITER" -> {
-                                    findNavController().navigate(R.id.mainActivity5)
-                                    println(role)
+                                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse("myapp://mainActivity3/recuritterProfile" ))
+                                    startActivity(intent)
+                                    requireActivity().finish()
                                 }
                                 "USER" -> {
                                     findNavController().navigate(R.id.mainActivity6)

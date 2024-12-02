@@ -92,7 +92,7 @@
     <TextView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:text="Find your perfect job, hire the perfect\ntalent. Start your Career journey Today\nwith Workify!"
+        android:text="Find your perfect job, hire the perfect talent. Start your Career journey Today with Workify!"
         android:gravity="start"
         android:textColor="@color/black"
         android:textSize="20sp"

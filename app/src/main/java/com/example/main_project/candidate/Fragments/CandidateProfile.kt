@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.main_project.CandidateInterface
 import com.example.main_project.CandidateProfileRetrofitClient
+import com.example.main_project.DataStoreManager
 import com.example.main_project.R
 import com.example.main_project.SettingProfile.DataClasses.Education
 import com.example.main_project.SettingProfile.DataClasses.Experience
@@ -48,6 +49,7 @@ class CandidateProfile : Fragment() {
     private var _binding: FragmentCandidateProfileBinding? = null
     private val binding get() = _binding!!
     private lateinit var loadingDialog: Dialog
+
 
     private val candidateViewModel: CandidateProfileViewModel by activityViewModels()
 

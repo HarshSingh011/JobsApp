@@ -58,43 +58,6 @@
             />
 
         <TextView
-            android:id="@+id/field1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Your Role"
-            android:textColor="@color/background"
-            android:textSize="18sp"
-            android:layout_marginTop="360dp"
-            app:layout_constraintEnd_toEndOf="@id/guideline3"
-            app:layout_constraintStart_toStartOf="@id/guideline1"
-            app:layout_constraintTop_toTopOf="parent"/>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/role"
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:textSize="14sp"
-            android:layout_marginTop="397dp"
-            app:hintEnabled="false"
-            app:layout_constraintEnd_toEndOf="@id/guideline3"
-            app:layout_constraintStart_toStartOf="@id/guideline1"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <AutoCompleteTextView
-                android:id="@+id/role_define"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/edittext_prop"
-                android:hint="Your role"
-                android:inputType="none"
-                android:textColor="@color/black"
-                android:textColorHint="@color/black"
-                android:textSize="14sp" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <TextView
             android:id="@+id/field2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -143,13 +106,13 @@
             android:textColor="@color/background"
             android:textSize="20sp"
             app:layout_constraintBaseline_toBaselineOf="@id/field5"
-            app:layout_constraintEnd_toEndOf="@id/industry"
+            app:layout_constraintEnd_toEndOf="@id/guideline3"
             app:layout_constraintStart_toEndOf="@id/guideline1"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/field5"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="583dp"
             android:gravity="start"
@@ -162,14 +125,13 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/industry"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
             android:layout_marginTop="620dp"
             android:textSize="14sp"
             app:hintEnabled="false"
-            app:layout_constraintBaseline_toBaselineOf="@id/location"
-            app:layout_constraintEnd_toStartOf="@id/location"
+            app:layout_constraintEnd_toStartOf="@id/guideline3"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintStart_toEndOf="@+id/guideline1"
             app:layout_constraintTop_toTopOf="parent">

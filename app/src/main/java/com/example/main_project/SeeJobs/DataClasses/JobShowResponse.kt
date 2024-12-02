@@ -14,6 +14,17 @@ data class JobShowResponse(
     val empty: Boolean
 )
 
+data class PostedBy(
+    val id: Long,
+    val companyEmail: String,
+    val companyName: String,
+    val jobTitle: String,
+    val companyWebsite: String,
+    val companyLocation: String,
+    val industry: String,
+    val profileImage: String?
+)
+
 data class Sort(
     val empty: Boolean,
     val sorted: Boolean,

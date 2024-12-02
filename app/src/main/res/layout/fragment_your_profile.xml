@@ -28,302 +28,479 @@
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.95" />
 
-
-
-        <TextView
-            android:id="@+id/heading"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Set Up Your Profile"
-            android:textColor="@color/background"
-            android:textSize="30sp"
-            android:layout_marginTop="123dp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="@id/guideline3"
-            app:layout_constraintStart_toStartOf="@id/guideline1"
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/pic"/>
+            android:background="@color/background"
+            app:layout_constraintStart_toStartOf="parent">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <TextView
+                    android:id="@+id/heading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Set Up Your Profile"
+                    android:textColor="@color/white"
+                    android:textSize="30sp"
+                    android:layout_marginTop="72dp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/pic"
             android:layout_width="110dp"
             android:layout_height="110dp"
-            android:layout_marginTop="196dp"
+            android:layout_marginTop="20dp"
             app:shapeAppearanceOverlay="@style/circular"
             app:strokeColor="@color/black"
             android:background="#D9D9D9"
             app:layout_constraintEnd_toEndOf="@id/guideline3"
             app:layout_constraintStart_toStartOf="@id/guideline1"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/linearLayout"
             app:srcCompat="@drawable/mdi_camera_outline"
             app:contentPadding="40dp"
             />
 
         <TextView
-            android:id="@+id/field1"
+            android:id="@+id/Education"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Your Role"
+            android:text="Education Details"
+            android:layout_marginTop="20sp"
+            android:textSize="24sp"
+            android:textStyle="bold"
             android:textColor="@color/background"
-            android:textSize="18sp"
-            android:layout_marginTop="360dp"
             app:layout_constraintEnd_toEndOf="@id/guideline3"
             app:layout_constraintStart_toStartOf="@id/guideline1"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toBottomOf="@id/pic"/>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/role"
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        <TextView
+            android:id="@+id/educationDetails"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
+            android:layout_marginTop="10dp"
             android:textSize="14sp"
-            android:layout_marginTop="397dp"
-            app:hintEnabled="false"
+            android:textColor="@color/background"
+            android:text="Add your education details here"
             app:layout_constraintEnd_toEndOf="@id/guideline3"
             app:layout_constraintStart_toStartOf="@id/guideline1"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toBottomOf="@id/Education"/>
 
-            <AutoCompleteTextView
-                android:id="@+id/role_define"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/edittext_prop"
-                android:hint="Your role"
-                android:inputType="none"
-                android:textColor="@color/black"
-                android:textColorHint="@color/black"
-                android:textSize="14sp" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <TextView
-            android:id="@+id/field2"
+        <androidx.cardview.widget.CardView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="464dp"
-            android:gravity="start"
-            android:text="D.O.B"
-            android:textColor="@color/background"
-            android:textSize="18sp"
-            app:layout_constraintEnd_toStartOf="@id/guideline3"
-            app:layout_constraintStart_toEndOf="@id/guideline1"
-            app:layout_constraintTop_toTopOf="parent"/>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/DateOfBirth"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:textSize="14sp"
-            app:helperText="Help"
-            android:layout_marginTop="501dp"
-            app:hintEnabled="false"
-            app:layout_constraintEnd_toStartOf="@id/guideline3"
-            app:layout_constraintStart_toEndOf="@id/guideline1"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/edittext_prop"
-                android:hint="DOB"
-                android:inputType="textEmailAddress"
-                android:textColor="@color/black"
-                android:textColorHint="@color/black"
-                android:textSize="14sp" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="583dp"
-            android:gravity="start"
-            android:text="Name of your institution"
-            android:textColor="@color/background"
-            android:textSize="18sp"
-            app:layout_constraintEnd_toStartOf="@id/guideline3"
-            app:layout_constraintStart_toEndOf="@id/guideline1"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/institute_name"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:textSize="14sp"
-            android:layout_marginTop="620dp"
-            app:endIconTintMode="@color/black"
-            app:helperTextTextColor="@color/red"
-            app:hintEnabled="false"
-            app:layout_constraintEnd_toStartOf="@+id/guideline3"
-            app:layout_constraintStart_toEndOf="@+id/guideline1"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/edittext_prop"
-                android:hint="Institution"
-                android:inputType="textPersonName"
-                android:maxLength="20"
-                android:textColor="@color/black"
-                android:textColorHint="@color/black"
-                android:textSize="14sp" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <TextView
-            android:id="@+id/field3"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="702dp"
-            android:gravity="start"
-            android:text="Degree"
-            android:textColor="@color/background"
-            android:textSize="18sp"
-            app:layout_constraintEnd_toStartOf="@id/guideline3"
-            app:layout_constraintStart_toEndOf="@id/guideline1"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/Degree"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:textSize="14sp"
-            android:layout_marginTop="739dp"
-            app:endIconTintMode="@color/black"
-            app:helperTextTextColor="@color/red"
-            app:hintEnabled="false"
-            app:layout_constraintEnd_toStartOf="@+id/guideline3"
-            app:layout_constraintStart_toEndOf="@+id/guideline1"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/edittext_prop"
-                android:hint="Degree"
-                android:inputType="textPersonName"
-                android:maxLength="20"
-                android:textColor="@color/black"
-                android:textColorHint="@color/black"
-                android:textSize="14sp" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="821dp"
-            android:gravity="start"
-            android:text="Year of Passing"
-            android:textColor="@color/background"
-            android:textSize="18sp"
-            app:layout_constraintEnd_toStartOf="@id/guideline3"
-            app:layout_constraintStart_toEndOf="@id/guideline1"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/yearOfCompleletion"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:textSize="14sp"
-            android:layout_marginTop="858dp"
-            app:endIconTintMode="@color/black"
-            app:helperTextTextColor="@color/red"
-            app:hintEnabled="false"
-            app:layout_constraintEnd_toStartOf="@+id/guideline3"
-            app:layout_constraintStart_toEndOf="@+id/guideline1"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/edittext_prop"
-                android:hint="Year"
-                android:inputType="textPersonName"
-                android:maxLength="20"
-                android:textColor="@color/black"
-                android:textColorHint="@color/black"
-                android:textSize="14sp" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="940dp"
-            android:gravity="start"
-            android:text="Choose your domain"
-            android:textColor="@color/background"
-            android:textSize="18sp"
-            app:layout_constraintEnd_toStartOf="@id/guideline3"
-            app:layout_constraintStart_toEndOf="@id/guideline1"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/search_box"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:textSize="14sp"
-            android:layout_marginBottom="60dp"
-            android:layout_marginTop="977dp"
-            app:endIconTintMode="@color/black"
-            app:helperText="Can be more than 1"
-            app:helperTextTextColor="@color/background"
-            app:endIconMode="custom"
-            app:hintEnabled="false"
-            app:endIconDrawable="@drawable/baseline_check_24"
-            app:layout_constraintEnd_toStartOf="@+id/guideline3"
-            app:layout_constraintStart_toEndOf="@+id/guideline1"
-            app:layout_constraintTop_toTopOf="parent"
+            android:id="@+id/educationCard"
+            app:layout_constraintEnd_toEndOf="@id/guideline3"
+            app:layout_constraintStart_toStartOf="@id/guideline1"
+            app:layout_constraintTop_toBottomOf="@id/educationDetails"
+            android:layout_marginTop="20dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="5dp"
+            android:background="@drawable/card_stroke"
             >
-
-            <AutoCompleteTextView
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/autoCompleteDomain"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="15dp"
-                android:background="@drawable/edittext_prop"
-                android:hint="Domain"
-                android:inputType="textPersonName"
-                android:maxLength="20"
-                android:textColor="@color/black"
-                android:textColorHint="@color/black"
-                android:textSize="14sp" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_height="wrap_content">
 
-        <Button
-            android:id="@+id/addEducation"
-            android:layout_width="wrap_content"
+                <TextView
+                    android:id="@+id/field1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:gravity="start"
+                    android:layout_marginLeft="10dp"
+                    android:text="Name of your institution"
+                    android:textColor="@color/background"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/institute_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:layout_marginHorizontal="5dp"
+                    android:layout_marginTop="10dp"
+                    app:endIconTintMode="@color/black"
+                    app:helperTextTextColor="@color/red"
+                    app:hintEnabled="false"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/field1">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/edittext_prop"
+                        android:hint="e.g. AKGEC"
+                        android:inputType="textPersonName"
+                        android:maxLength="20"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/black"
+                        android:textSize="14sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:id="@+id/field2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="27dp"
+                    android:gravity="start"
+                    android:text="Degree"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="@color/background"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/institute_name" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/Degree"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:layout_marginHorizontal="5dp"
+                    android:layout_marginTop="10dp"
+                    app:endIconTintMode="@color/black"
+                    app:helperTextTextColor="@color/red"
+                    app:hintEnabled="false"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/field2">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/edittext_prop"
+                        android:hint="e.g. B.tech"
+                        android:inputType="textPersonName"
+                        android:maxLength="20"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/black"
+                        android:textSize="14sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:id="@+id/field3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="27dp"
+                    android:gravity="start"
+                    android:text="Year of Passing"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="@color/background"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/Degree" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/yearOfCompleletion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:layout_marginHorizontal="5dp"
+                    android:layout_marginTop="20dp"
+                    app:endIconTintMode="@color/black"
+                    app:helperTextTextColor="@color/red"
+                    app:hintEnabled="false"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/field3">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/edittext_prop"
+                        android:hint="Year"
+                        android:inputType="textPersonName"
+                        android:maxLength="20"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/black"
+                        android:textSize="14sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:id="@+id/field4"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="27dp"
+                    android:gravity="start"
+                    android:text="Choose your domain"
+                    android:textColor="@color/background"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/yearOfCompleletion" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/search_box"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:layout_marginBottom="60dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginHorizontal="5dp"
+                    app:endIconTintMode="@color/black"
+                    app:helperText="Can be more than 1"
+                    app:helperTextTextColor="@color/background"
+                    app:endIconMode="custom"
+                    app:hintEnabled="false"
+                    app:endIconDrawable="@drawable/baseline_check_24"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/field4"
+                    >
+
+                    <AutoCompleteTextView
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:id="@+id/autoCompleteDomain"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="15dp"
+                        android:background="@drawable/edittext_prop"
+                        android:hint="Domain"
+                        android:inputType="textPersonName"
+                        android:maxLength="20"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/black"
+                        android:textSize="14sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Button
+                    android:id="@+id/addEducation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/background"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:text="Add Education"
+                    app:cornerRadius="10dp"
+                    android:layout_marginHorizontal="5dp"
+                    android:textSize="16sp"
+                    android:drawableEnd="@drawable/plus"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/search_box"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/Experience"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/background"
-            android:layout_marginTop="1060dp"
-            android:layout_marginBottom="60dp"
-            android:text="Add Education"
-            app:cornerRadius="10dp"
-            android:textSize="16sp"
-            android:drawableEnd="@drawable/plus"
-            app:layout_constraintStart_toEndOf="@id/guideline1"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            android:text="Education Details"
+            android:layout_marginTop="20sp"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@color/background"
+            app:layout_constraintEnd_toEndOf="@id/guideline3"
+            app:layout_constraintStart_toStartOf="@id/guideline1"
+            app:layout_constraintTop_toBottomOf="@id/educationCard"/>
+
+        <TextView
+            android:id="@+id/ExperienceDetails"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textSize="14sp"
+            android:textColor="@color/background"
+            android:text="Add your education details here"
+            app:layout_constraintEnd_toEndOf="@id/guideline3"
+            app:layout_constraintStart_toStartOf="@id/guideline1"
+            app:layout_constraintTop_toBottomOf="@id/Experience"/>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/experienceCard"
+            app:layout_constraintEnd_toEndOf="@id/guideline3"
+            app:layout_constraintStart_toStartOf="@id/guideline1"
+            app:layout_constraintTop_toBottomOf="@id/ExperienceDetails"
+            android:layout_marginTop="20dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="5dp"
+            android:background="@drawable/card_stroke"
+            >
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/field5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:gravity="start"
+                    android:layout_marginLeft="10dp"
+                    android:text="Name of your institution"
+                    android:textColor="@color/background"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/company_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:layout_marginHorizontal="5dp"
+                    android:layout_marginTop="10dp"
+                    app:endIconTintMode="@color/black"
+                    app:helperTextTextColor="@color/red"
+                    app:hintEnabled="false"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/field5">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/edittext_prop"
+                        android:hint="e.g. google"
+                        android:inputType="textPersonName"
+                        android:maxLength="20"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/black"
+                        android:textSize="14sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:id="@+id/field6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="27dp"
+                    android:gravity="start"
+                    android:text="Position"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="@color/background"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/company_name" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/position"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:layout_marginHorizontal="5dp"
+                    android:layout_marginTop="10dp"
+                    app:endIconTintMode="@color/black"
+                    app:helperTextTextColor="@color/red"
+                    app:hintEnabled="false"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/field6">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/edittext_prop"
+                        android:hint="e.g. e.g. CEO"
+                        android:inputType="textPersonName"
+                        android:maxLength="20"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/black"
+                        android:textSize="14sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:id="@+id/field7"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="27dp"
+                    android:gravity="start"
+                    android:text="Year of Passing"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="@color/background"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/position" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/yearOfWork"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:layout_marginHorizontal="5dp"
+                    android:layout_marginTop="20dp"
+                    app:endIconTintMode="@color/black"
+                    app:helperTextTextColor="@color/red"
+                    app:hintEnabled="false"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/field7">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/edittext_prop"
+                        android:hint="Year"
+                        android:inputType="textPersonName"
+                        android:maxLength="20"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/black"
+                        android:textSize="14sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Button
+                    android:id="@+id/addExperience"
+                    android:layout_marginHorizontal="5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/background"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:text="Add Education"
+                    app:cornerRadius="10dp"
+                    android:textSize="16sp"
+                    android:drawableEnd="@drawable/plus"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/yearOfWork"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
 
         <Button
             android:id="@+id/next_fragment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="1060dp"
+            android:layout_marginTop="60dp"
+            android:layout_marginBottom="60dp"
             android:gravity="end"
-            android:backgroundTint="@color/background"
             android:text="NEXT"
+            android:backgroundTint="@color/background"
             app:cornerRadius="10dp"
             android:textColor="@color/white"
             android:textSize="16sp"
             android:textStyle="bold"
             android:clickable="true"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/experienceCard"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/guideline3"/>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

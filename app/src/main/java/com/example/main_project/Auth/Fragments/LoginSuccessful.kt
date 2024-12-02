@@ -1,5 +1,6 @@
 package com.example.main_project.Auth.Fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
@@ -10,7 +11,10 @@ import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.main_project.DataStoreManager
+import com.example.main_project.MainActivity3
+import com.example.main_project.MainActivity5
 import com.example.main_project.R
+import com.example.main_project.SettingProfile.MainActivity2
 import com.example.main_project.databinding.FragmentSuccessfullBinding
 import kotlinx.coroutines.launch
 
@@ -40,11 +44,13 @@ class LoginSuccessful : Fragment() {
             when (selectedRole) {
                 "Candidate" -> {
                     println("Navigating to mainActivity2")
-                    findNavController().navigate(R.id.mainActivity2)
+                    val intent = Intent(requireContext(), MainActivity2::class.java)
+                    startActivity(intent)
                 }
                 "Recruiter" -> {
                     println("Navigating to mainActivity3")
-                    findNavController().navigate(R.id.mainActivity3)
+                    val intent = Intent(requireContext(), MainActivity3::class.java)
+                    startActivity(intent)
                 }
                 else -> {
                     println("Staying in LoginSuccessful")

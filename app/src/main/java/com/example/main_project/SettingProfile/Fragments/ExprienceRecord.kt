@@ -37,15 +37,6 @@ class ExprienceRecord : Fragment() {
         val arrayAdapter = ArrayAdapter(requireContext(), R.layout.dropdownmenu, exp)
         binding.expDefine.setAdapter(arrayAdapter)
 
-        binding.expDefine.setOnItemClickListener { _, _, position, _ ->
-            val selectedValue = exp[position]
-            println("Selected value: $selectedValue")
-            if (selectedValue == "NO") {
-                hideExperienceFields()
-            } else {
-                showExperienceFields()
-            }
-        }
     }
 
     override fun onCreateView(
@@ -65,8 +56,6 @@ class ExprienceRecord : Fragment() {
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                val viewPager = requireActivity().findViewById<ViewPager2>(R.id.viewPager)
-                viewPager.currentItem = 0
                 findNavController().navigate(R.id.yourProfile)
             }
         })
@@ -88,15 +77,12 @@ class ExprienceRecord : Fragment() {
         }
 
         binding.submitButton.setOnClickListener {
-            addExperienceDataToList()
+
         }
 
         binding.nextFragment.setOnClickListener {
             if (validateInputs()) {
-                sendCandidateData()
-                showLoadingDialog()
-                val viewPager = requireActivity().findViewById<ViewPager2>(R.id.viewPager)
-                viewPager.currentItem = 2
+
             } else {
                 Toast.makeText(requireContext(), "Please fill all required fields correctly", Toast.LENGTH_SHORT).show()
             }
@@ -109,84 +95,11 @@ class ExprienceRecord : Fragment() {
             binding.yearOfWork.visibility = View.GONE
             binding.submitButton.visibility = View.GONE
         }
-
         return binding.root
-    }
-
-    private fun hideExperienceFields() {
-        binding.position.visibility = View.GONE
-        binding.companyName.visibility = View.GONE
-        binding.yearOfWork.visibility = View.GONE
-        binding.submitButton.visibility = View.GONE
-    }
-
-    private fun showExperienceFields() {
-        binding.position.visibility = View.VISIBLE
-        binding.companyName.visibility = View.VISIBLE
-        binding.yearOfWork.visibility = View.VISIBLE
-        binding.submitButton.visibility = View.VISIBLE
     }
 
     private fun showLoadingDialog() {
         loadingDialog.show()
-    }
-
-    private fun addExperienceDataToList() {
-        val companyName = binding.companyName.editText?.text.toString().trim()
-        val position = binding.position.editText?.text.toString().trim()
-        val yearOfWork = binding.yearOfWork.editText?.text.toString().trim()
-
-        Toast.makeText(requireContext(), "Experience added", Toast.LENGTH_SHORT).show()
-        val experience = Experience(companyName, yearOfWork.toInt(), position)
-
-        sharedViewModel.experienceList.add(experience)
-
-        println(sharedViewModel.educationList)
-        println(sharedViewModel.experienceList)
-        println(sharedViewModel.domain)
-    }
-
-    private fun sendCandidateData() {
-        lifecycleScope.launch {
-            try {
-                val retrofit = CandidateProfileRetrofitClient.instance(requireContext())
-                val api = retrofit.create(CandidateInterface::class.java)
-
-                val candidateData = CandidateData(
-                    education = sharedViewModel.educationList,
-                    experience = sharedViewModel.experienceList,
-                    skill = listOf(sharedViewModel.domain),
-                    DOB = sharedViewModel.DOB
-                )
-
-                println(candidateData)
-
-                val response = api.createCandidate(candidateData)
-                if (response.isSuccessful) {
-                    loadingDialog.dismiss()
-                    Toast.makeText(context, "Data submitted successfully!", Toast.LENGTH_SHORT).show()
-                    sharedViewModel.isApiSuccess = true
-                } else {
-                    val errorResponse = response.errorBody()?.string()
-                    println("failer")
-                    val errorMessage = errorResponse?.let { parseErrorMessage(it) } ?: "An error occurred"
-                    Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
-                }
-            } catch (e: Exception) {
-                loadingDialog.dismiss()
-                println(e.message)
-                Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-
-    private fun parseErrorMessage(response: String?): String {
-        return try {
-            val jsonObject = JSONObject(response ?: "")
-            jsonObject.getString("message")
-        } catch (e: Exception) {
-            "An error occurred"
-        }
     }
 
     private fun validateInputs(): Boolean {

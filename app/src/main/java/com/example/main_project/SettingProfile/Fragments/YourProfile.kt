@@ -19,9 +19,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.example.main_project.CandidateInterface
 import com.example.main_project.CandidateProfileRetrofitClient
+import com.example.main_project.DataStoreManager
 import com.example.main_project.SettingProfile.ViewModels.CandidateViewModel
 import com.example.main_project.R
+import com.example.main_project.SettingProfile.DataClasses.CandidateData
 import com.example.main_project.SettingProfile.DataClasses.Education
+import com.example.main_project.SettingProfile.DataClasses.Experience
 import com.example.main_project.databinding.FragmentYourProfileBinding
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.google.android.material.textfield.TextInputLayout
@@ -38,6 +41,7 @@ class YourProfile : Fragment() {
     private val binding get() = _binding!!
     private lateinit var loadingDialog: Dialog
     private val sharedViewModel: CandidateViewModel by activityViewModels()
+    private lateinit var dataStoreManager: DataStoreManager
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,12 +49,12 @@ class YourProfile : Fragment() {
     ): View? {
         _binding = FragmentYourProfileBinding.inflate(inflater, container, false)
 
-        val role = resources.getStringArray(R.array.role)
-        val arrayAdapter = ArrayAdapter(requireContext(), R.layout.dropdownmenu, role)
-        binding.roleDefine.setAdapter(arrayAdapter)
-
         binding.addEducation.setOnClickListener {
             addDataToCandidateData()
+        }
+
+        binding.addExperience.setOnClickListener {
+            addExperienceDataToList()
         }
 
         binding.searchBox.setEndIconOnClickListener {
@@ -69,30 +73,22 @@ class YourProfile : Fragment() {
             }
         }
 
-        if (binding.roleDefine.text.toString() == "Candidate") {
-            findNavController().navigate(R.id.yourProfile)
-        }
-        if (binding.roleDefine.text.toString() == "Recruiter") {
-            findNavController().navigate(R.id.mainActivity3)
-        }
-
         binding.nextFragment.setOnClickListener {
             if (validateInputs()) {
-                val viewPager = requireActivity().findViewById<ViewPager2>(R.id.viewPager)
-                viewPager.currentItem = 1
+                sendCandidateData()
+                showLoadingDialog()
+                println("hello world")
             }
         }
 
         val domainSuggestions = listOf(
             "Web Developer", "Front End", "Back End", "Data Scientist",
-            "Software Engineer", "Android Developer", "Game Developer"
+            "Software Engineer", "Android Developer", "Game Developer","Weblogic Admin"
         )
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, domainSuggestions)
         binding.autoCompleteDomain.setAdapter(adapter)
 
-        binding.role.editText?.setOnFocusChangeListener { _, hasFocus ->
-            if (hasFocus) resetToDefaultDrawable(binding.role)
-        }
+
         binding.instituteName.editText?.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) resetToDefaultDrawable(binding.instituteName)
         }
@@ -101,9 +97,6 @@ class YourProfile : Fragment() {
         }
         binding.yearOfCompleletion.editText?.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) resetToDefaultDrawable(binding.yearOfCompleletion)
-        }
-        binding.DateOfBirth.editText?.setOnFocusChangeListener { _, hasFocus ->
-            if (hasFocus) resetToDefaultDrawable(binding.DateOfBirth)
         }
 
         binding.pic.setOnClickListener {
@@ -117,8 +110,6 @@ class YourProfile : Fragment() {
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 findNavController().navigate(R.id.yourProfile)
-                val viewPager = requireActivity().findViewById<ViewPager2>(R.id.viewPager)
-                viewPager.currentItem = 0
             }
         })
 
@@ -128,7 +119,7 @@ class YourProfile : Fragment() {
     private fun showLoadingDialog() {
         if (!::loadingDialog.isInitialized) {
             loadingDialog = Dialog(requireContext())
-            loadingDialog.setContentView(R.layout.loader)
+            loadingDialog.setContentView(R.layout.settingprofiledialog)
             loadingDialog.window?.setBackgroundDrawableResource(android.R.color.white)
             loadingDialog.window?.setLayout(
                 ViewGroup.LayoutParams.MATCH_PARENT,
@@ -143,7 +134,6 @@ class YourProfile : Fragment() {
         val companyName = binding.instituteName.editText?.text.toString().trim()
         val position = binding.Degree.editText?.text.toString().trim()
         val yearOfWork = binding.yearOfCompleletion.editText?.text.toString().trim()
-        val DOB = binding.DateOfBirth.editText?.text.toString().trim()
 
         var isValid = true
 
@@ -160,26 +150,90 @@ class YourProfile : Fragment() {
         if (yearOfWork.isBlank()) {
             setToErrorDrawable(binding.yearOfCompleletion)
             isValid = false
-        }
-
-        if (DOB.isBlank()) {
-            setToErrorDrawable(binding.DateOfBirth)
-            isValid = false
+        }else{
+            val yearRegex = "^(19|20)\\d{2}$".toRegex()
+            if (yearOfWork.isBlank() || !yearRegex.matches(yearOfWork)) {
+                binding.yearOfCompleletion.editText?.setBackgroundResource(R.drawable.error_prop)
+                binding.yearOfCompleletion.error = "YYYY"
+                binding.yearOfCompleletion.clearFocus()
+                isValid = false
+            }
         }
 
         return isValid
+    }
+
+    private fun sendCandidateData() {
+        lifecycleScope.launch {
+            try {
+                val retrofit = CandidateProfileRetrofitClient.instance(requireContext())
+                val api = retrofit.create(CandidateInterface::class.java)
+
+                val candidateData = CandidateData(
+                    education = sharedViewModel.educationList,
+                    experience = sharedViewModel.experienceList,
+                    skill = listOf(sharedViewModel.domain),
+                    DOB = sharedViewModel.DOB
+                )
+
+                println(candidateData)
+
+                val response = api.createCandidate(candidateData)
+                if (response.isSuccessful) {
+                    loadingDialog.dismiss()
+                    val role = "CANDIDATE"
+                    dataStoreManager.saveRole(role)
+                    Toast.makeText(context, "Data submitted successfully!", Toast.LENGTH_SHORT).show()
+                    findNavController().navigate(R.id.certificates)
+                    sharedViewModel.isApiSuccess = true
+                } else {
+                    loadingDialog.dismiss()
+                    val errorResponse = response.errorBody()?.string()
+                    println("failer")
+                    val errorMessage = errorResponse?.let { parseErrorMessage(it) } ?: "An error occurred"
+                    Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
+                }
+            } catch (e: Exception) {
+                loadingDialog.dismiss()
+                println(e.message)
+                Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun parseErrorMessage(response: String?): String {
+        return try {
+            val jsonObject = JSONObject(response ?: "")
+            jsonObject.getString("message")
+        } catch (e: Exception) {
+            "An error occurred"
+        }
     }
 
     private fun addDataToCandidateData() {
         val institution = binding.instituteName.editText?.text.toString().trim()
         val degree = binding.Degree.editText?.text.toString().trim()
         val yearOfCompletion = binding.yearOfCompleletion.editText?.text.toString().trim().toIntOrNull()
-        val DOB = binding.DateOfBirth.editText?.text.toString().trim()
-        sharedViewModel.DOB = DOB
         val newEducation = Education(institution, degree, yearOfCompletion)
         sharedViewModel.educationList.add(newEducation)
+        Toast.makeText(requireContext(), "Education added", Toast.LENGTH_SHORT).show()
 
         println(sharedViewModel.educationList)
+        println(sharedViewModel.domain)
+    }
+
+    private fun addExperienceDataToList() {
+        val companyName = binding.companyName.editText?.text.toString().trim()
+        val position = binding.position.editText?.text.toString().trim()
+        val yearOfWork = binding.yearOfWork.editText?.text.toString().trim()
+
+        Toast.makeText(requireContext(), "Experience added", Toast.LENGTH_SHORT).show()
+        val experience = Experience(companyName, yearOfWork.toInt(), position)
+
+        sharedViewModel.experienceList.add(experience)
+
+        println(sharedViewModel.educationList)
+        println(sharedViewModel.experienceList)
         println(sharedViewModel.domain)
     }
 

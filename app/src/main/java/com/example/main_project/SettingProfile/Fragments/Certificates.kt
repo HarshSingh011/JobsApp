@@ -45,8 +45,7 @@ class Certificates : Fragment() {
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                val viewPager = requireActivity().findViewById<ViewPager2>(R.id.viewPager)
-                viewPager.currentItem = 1
+                findNavController().navigate(R.id.candidateProfile)
             }
         })
 
@@ -154,7 +153,6 @@ class Certificates : Fragment() {
                 if (response.isSuccessful) {
                     Toast.makeText(requireContext(), "Certificate uploaded successfully", Toast.LENGTH_SHORT).show()
                     isApiSuccess = true
-                    restrictNavigation()
                 } else {
                     val errorResponse = response.errorBody()?.string()
                     println("failer")
@@ -183,11 +181,14 @@ class Certificates : Fragment() {
                 if (response.isSuccessful) {
                     Toast.makeText(requireContext(), "Resume uploaded successfully", Toast.LENGTH_SHORT).show()
                 } else {
-                    val errorMessage = response.errorBody()?.string() ?: "Unknown error occurred"
+                    val errorResponse = response.errorBody()?.string()
+                    println("failer")
+                    val errorMessage = errorResponse?.let { parseErrorMessage(it) } ?: "An error occurred"
                     println(errorMessage)
-                    Toast.makeText(requireContext(), "Upload failed: ${response.message()}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
                 }
             } catch (e: Exception) {
+                println(e.message)
                 Toast.makeText(requireContext(), "Error data: ${e.message}", Toast.LENGTH_SHORT).show()
             }
         }
@@ -210,17 +211,6 @@ class Certificates : Fragment() {
             jsonObject.getString("message")
         } catch (e: Exception) {
             "An error occurred"
-        }
-    }
-
-    private fun restrictNavigation() {
-        if (isApiSuccess) {
-            val viewPager = requireActivity().findViewById<ViewPager2>(R.id.viewPager)
-            val tabLayout = requireActivity().findViewById<com.google.android.material.tabs.TabLayout>(R.id.tabLayout)
-
-            viewPager.isUserInputEnabled = false
-            tabLayout.getTabAt(1)?.view?.isEnabled = false
-            tabLayout.getTabAt(0)?.view?.isEnabled = false
         }
     }
 

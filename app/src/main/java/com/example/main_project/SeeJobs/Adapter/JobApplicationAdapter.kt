@@ -19,7 +19,7 @@ class JobApplicationAdapter(
             binding.Skills.text = jobApplication.job.requiredSkills.joinToString(", ")
 
             Glide.with(binding.profileImage.context)
-                .load(jobApplication.applicant.profileImageKey)
+                .load(jobApplication.job.postedBy.profileImage)
                 .thumbnail(
                     Glide.with(binding.profileImage.context)
                         .load(jobApplication.applicant.profileImageKey)

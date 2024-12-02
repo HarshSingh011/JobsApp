@@ -33,6 +33,8 @@ class Notification : Fragment() {
             }
         })
 
+        println("Notification is being loaded successfully")
+
         return binding.root
     }
 

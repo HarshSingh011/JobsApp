@@ -1,9 +1,11 @@
 package com.example.main_project.SettingProfile.Fragments
 
-import android.app.Activity
+import android.app.Dialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,10 +17,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.main_project.CandidateInterface
 import com.example.main_project.CandidateProfileRetrofitClient
+import com.example.main_project.DataStoreManager
 import com.example.main_project.R
-import com.example.main_project.Recruiter.DataClasses.ProfilePictureResponse
 import com.example.main_project.SettingProfile.DataClasses.RequiterRequest
 import com.example.main_project.databinding.FragmentRecuriterProfileBinding
+import com.github.dhaval2404.imagepicker.ImagePicker
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -36,6 +39,8 @@ class RecuriterProfile : Fragment() {
 
     private val IMAGE_PICK_CODE = 1000
     private var imageUri: Uri? = null
+    private lateinit var loadingDialog: Dialog
+    private lateinit var dataStoreManager: DataStoreManager
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -142,6 +147,8 @@ class RecuriterProfile : Fragment() {
                 val response = api.createRecruiter(recruiterRequest)
 
                 if (response.isSuccessful) {
+                    val role = "RECRUITER"
+                    dataStoreManager.saveRole(role)
                     imageUri?.let { uploadProfilePicture(it) }
                     Toast.makeText(requireContext(), "Success: ${response.body()?.message}", Toast.LENGTH_SHORT).show()
                     findNavController().navigate(R.id.recruiterDetails)
@@ -158,69 +165,157 @@ class RecuriterProfile : Fragment() {
         }
     }
 
-    private fun uploadProfilePicture(imageUri: Uri) {
+    private fun uploadProfilePicture(fileUri: Uri) {
+        val context = requireContext()
+        showLoadingDialog()
         lifecycleScope.launch {
             try {
-                val retrofit = CandidateProfileRetrofitClient.instance(requireContext())
-                val api = retrofit.create(CandidateInterface::class.java)
+                Log.d("ProfilePictureUpload", "Original URI: $fileUri")
+                Log.d("ProfilePictureUpload", "URI Scheme: ${fileUri.scheme}")
+                Log.d("ProfilePictureUpload", "URI Path: ${fileUri.path}")
 
-                val file = File(getRealPathFromURI(imageUri))
-                if (!file.exists()) {
-                    Toast.makeText(requireContext(), "File does not exist", Toast.LENGTH_SHORT).show()
+                val filePath = getActualFilePath(fileUri)
+
+                if (filePath == null) {
+                    Toast.makeText(context, "Unable to retrieve file path", Toast.LENGTH_LONG).show()
+                    Log.e("ProfilePictureUpload", "File path retrieval failed")
                     return@launch
                 }
 
-                val requestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
-                val part = MultipartBody.Part.createFormData("image", file.name, requestBody)
+                val file = File(filePath)
 
-                val response: Response<ProfilePictureResponse> = api.uploadProfileRecruiterPicture(part)
+                Log.d("ProfilePictureUpload", "Resolved File Path: ${file.absolutePath}")
+                Log.d("ProfilePictureUpload", "File Exists: ${file.exists()}")
+                Log.d("ProfilePictureUpload", "File Length: ${file.length()} bytes")
+
+                if (!file.exists()) {
+                    Toast.makeText(context, "File not found", Toast.LENGTH_LONG).show()
+                    return@launch
+                }
+
+                val contentResolver = context.contentResolver
+                val mimeType = contentResolver.getType(fileUri) ?: "image/jpeg"
+
+                Log.d("ProfilePictureUpload", "Detected MIME Type: $mimeType")
+
+                val requestFile = file.asRequestBody(mimeType.toMediaTypeOrNull())
+                val body = MultipartBody.Part.createFormData("image", file.name, requestFile)
+
+                val api = CandidateProfileRetrofitClient.instance(context).create(CandidateInterface::class.java)
+                val response = api.uploadProfileRecruiterPicture(body)
 
                 if (response.isSuccessful) {
-                    Toast.makeText(requireContext(), "Profile picture uploaded successfully", Toast.LENGTH_SHORT).show()
+                    val responseBody = response.body()
+                    val message = responseBody?.message ?: "Image uploaded successfully!"
+                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                    Log.d("ProfilePictureUpload", "Response: $message")
                 } else {
                     val errorResponse = response.errorBody()?.string()
-                    val errorMessage = errorResponse?.let { parseErrorMessage(it) } ?: "Failed to upload image"
-                    Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
+                    val errorMessage = try {
+                        JSONObject(errorResponse).optString("message", "Failed to upload image")
+                    } catch (e: Exception) {
+                        "Failed to upload image"
+                    }
+                    Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
+                    Log.e("ProfilePictureUpload", "Error Response Code: ${response.code()}")
+                    Log.e("ProfilePictureUpload", "Error: $errorMessage")
                 }
             } catch (e: Exception) {
-                Toast.makeText(requireContext(), "Error uploading image: ${e.message}", Toast.LENGTH_SHORT).show()
-                println(e.message)
-                e.printStackTrace()
+                Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_LONG).show()
+                Log.e("API Error", "Exception details", e)
+            } finally {
+                loadingDialog.dismiss()
             }
         }
     }
 
-    private fun getRealPathFromURI(uri: Uri): String {
-        val cursor = requireContext().contentResolver.query(uri, null, null, null, null)
-        cursor?.moveToFirst()
 
-        val columnIndex = cursor?.getColumnIndex("_data")
-        val path = columnIndex?.let { cursor.getString(it) }
+    private fun getActualFilePath(uri: Uri): String? {
+        val context = requireContext()
+        return when {
+            "content" == uri.scheme -> {
+                try {
+                    val projection = arrayOf(MediaStore.Images.Media.DATA)
+                    val cursor = context.contentResolver.query(uri, projection, null, null, null)
 
-        cursor?.close()
+                    cursor?.use {
+                        val columnIndex = it.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+                        it.moveToFirst()
+                        it.getString(columnIndex)
+                    }
+                } catch (e: Exception) {
+                    uriToFileWithContentResolver(uri)
+                }
+            }
 
-        return path ?: ""
+            "file" == uri.scheme -> uri.path
+
+            else -> {
+                Log.e("FileUpload", "Unsupported URI scheme: ${uri.scheme}")
+                null
+            }
+        }
+    }
+
+    private fun uriToFileWithContentResolver(uri: Uri): String? {
+        val context = requireContext()
+        val tempFile = File(context.cacheDir, "temp_image_${System.currentTimeMillis()}.jpg")
+
+        try {
+            val inputStream = context.contentResolver.openInputStream(uri)
+            inputStream?.use { input ->
+                tempFile.outputStream().use { output ->
+                    input.copyTo(output)
+                }
+            }
+            return tempFile.absolutePath
+        } catch (e: Exception) {
+            Log.e("FileUpload", "Error converting URI to file: ${e.message}")
+            return null
+        }
+    }
+
+    private fun getRealPathFromURI(uri: Uri): String? {
+        val context = requireContext()
+        val contentResolver = context.contentResolver
+
+        if (uri.scheme == "file") {
+            return uri.path
+        }
+
+        if (uri.scheme == "content") {
+            val projection = arrayOf(MediaStore.Images.Media.DATA)
+            val cursor = contentResolver.query(uri, projection, null, null, null)
+            cursor?.use {
+                if (it.moveToFirst()) {
+                    val columnIndex = it.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+                    return it.getString(columnIndex)
+                }
+            }
+        }
+
+        // If we couldn't resolve it, return null
+        return null
     }
 
     private fun pickImageFromGallery() {
-        val intent = Intent(Intent.ACTION_PICK)
-        intent.type = "image/*"
-        startActivityForResult(intent, IMAGE_PICK_CODE)
+        ImagePicker.with(this)
+            .crop()
+            .compress(1024)
+            .maxResultSize(1080, 1080)
+            .start()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
-        if (resultCode == Activity.RESULT_OK && requestCode == IMAGE_PICK_CODE) {
-            val imageUri = data?.data
-            if (imageUri != null) {
-                this.imageUri = imageUri
-                binding.pic.setImageURI(imageUri)
-
-                binding.pic.setContentPadding(0, 0, 0, 0)
-
-                uploadProfilePicture(imageUri)
-            }
+        val fileUri = data?.data
+        if (fileUri != null) {
+            binding.pic.setImageURI(fileUri)
+            binding.pic.setContentPadding(0, 0, 0, 0)
+            imageUri = fileUri
+            uploadProfilePicture(fileUri)
+        } else {
+            Toast.makeText(requireContext(), "Image selection failed", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -233,8 +328,23 @@ class RecuriterProfile : Fragment() {
         }
     }
 
+    private fun showLoadingDialog() {
+        if (!::loadingDialog.isInitialized) {
+            loadingDialog = Dialog(requireContext())
+            loadingDialog.setContentView(R.layout.loader)
+            loadingDialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+            loadingDialog.window?.setLayout(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+            )
+            loadingDialog.setCancelable(false)
+        }
+        loadingDialog.show()
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 }
+

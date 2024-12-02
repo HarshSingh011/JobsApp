@@ -1,10 +1,10 @@
 package com.example.main_project.Auth.Fragments
 
-import com.example.main_project.Auth.DataClasses.LoginRequest
-import com.example.main_project.Auth.DataClasses.LoginResponse
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
 import android.net.ConnectivityManager
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,10 +14,14 @@ import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.navOptions
 import com.example.main_project.DataStoreManager
 import com.example.main_project.R
+import com.example.main_project.Auth.DataClasses.LoginRequest
+import com.example.main_project.Auth.DataClasses.LoginResponse
 import com.example.main_project.Auth.RetrofitClient
+import com.example.main_project.MainActivity4
+import com.example.main_project.MainActivity5
+import com.example.main_project.MainActivity6
 import com.example.main_project.databinding.FragmentLoginPageBinding
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.launch
@@ -83,6 +87,17 @@ class LoginPage : Fragment() {
         return binding.root
     }
 
+    private fun navigateToNotification4() {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("myapp://mainActivity4/notification"))
+        startActivity(intent)
+        requireActivity().finish()
+    }
+
+    private fun navigateToNotification5() {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("myapp://mainActivity5/notification"))
+        startActivity(intent)
+        requireActivity().finish()
+    }
 
     private fun validateInputs() {
         var input = binding.editEmail.editText?.text.toString().trim()
@@ -98,8 +113,15 @@ class LoginPage : Fragment() {
         } else {
             binding.editEmail.editText?.setBackgroundResource(R.drawable.edittext_prop)
             val phoneRegex = "^[0-9]{10}$".toRegex()
+            val emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$".toRegex()
+
             if (phoneRegex.matches(input)) {
                 input = "+91$input"
+            } else if (!emailRegex.matches(input)) {
+                binding.editEmail.error = "Invalid email format"
+                binding.editEmail.editText?.setBackgroundResource(R.drawable.error_prop)
+                binding.editEmail.clearFocus()
+                hasError = true
             }
         }
 
@@ -121,6 +143,7 @@ class LoginPage : Fragment() {
             loginUser(input, password)
         }
     }
+
     private fun showLoadingDialog() {
         loadingDialog = Dialog(requireContext())
         loadingDialog.setContentView(R.layout.loader)
@@ -140,7 +163,6 @@ class LoginPage : Fragment() {
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
                 binding.loginBtn.isEnabled = true
 
-
                 if (response.isSuccessful) {
                     response.body()?.let { loginResponse ->
                         val token = loginResponse.token
@@ -156,12 +178,10 @@ class LoginPage : Fragment() {
 
                             println(role)
                             when (role) {
-                                "CANDIDATE" -> findNavController().navigate(R.id.mainActivity4)
+                                "CANDIDATE" -> navigateToNotification4()
                                 "RECRUITER" -> findNavController().navigate(R.id.mainActivity5)
-                                "USER" -> findNavController().navigate(R.id.mainActivity6)
-                                else -> {
-                                    Toast.makeText(requireContext(), "Invalid role", Toast.LENGTH_SHORT).show()
-                                }
+                                "USER" -> findNavController().navigate(R.id.loginSuccessful)
+                                else -> Toast.makeText(requireContext(), "Invalid role", Toast.LENGTH_SHORT).show()
                             }
                         } else {
                             val errorMessage = parseErrorMessage(response.errorBody()?.string())
@@ -203,28 +223,29 @@ class LoginPage : Fragment() {
     }
 
     private fun showError(message: String) {
-
-        if( message == "Incorrect password"){
-            binding.editPassword.editText?.setBackgroundResource(R.drawable.error_prop)
+        if (message == "Incorrect password") {
             binding.editPassword.error = message
-        }else{
-            binding.editEmail.editText?.setBackgroundResource(R.drawable.error_prop)
-            binding.editEmail.error = message
+            binding.editPassword.editText?.setBackgroundResource(R.drawable.error_prop)
+        } else {
+            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
         }
-
-        binding.editEmail.editText?.clearFocus()
-        binding.editPassword.editText?.clearFocus()
-    }
-
-    private fun resetToDefaultDrawable(editText: TextInputLayout) {
-        editText.editText?.setBackgroundResource(R.drawable.edittext_prop)
-        editText.error = null
     }
 
     private fun isNetworkAvailable(): Boolean {
-        val connectivityManager = context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val connectivityManager = requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val networkInfo = connectivityManager.activeNetworkInfo
         return networkInfo != null && networkInfo.isConnected
+    }
+
+    private fun resetToDefaultDrawable(textInputLayout: TextInputLayout) {
+        textInputLayout.error = null
+        textInputLayout.editText?.setBackgroundResource(R.drawable.edittext_prop)
+    }
+
+    private fun navigateToActivity(activityClass: Class<*>) {
+        val intent = Intent(requireContext(), activityClass)
+        startActivity(intent)
+        requireActivity().finish()
     }
 
     override fun onDestroyView() {

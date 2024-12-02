@@ -21,11 +21,6 @@
         android:label="fragment_splash_screen"
         tools:layout="@layout/fragment_splash_screen" >
     </fragment>
-    <activity
-        android:id="@+id/mainActivity"
-        android:name="com.example.main_project.Auth.MainActivity"
-        android:label="activity_main"
-        tools:layout="@layout/activity_main" />
     <fragment
         android:id="@+id/verificationCode"
         android:name="com.example.main_project.Auth.Fragments.VerificationCode"
@@ -89,6 +84,38 @@
         android:name="com.example.main_project.MainActivity6"
         android:label="activity_main6"
         tools:layout="@layout/activity_main6" />
+    <activity
+        android:id="@+id/mainActivity4"
+        android:name="com.example.main_project.MainActivity4"
+        android:label="activity_main4"
+        tools:layout="@layout/activity_main4" />
+    <activity
+        android:id="@+id/mainActivity5"
+        android:name="com.example.main_project.MainActivity5"
+        android:label="activity_main5"
+        tools:layout="@layout/activity_main5" />
+    <navigation android:id="@+id/navigation"
+        app:startDestination="@id/mainActivity">
+        <activity
+            android:id="@+id/mainActivity"
+            android:name="com.example.main_project.Auth.MainActivity"
+            android:label="activity_main"
+            tools:layout="@layout/activity_main" />
+    </navigation>
+    <fragment
+        android:id="@+id/loginSuccessful"
+        android:name="com.example.main_project.Auth.Fragments.LoginSuccessful"
+        android:label="Login Successful"
+        tools:layout="@layout/fragment_successfull">
+        <action
+            android:id="@+id/action_loginSuccessful_to_recruiterDetails"
+            app:destination="@id/recruiterDetails" />
+    </fragment>
+    <fragment
+        android:id="@+id/recruiterDetails2"
+        android:name="com.example.main_project.Recruiter.Fragments.RecruiterDetails"
+        android:label="fragment_recruiter_details"
+        tools:layout="@layout/fragment_recruiter_details" />
 
 
 </navigation>
