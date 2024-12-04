@@ -29,7 +29,7 @@ class MainActivity5 : AppCompatActivity() {
         setupCustomNavigation(bottomNavigationView, navController)
     }
 
-    private fun setupCustomNavigation(bottomNavigationView: BottomNavigationView, navController: NavController) {
+    private fun setupCustomNavigation(bottomNavigationView: BottomNavigationView,navController: NavController) {
         bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.jobs -> {

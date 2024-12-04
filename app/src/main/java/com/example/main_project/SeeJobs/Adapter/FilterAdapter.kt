@@ -26,10 +26,8 @@ class FilterAdapter(private val filterItems: List<FilterItem>) :
         val filterItem = filterItems[position]
         holder.bind(filterItem)
 
-        // Remove any existing TextWatchers to prevent duplicate listeners
         holder.textInputEditText.removeTextChangedListener(holder.textWatcher)
 
-        // Create a new TextWatcher for this specific EditText
         holder.textWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
@@ -40,10 +38,8 @@ class FilterAdapter(private val filterItems: List<FilterItem>) :
             }
         }
 
-        // Add the new TextWatcher
         holder.textInputEditText.addTextChangedListener(holder.textWatcher)
 
-        // Set the current value for this filter item
         holder.textInputEditText.setText(filterValues[filterItem.id] ?: "")
     }
 

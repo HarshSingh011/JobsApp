@@ -25,13 +25,19 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="myapp" android:host="mainactivity6" android:path="/loginsuccessful" />
+                <data android:scheme="myapp" android:host="mainactivity6" android:path="/loginSuccessful" />
             </intent-filter>
         </activity>
         <activity
             android:name=".MainActivity5"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="myapp" android:host="mainactivity5" android:path="/jobPosted" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".MainActivity4"
             android:exported="true">
@@ -39,7 +45,7 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="myapp" android:host="mainactivity4" android:path="/notification" />
+                <data android:scheme="myapp" android:host="mainactivity4" android:path="/SearchJob" />
             </intent-filter>
         </activity>
         <activity
@@ -58,6 +64,7 @@
         <activity
             android:name=".Auth.MainActivity"
             android:exported="true">
+            <nav-graph android:value="@navigation/nav_graph6" />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

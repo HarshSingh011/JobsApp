@@ -19,7 +19,10 @@
         android:id="@+id/jobPosted"
         android:name="com.example.main_project.Recruiter.Fragments.JobPosted"
         android:label="fragment_job_posted"
-        tools:layout="@layout/fragment_job_posted" />
+        tools:layout="@layout/fragment_job_posted">
+        <deepLink
+            app:uri="myapp://mainActivity5/jobPosted" />
+    </fragment>
     <fragment
         android:id="@+id/applicants"
         android:name="com.example.main_project.Recruiter.Fragments.Applicants"
@@ -29,6 +32,7 @@
         android:id="@+id/recruiterDetails"
         android:name="com.example.main_project.Recruiter.Fragments.RecruiterDetails"
         android:label="fragment_recruiter_details"
-        tools:layout="@layout/fragment_recruiter_details" />
+        tools:layout="@layout/fragment_recruiter_details">
+    </fragment>
 
 </navigation>

@@ -103,16 +103,7 @@
             tools:layout="@layout/activity_main" />
     </navigation>
     <fragment
-        android:id="@+id/loginSuccessful"
-        android:name="com.example.main_project.Auth.Fragments.LoginSuccessful"
-        android:label="Login Successful"
-        tools:layout="@layout/fragment_successfull">
-        <action
-            android:id="@+id/action_loginSuccessful_to_recruiterDetails"
-            app:destination="@id/recruiterDetails" />
-    </fragment>
-    <fragment
-        android:id="@+id/recruiterDetails2"
+        android:id="@+id/recruiterDetails"
         android:name="com.example.main_project.Recruiter.Fragments.RecruiterDetails"
         android:label="fragment_recruiter_details"
         tools:layout="@layout/fragment_recruiter_details" />

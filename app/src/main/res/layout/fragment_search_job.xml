@@ -32,11 +32,11 @@
             app:layout_constraintGuide_percent="0.95"/>
 
         <ImageView
-            android:id="@+id/image"
+            android:id="@+id/notification"
             android:layout_width="48dp"
             android:layout_height="43dp"
             android:layout_marginTop="45dp"
-            android:background="@color/previous"
+            android:src="@drawable/bell"
             app:layout_constraintEnd_toStartOf="@id/guideline3"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -44,7 +44,7 @@
             android:id="@+id/find_your"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="127dp"
+            android:layout_marginTop="89dp"
             android:text="Good Morning christ "
             android:textColor="@color/background"
             android:textSize="18sp"
@@ -58,20 +58,60 @@
             android:text="Find Your Creative\nJob"
             android:textColor="@color/background"
             android:textStyle="bold"
-            android:layout_marginTop="156dp"
+            android:layout_marginTop="118dp"
             android:textSize="36sp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="@id/guideline1"
             />
 
-        <TextView
-            android:layout_width="210dp"
-            android:layout_height="38dp"
-            android:layout_marginTop="257dp"
-            android:background="@color/previous"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/search"
+            android:layout_width="250dp"
+            android:layout_height="55dp"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:layout_marginTop="206dp"
+            app:startIconCheckable="true"
+            app:startIconDrawable="@drawable/searchicon"
+            app:endIconTintMode="@color/black"
+            app:helperTextTextColor="@color/red"
+            app:hintEnabled="false"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="@id/guideline1">
+
+            <AutoCompleteTextView
+                android:id="@+id/searchBox"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:background="@drawable/edittext_prop"
+                android:hint="search"
+                android:inputType="textPersonName"
+                android:maxLength="20"
+                android:paddingLeft="40dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
+                android:textSize="14sp"
+                android:imeOptions="actionDone" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/search_box_recyclerView"
+            android:visibility="gone"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/search"
+            app:layout_constraintBottom_toBottomOf="@id/jobs"
             app:layout_constraintStart_toStartOf="@id/guideline1"
-            />
+            app:layout_constraintEnd_toEndOf="@id/guideline3"/>
+
+        <ImageView
+            android:id="@+id/filtericon"
+            android:layout_width="48dp"
+            android:layout_height="65dp"
+            android:layout_marginTop="206dp"
+            android:src="@drawable/filter"
+            app:layout_constraintEnd_toStartOf="@id/guideline3"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/jobs"
@@ -81,18 +121,20 @@
             android:textColor="@color/background"
             android:textSize="24sp"
             app:layout_constraintBaseline_toBaselineOf="@+id/filter"
-            app:layout_constraintStart_toStartOf="@id/guideline1" />
+            app:layout_constraintStart_toStartOf="@id/guideline1"
+            app:layout_constraintTop_toBottomOf="@id/search_box_recyclerView"
+            />
 
         <TextView
             android:id="@+id/filter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="320dp"
+            android:layout_marginTop="20dp"
             android:text="Show all"
             android:textColor="@color/background"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="@id/guideline3"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/search_box_recyclerView" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/jobsearch"

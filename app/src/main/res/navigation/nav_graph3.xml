@@ -9,7 +9,10 @@
         android:id="@+id/mainActivity5"
         android:name="com.example.main_project.MainActivity5"
         android:label="activity_main5"
-        tools:layout="@layout/activity_main5" />
+        tools:layout="@layout/activity_main5">
+        <deepLink
+            app:uri="myapp://mainActivity3/rec" />
+    </activity>
 
     <activity
         android:id="@+id/mainActivity2"

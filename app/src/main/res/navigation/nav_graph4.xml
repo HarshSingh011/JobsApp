@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph4"
-    app:startDestination="@id/notification">
+    app:startDestination="@id/searchJob">
 
     <activity
         android:id="@+id/mainActivity4"
@@ -20,10 +20,6 @@
         android:name="com.example.main_project.candidate.Fragments.CandidateEditDetail"
         android:label="fragment_candidate_edit_detail"
         tools:layout="@layout/fragment_candidate_edit_detail" />
-    <fragment
-        android:id="@+id/searchJob"
-        android:name="com.example.main_project.SeeJobs.Fragments.SearchJob"
-        android:label="SearchJobFragment" />
     <fragment
         android:id="@+id/jobsDetails"
         android:name="com.example.main_project.SeeJobs.Fragments.JobsDetails"
@@ -44,13 +40,29 @@
         android:name="com.example.main_project.candidate.Fragments.Notification"
         android:label="fragment_notification"
         tools:layout="@layout/fragment_notification">
-        <deepLink
-            app:uri="myapp://mainActivity4/notification" />
     </fragment>
     <activity
         android:id="@+id/mainActivity2"
         android:name="com.example.main_project.SettingProfile.MainActivity2"
         android:label="activity_main2"
         tools:layout="@layout/activity_main2" />
+    <fragment
+        android:id="@+id/applications"
+        android:name="com.example.main_project.SeeJobs.Fragments.Applications"
+        android:label="fragment_applications"
+        tools:layout="@layout/fragment_applications" />
+    <fragment
+        android:id="@+id/seeAllJobs"
+        android:name="com.example.main_project.SeeJobs.Fragments.SeeAllJobs"
+        android:label="fragment_see_all_jobs"
+        tools:layout="@layout/fragment_see_all_jobs" />
+    <fragment
+        android:id="@+id/searchJob"
+        android:name="com.example.main_project.SeeJobs.Fragments.SearchJob"
+        android:label="fragment_search_job"
+        tools:layout="@layout/fragment_search_job">
+        <deepLink
+            app:uri="myapp://mainActivity4/SearchJob" />
+    </fragment>
 
 </navigation>

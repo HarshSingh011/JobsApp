@@ -8,21 +8,19 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.main_project.R
 import com.example.main_project.SeeJobs.DataClasses.Job
 
-class JobAdapter(
+class SearchJobAdapter(
     private var jobList: MutableList<Job>,
     private val onViewMoreClick: (Job) -> Unit
-) : RecyclerView.Adapter<JobAdapter.JobViewHolder>() {
-
+) : RecyclerView.Adapter<SearchJobAdapter.JobViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JobViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.search_job_element, parent, false)
+            .inflate(R.layout.search_jobs_elements, parent, false)
         return JobViewHolder(view)
     }
-
     override fun onBindViewHolder(holder: JobViewHolder, position: Int) {
         val job = jobList[position]
         holder.title.text = job.title
-        holder.experience.text = "${job.experience} yr EXP"
+        holder.experience.text = "${job.experience}yr EXP"
         holder.salary.text = "₹${job.minSalary} - ₹${job.maxSalary}/Monthly"
         holder.location.text = job.location
         holder.requiredSkills.text = job.requiredSkills.joinToString(", ")
@@ -33,16 +31,15 @@ class JobAdapter(
             onViewMoreClick(job)
         }
     }
-
     override fun getItemCount(): Int = jobList.size
-
-    // Method to add new jobs to the adapter
-    fun addJobs(newJobs: List<Job>) {
-        val startIndex = jobList.size
+    fun updateJobs(newJobs: List<Job>) {
+        jobList.clear()
         jobList.addAll(newJobs)
-        notifyItemRangeInserted(startIndex, newJobs.size)
+        notifyDataSetChanged()
     }
-
+    fun getSearchJobElementsCount(): Int {
+        return itemCount
+    }
     inner class JobViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val title: TextView = itemView.findViewById(R.id.Title)
         val experience: TextView = itemView.findViewById(R.id.experience)

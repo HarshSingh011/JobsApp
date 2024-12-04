@@ -88,13 +88,19 @@ class LoginPage : Fragment() {
     }
 
     private fun navigateToNotification4() {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("myapp://mainActivity4/notification"))
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("myapp://mainActivity4/SearchJob"))
         startActivity(intent)
         requireActivity().finish()
     }
 
-    private fun navigateToNotification5() {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("myapp://mainActivity5/notification"))
+    private fun navigateToActivity5() {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("myapp://mainActivity5/jobPosted"))
+        startActivity(intent)
+        requireActivity().finish()
+    }
+
+    private fun navigateToActivity6() {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("myapp://mainActivity6/loginSuccessful"))
         startActivity(intent)
         requireActivity().finish()
     }
@@ -179,9 +185,9 @@ class LoginPage : Fragment() {
                             println(role)
                             when (role) {
                                 "CANDIDATE" -> navigateToNotification4()
-                                "RECRUITER" -> findNavController().navigate(R.id.mainActivity5)
-                                "USER" -> findNavController().navigate(R.id.loginSuccessful)
-                                else -> Toast.makeText(requireContext(), "Invalid role", Toast.LENGTH_SHORT).show()
+                                "RECRUITER" -> navigateToActivity5()
+                                "USER" -> navigateToActivity6()
+//                                else -> Toast.makeText(requireContext(), "Invalid role", Toast.LENGTH_SHORT).show()
                             }
                         } else {
                             val errorMessage = parseErrorMessage(response.errorBody()?.string())
@@ -240,12 +246,6 @@ class LoginPage : Fragment() {
     private fun resetToDefaultDrawable(textInputLayout: TextInputLayout) {
         textInputLayout.error = null
         textInputLayout.editText?.setBackgroundResource(R.drawable.edittext_prop)
-    }
-
-    private fun navigateToActivity(activityClass: Class<*>) {
-        val intent = Intent(requireContext(), activityClass)
-        startActivity(intent)
-        requireActivity().finish()
     }
 
     override fun onDestroyView() {

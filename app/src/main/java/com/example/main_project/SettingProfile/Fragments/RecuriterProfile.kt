@@ -47,12 +47,10 @@ class RecuriterProfile : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentRecuriterProfileBinding.inflate(inflater, container, false)
-
-        val role = resources.getStringArray(R.array.role)
-        val arrayAdapter = ArrayAdapter(requireContext(), R.layout.dropdownmenu, role)
-        binding.roleDefine.setAdapter(arrayAdapter)
+        dataStoreManager = DataStoreManager(requireContext())
 
         binding.nextFragment.setOnClickListener {
+            findNavController().navigate(R.id.mainActivity5)
             if (validateInputs()) {
                 sendRecruiterData()
             }
@@ -75,6 +73,12 @@ class RecuriterProfile : Fragment() {
         setFocusChangeListener(binding.industry)
 
         return binding.root
+    }
+
+    private fun navigateToNotification5() {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("myapp://mainActivity5/recruiterDetails"))
+        startActivity(intent)
+        requireActivity().finish()
     }
 
     private fun setFocusChangeListener(editText: TextInputLayout) {
@@ -149,9 +153,10 @@ class RecuriterProfile : Fragment() {
                 if (response.isSuccessful) {
                     val role = "RECRUITER"
                     dataStoreManager.saveRole(role)
-                    imageUri?.let { uploadProfilePicture(it) }
+//                    imageUri?.let { uploadProfilePicture(it) }
                     Toast.makeText(requireContext(), "Success: ${response.body()?.message}", Toast.LENGTH_SHORT).show()
-                    findNavController().navigate(R.id.recruiterDetails)
+                    println("Success: ${response.body()?.message}")
+                    navigateToNotification5()
                 } else {
                     val errorResponse = response.errorBody()?.string()
                     val errorMessage = errorResponse?.let { parseErrorMessage(it) } ?: "An error occurred"
@@ -294,7 +299,6 @@ class RecuriterProfile : Fragment() {
             }
         }
 
-        // If we couldn't resolve it, return null
         return null
     }
 

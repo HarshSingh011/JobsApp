@@ -1,4 +1,4 @@
-package com.example.main_project.SeeJobs.Adapters
+package com.example.main_project.SeeJobs.Adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,9 +7,9 @@ import com.bumptech.glide.Glide
 import com.example.main_project.SeeJobs.DataClasses.JobApplication
 import com.example.main_project.databinding.AppliedBinding
 
-class JobApplicationAdapter(
+class ApplicationsAdapter(
     private val jobApplications: MutableList<JobApplication>
-) : RecyclerView.Adapter<JobApplicationAdapter.JobApplicationViewHolder>() {
+) : RecyclerView.Adapter<ApplicationsAdapter.JobApplicationViewHolder>() {
 
     inner class JobApplicationViewHolder(private val binding: AppliedBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -43,7 +43,7 @@ class JobApplicationAdapter(
         holder.bind(jobApplications[position])
     }
 
-    override fun getItemCount(): Int = minOf(3, jobApplications.size)
+    override fun getItemCount(): Int = jobApplications.size
 
     fun addApplications(newApplications: List<JobApplication>) {
         jobApplications.addAll(newApplications)

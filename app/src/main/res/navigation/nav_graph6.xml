@@ -18,7 +18,7 @@
     <fragment
         android:id="@+id/loginSuccessful"
         android:name="com.example.main_project.Auth.Fragments.LoginSuccessful"
-        android:label="fragment_successfull"
+        android:label="fragment_login_successful"
         tools:layout="@layout/fragment_successfull">
         <deepLink
             app:uri="myapp://mainActivity6/loginSuccessful" />

@@ -11,7 +11,8 @@ data class Job(
     val jobType: String?,
     val requiredSkills: List<String>,
     val experience: Int,
-    val postedBy:PostedBy
+    val postedBy:PostedBy,
+    val jobStatus: String
 )
 
 data class JobApplyResponse(

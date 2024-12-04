@@ -127,6 +127,8 @@ interface CandidateInterface {
         @Part image: MultipartBody.Part
     ): Response<ProfilePictureResponse>
 
+    @GET("jobs/filter/title")
+    suspend fun searchJobs(@Query("title") title: String): Response<List<Job>>
 }
 
 

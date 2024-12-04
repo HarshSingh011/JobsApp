@@ -34,10 +34,11 @@ class MainActivity4 : AppCompatActivity() {
         bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.jobs -> {
-                    navController.navigate(R.id.searchJob)
+                    navController.navigate(R.id.seeAllJobs)
                     true
                 }
-                R.id.community -> {
+                R.id.applications -> {
+                    navController.navigate(R.id.applications)
                     true
                 }
                 R.id.profile -> {
@@ -45,7 +46,7 @@ class MainActivity4 : AppCompatActivity() {
                     true
                 }
                 R.id.home -> {
-                    navController.navigate(R.id.notification)
+                    navController.navigate(R.id.searchJob)
                     true
                 }
                 else -> false

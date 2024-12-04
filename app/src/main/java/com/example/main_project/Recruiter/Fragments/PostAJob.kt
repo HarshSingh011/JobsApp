@@ -36,17 +36,6 @@ class PostAJob : Fragment() {
         val jobMode = resources.getStringArray(R.array.JobMode)
         val arrayAdapterJobMode = ArrayAdapter(requireContext(), R.layout.dropdownmenu, jobMode)
         binding.ModeInputbox.setAdapter(arrayAdapterJobMode)
-
-        binding.nextFragment.setOnClickListener {
-            findNavController().navigate(R.id.jobPosted)
-        }
-
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                findNavController().navigate(R.id.postAJob)
-            }
-        })
-
     }
 
     override fun onCreateView(
@@ -78,6 +67,12 @@ class PostAJob : Fragment() {
             }
         }
 
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                findNavController().navigate(R.id.postAJob)
+            }
+        })
+
         return binding.root
     }
 
@@ -87,14 +82,14 @@ class PostAJob : Fragment() {
     }
 
     private suspend fun postJob() {
-        val title = binding.jobtitleInputbox.text.toString()
-        val description = binding.DescriptionInputbox.text.toString()
-        val location = binding.locationInputbox.text.toString()
-        val experience = binding.ExperienceInputbox.text.toString().toIntOrNull() ?: 0
-        val minSalary = binding.MinimumSalaryInputbox.text.toString().toIntOrNull() ?: 0
-        val maxSalary = binding.MaximumSalaryInputbox.text.toString().toIntOrNull() ?: 0
-        val jobType = binding.JobTypeInputbox.text.toString()
-        val jobMode = binding.ModeInputbox.text.toString()
+        val title = binding.jobtitleInputbox.text.toString().trim()
+        val description = binding.DescriptionInputbox.text.toString().trim()
+        val location = binding.locationInputbox.text.toString().trim()
+        val experience = binding.ExperienceInputbox.text.toString().trim().toIntOrNull() ?: 0
+        val minSalary = binding.MinimumSalaryInputbox.text.toString().trim().toIntOrNull() ?: 0
+        val maxSalary = binding.MaximumSalaryInputbox.text.toString().trim().toIntOrNull() ?: 0
+        val jobType = binding.JobTypeInputbox.text.toString().trim()
+        val jobMode = binding.ModeInputbox.text.toString().trim()
 
         if (title.isBlank() || description.isBlank() || location.isBlank() || jobType.isBlank() || requiredSkills.isEmpty()) {
             println("Title: $title, Description: $description, Location: $location, Job Type: $jobType, Required Skills: $requiredSkills")
@@ -110,9 +105,11 @@ class PostAJob : Fragment() {
             minSalary = minSalary,
             maxSalary = maxSalary,
             jobType = jobType,
-            jobMode = jobMode,
+            mode = jobMode,
             requiredSkills = requiredSkills
         )
+
+        println(jobRequest)
 
         val api = CandidateProfileRetrofitClient.instance(requireContext())
             .create(CandidateInterface::class.java)
@@ -130,15 +127,16 @@ class PostAJob : Fragment() {
                 Toast.makeText(requireContext(), response.body()?.message ?: "Success", Toast.LENGTH_SHORT).show()
             } else {
                 val errorResponse = response.errorBody()?.string()
-                println("failer")
                 val errorMessage = errorResponse?.let { parseErrorMessage(it) } ?: "An error occurred"
                 Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
+                println(errorMessage)
             }
         } catch (e: Exception) {
             Log.e("PostAJob", "Exception: ${e.message}", e)
             Toast.makeText(requireContext(), "Exception: ${e.message}", Toast.LENGTH_LONG).show()
         }
     }
+
     private fun parseErrorMessage(response: String?): String {
         return try {
             val jsonObject = JSONObject(response ?: "")

@@ -48,6 +48,7 @@ class YourProfile : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentYourProfileBinding.inflate(inflater, container, false)
+        dataStoreManager = DataStoreManager(requireContext())
 
         binding.addEducation.setOnClickListener {
             addDataToCandidateData()

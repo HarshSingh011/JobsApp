@@ -37,18 +37,14 @@ class SplashScreen : Fragment() {
                         dataStoreManager.getRole().collect { role ->
                             when (role) {
                                 "CANDIDATE" -> {
-                                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse("myapp://mainActivity4/notification"))
-                                    startActivity(intent)
-                                    requireActivity().finish()
+                                    findNavController().navigate(R.id.mainActivity4)
                                 }
                                 "RECRUITER" -> {
-                                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse("myapp://mainActivity3/recuritterProfile" ))
-                                    startActivity(intent)
-                                    requireActivity().finish()
+                                    findNavController().navigate(R.id.mainActivity5)
                                 }
                                 "USER" -> {
                                     findNavController().navigate(R.id.mainActivity6)
-                                    println(role)
+
                                 }
                                 else -> {
                                     findNavController().navigate(R.id.frontPage)

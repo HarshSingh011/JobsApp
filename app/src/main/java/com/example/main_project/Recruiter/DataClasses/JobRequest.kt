@@ -6,7 +6,7 @@ data class JobRequest(
     val location: String,
     val experience: Int,
     val jobType: String,
-    val jobMode: String,
+    val mode: String,
     val minSalary: Int,
     val maxSalary: Int,
     val requiredSkills: List<String>
