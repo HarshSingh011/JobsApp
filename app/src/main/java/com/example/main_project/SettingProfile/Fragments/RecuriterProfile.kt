@@ -31,6 +31,7 @@ import org.json.JSONObject
 import retrofit2.HttpException
 import retrofit2.Response
 import java.io.File
+import android.view.ViewTreeObserver
 
 class RecuriterProfile : Fragment() {
 
@@ -51,9 +52,10 @@ class RecuriterProfile : Fragment() {
 
         binding.nextFragment.setOnClickListener {
             findNavController().navigate(R.id.mainActivity5)
-            if (validateInputs()) {
-                sendRecruiterData()
-            }
+//            if (validateInputs()) {
+//                sendRecruiterData()
+//
+//            }
         }
 
         binding.pic.setOnClickListener {
@@ -66,11 +68,26 @@ class RecuriterProfile : Fragment() {
             }
         })
 
-        setFocusChangeListener(binding.companyName)
-        setFocusChangeListener(binding.companyEmail)
-        setFocusChangeListener(binding.JobTitle)
-        setFocusChangeListener(binding.companyWebsite)
-        setFocusChangeListener(binding.industry)
+        binding.companyName.editText?.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) resetToDefaultDrawable(binding.companyName)
+        }
+        binding.companyEmail.editText?.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) resetToDefaultDrawable(binding.companyEmail)
+        }
+        binding.JobTitle.editText?.setOnFocusChangeListener(){_, hasFocus ->
+            if (hasFocus) resetToDefaultDrawable(binding.JobTitle)
+        }
+        binding.companyWebsite.editText?.setOnFocusChangeListener(){_, hasFocus ->
+            if (hasFocus) resetToDefaultDrawable(binding.companyWebsite)
+        }
+        binding.industry.editText?.setOnFocusChangeListener(){_, hasFocus ->
+            if (hasFocus) resetToDefaultDrawable(binding.industry)
+        }
+        binding.location.editText?.setOnFocusChangeListener(){_, hasFocus ->
+            if (hasFocus) resetToDefaultDrawable(binding.location)
+        }
+
+        setUpKeyboardListener()
 
         return binding.root
     }
@@ -79,12 +96,6 @@ class RecuriterProfile : Fragment() {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse("myapp://mainActivity5/recruiterDetails"))
         startActivity(intent)
         requireActivity().finish()
-    }
-
-    private fun setFocusChangeListener(editText: TextInputLayout) {
-        editText.editText?.setOnFocusChangeListener { _, hasFocus ->
-            if (hasFocus) resetToDefaultDrawable(editText)
-        }
     }
 
     private fun resetToDefaultDrawable(editText: TextInputLayout) {
@@ -99,13 +110,27 @@ class RecuriterProfile : Fragment() {
     }
 
     private fun validateInputs(): Boolean {
+        val location = binding.location.editText?.text.toString().trim()
         val companyName = binding.companyName.editText?.text.toString().trim()
         val position = binding.companyEmail.editText?.text.toString().trim()
-        val yearOfWork = binding.JobTitle.editText?.text.toString().trim()
-        val DOB = binding.companyWebsite.editText?.text.toString().trim()
+        val jobtitle = binding.JobTitle.editText?.text.toString().trim()
+        val companywebsite = binding.companyWebsite.editText?.text.toString().trim()
         val industry = binding.industry.editText?.text.toString().trim()
+        val email = binding.companyEmail.editText?.text.toString().trim()
 
         var isValid = true
+
+        if(email.isBlank()){
+            setToErrorDrawable(binding.companyEmail)
+            isValid = false
+        }else{
+            if(!email.matches(Regex("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$"))){
+                binding.companyEmail.error = "Not an email"
+                binding.companyEmail.editText?.setBackgroundResource(R.drawable.error_prop)
+                binding.companyEmail.clearFocus()
+                isValid = false
+            }
+        }
 
         if (companyName.isBlank()) {
             setToErrorDrawable(binding.companyName)
@@ -117,18 +142,30 @@ class RecuriterProfile : Fragment() {
             isValid = false
         }
 
-        if (yearOfWork.isBlank()) {
+        if (jobtitle.isBlank()) {
             setToErrorDrawable(binding.JobTitle)
             isValid = false
         }
 
-        if (DOB.isBlank()) {
+        if (companywebsite.isBlank()) {
             setToErrorDrawable(binding.companyWebsite)
             isValid = false
+        }else{
+            if(!companywebsite.matches(Regex("^(www\\.)[a-zA-Z0-9]+\\.[a-zA-Z]{2,}$"))){
+                binding.companyWebsite.error = "Not a valid website"
+                binding.companyWebsite.editText?.setBackgroundResource(R.drawable.error_prop)
+                binding.companyWebsite.clearFocus()
+                isValid = false
+            }
         }
 
         if (industry.isBlank()) {
             setToErrorDrawable(binding.industry)
+            isValid = false
+        }
+
+        if( location.isBlank()){
+            setToErrorDrawable(binding.location)
             isValid = false
         }
 
@@ -153,7 +190,7 @@ class RecuriterProfile : Fragment() {
                 if (response.isSuccessful) {
                     val role = "RECRUITER"
                     dataStoreManager.saveRole(role)
-//                    imageUri?.let { uploadProfilePicture(it) }
+                    imageUri?.let { uploadProfilePicture(it) }
                     Toast.makeText(requireContext(), "Success: ${response.body()?.message}", Toast.LENGTH_SHORT).show()
                     println("Success: ${response.body()?.message}")
                     navigateToNotification5()
@@ -298,7 +335,6 @@ class RecuriterProfile : Fragment() {
                 }
             }
         }
-
         return null
     }
 
@@ -344,6 +380,21 @@ class RecuriterProfile : Fragment() {
             loadingDialog.setCancelable(false)
         }
         loadingDialog.show()
+    }
+
+    private fun setUpKeyboardListener() {
+        binding.root.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+            private var lastHeight = 0
+            override fun onGlobalLayout() {
+                val newHeight = binding.root.height
+                if (lastHeight != 0 && newHeight < lastHeight) {
+                    binding.scrollView.post {
+                        binding.scrollView.scrollTo(0, binding.scrollView.bottom)
+                    }
+                }
+                lastHeight = newHeight
+            }
+        })
     }
 
     override fun onDestroyView() {

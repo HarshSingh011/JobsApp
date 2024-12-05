@@ -2,7 +2,7 @@
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="230dp"
+    android:layout_height="198dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardElevation="5dp"
     app:cardCornerRadius="10dp"
@@ -11,7 +11,7 @@
     >
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:background="@drawable/gradient_background"
+        android:background="@drawable/applicantion_prop"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -20,23 +20,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.05" />
+            app:layout_constraintGuide_percent="0.05"/>
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.95" />
-
-        <ImageView
-            android:id="@+id/bookmark"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginTop="15dp"
-            android:src="@drawable/bookmark"
-            app:layout_constraintEnd_toEndOf="@id/guideline2"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintGuide_percent="0.95"/>
 
         <ImageView
             android:id="@+id/image"
@@ -54,7 +45,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginTop="32dp"
             android:text="Analytic Data"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@id/image"
@@ -66,7 +57,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:text="Apple Officer"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:textSize="10sp"
             app:layout_constraintStart_toEndOf="@id/image"
             app:layout_constraintTop_toBottomOf="@id/Title" />
@@ -77,7 +68,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="90dp"
             android:background="@drawable/element2_bg"
-            android:padding="6dp"
+            android:padding="3dp"
             android:text="Full time"
             android:textColor="@color/black"
             android:textSize="10sp"
@@ -91,7 +82,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="90dp"
             android:background="@drawable/element2_bg"
-            android:padding="6dp"
+            android:padding="3dp"
             android:layout_marginLeft="20dp"
             android:text="Offline"
             android:textColor="@color/black"
@@ -106,8 +97,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="90dp"
             android:background="@drawable/element2_bg"
+            android:padding="3dp"
             android:layout_marginLeft="20dp"
-            android:padding="6dp"
             android:text="1yr EXP"
             android:textColor="@color/black"
             android:textSize="10sp"
@@ -118,11 +109,12 @@
             android:id="@+id/requiredSkills"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="120dp"
+            android:layout_marginTop="124dp"
             android:text="See our area of work, worldwide locations\nand opportunities for students"
             android:textColor="@color/black"
             android:textSize="10sp"
             app:layout_constraintEnd_toEndOf="@id/guideline2"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@id/guideline1"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -130,10 +122,11 @@
             android:id="@+id/Salary"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="$300/Month"
+            android:text="$300"
             android:textColor="@color/black"
             android:textSize="12sp"
             app:layout_constraintBaseline_toBaselineOf="@+id/ViewMore"
+            app:layout_constraintEnd_toStartOf="@id/ViewMore"
             app:layout_constraintStart_toEndOf="@id/guideline1" />
 
         <Button
@@ -146,31 +139,11 @@
             android:textColor="@color/background"
             android:textSize="10sp"
             app:cornerRadius="10dp"
+            app:paddingStart="0dp"
+            app:paddingEnd="0dp"
             app:layout_constraintEnd_toEndOf="@id/guideline2"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/clock"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_marginTop="195dp"
-            android:src="@drawable/clock"
-            app:layout_constraintStart_toEndOf="@id/guideline1"
-            app:layout_constraintEnd_toStartOf="@id/days"
-            app:layout_constraintTop_toTopOf="parent"/>
-
-        <TextView
-            android:id="@+id/days"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="195dp"
-            android:text="1 Day ago - 12 applicant applied"
-            android:textColor="@color/black"
-            android:textSize="10sp"
-            app:cornerRadius="10dp"
-            app:layout_constraintStart_toEndOf="@id/clock"
-            app:layout_constraintTop_toTopOf="parent"
-            />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

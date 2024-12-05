@@ -6,6 +6,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.main_project.R
 import com.example.main_project.SeeJobs.DataClasses.Job
 import com.example.main_project.databinding.SeealljobselementsBinding
@@ -17,6 +18,11 @@ class SeeAllJobsAdapter : ListAdapter<Job, SeeAllJobsAdapter.JobViewHolder>(JobD
 
         fun bind(job: Job) {
             binding.apply {
+//                Glide.with(image.context)
+//                    .load(job.postedBy.profileImage)
+//                    .placeholder(R.drawable.bottomnav4)
+//                    .error(R.drawable.bottomnav4)
+//                    .into(image)
                 Title.text = job.title
                 location.text = job.location
                 JobType.text = job.jobType ?: "N/A"

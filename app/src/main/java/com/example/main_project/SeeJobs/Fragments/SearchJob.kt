@@ -65,6 +65,10 @@ class SearchJob : Fragment() {
             findNavController().navigate(R.id.notification)
         }
 
+        binding.filtericon.setOnClickListener{
+            findNavController().navigate(R.id.jobFilter)
+        }
+
         requireActivity().onBackPressedDispatcher.addCallback(
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {

@@ -10,6 +10,7 @@
     android:id="@+id/RecentSearchJobElement">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:background="@drawable/applicantion_prop"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="10dp">
@@ -35,7 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:text="Institute Name"
-            android:textColor="@color/background"
+            android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="@id/guideline1"
             app:layout_constraintEnd_toEndOf="@+id/guideline2"
@@ -63,7 +64,7 @@
             android:layout_height="wrap_content"
             android:text="Degree name"
             android:layout_marginTop="10dp"
-            android:textColor="@color/background"
+            android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="@+id/guideline2"
             app:layout_constraintTop_toBottomOf="@id/institute_edit"
@@ -91,7 +92,7 @@
             android:layout_height="wrap_content"
             android:text="year of Completion"
             android:layout_marginTop="10dp"
-            android:textColor="@color/background"
+            android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="@+id/guideline2"
             app:layout_constraintStart_toEndOf="@id/guideline1"

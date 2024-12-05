@@ -14,7 +14,8 @@ data class JobContent(
     val mode: String?,
     val minSalary: Int?,
     val maxSalary: Int?,
-    val requiredSkills: List<String>?
+    val requiredSkills: List<String>?,
+    val postedBy: PostedBy
 )
 
 data class PostedBy(

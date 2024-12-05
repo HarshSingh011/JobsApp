@@ -132,13 +132,18 @@ class YourProfile : Fragment() {
     }
 
     private fun validateInputs(): Boolean {
-        val companyName = binding.instituteName.editText?.text.toString().trim()
+        val institutename = binding.instituteName.editText?.text.toString().trim()
         val position = binding.Degree.editText?.text.toString().trim()
-        val yearOfWork = binding.yearOfCompleletion.editText?.text.toString().trim()
+        val yearOfCompleletion = binding.yearOfCompleletion.editText?.text.toString().trim()
+        val domain = binding.autoCompleteDomain.text.toString().trim()
+        val companyname = binding.companyName.editText?.text.toString().trim()
+        val degree = binding.Degree.editText?.text.toString().trim()
+        val  yearOfWork= binding.yearOfWork.editText?.text.toString().trim()
+
 
         var isValid = true
 
-        if (companyName.isBlank()) {
+        if (institutename.isBlank()) {
             setToErrorDrawable(binding.instituteName)
             isValid = false
         }
@@ -148,17 +153,24 @@ class YourProfile : Fragment() {
             isValid = false
         }
 
-        if (yearOfWork.isBlank()) {
+        if (yearOfCompleletion.isBlank()) {
             setToErrorDrawable(binding.yearOfCompleletion)
             isValid = false
         }else{
             val yearRegex = "^(19|20)\\d{2}$".toRegex()
-            if (yearOfWork.isBlank() || !yearRegex.matches(yearOfWork)) {
+            if (yearOfCompleletion.isBlank() || !yearRegex.matches(yearOfCompleletion)) {
                 binding.yearOfCompleletion.editText?.setBackgroundResource(R.drawable.error_prop)
                 binding.yearOfCompleletion.error = "YYYY"
                 binding.yearOfCompleletion.clearFocus()
                 isValid = false
             }
+        }
+
+        if (yearOfWork.isNotBlank() && !yearOfWork.matches(Regex("\\d{2}"))) {
+            binding.yearOfWork.editText?.setBackgroundResource(R.drawable.error_prop)
+            binding.yearOfWork.error = "YY"
+            binding.yearOfWork.clearFocus()
+            isValid = false
         }
 
         return isValid

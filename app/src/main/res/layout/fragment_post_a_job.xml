@@ -226,7 +226,8 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/edittext_prop"
                 android:hint="Job Type"
-                android:inputType="textEmailAddress"
+                android:inputType="none"
+                android:clickable="true"
                 android:textColor="@color/black"
                 android:textColorHint="@color/black"
                 android:textSize="14sp" />
@@ -260,12 +261,13 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <AutoCompleteTextView
-                android:id="@+id/Mode_inputbox"
+                android:id="@+id/ModeInputbox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/edittext_prop"
                 android:hint="Mode"
-                android:inputType="textEmailAddress"
+                android:inputType="none"
+                android:clickable="true"
                 android:textColor="@color/black"
                 android:textColorHint="@color/black"
                 android:textSize="14sp" />
@@ -377,11 +379,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/edittext_prop"
-                android:hint="experience"
+                android:hint="Description"
+                android:maxLength="150"
                 android:inputType="text"
                 android:textColor="@color/black"
                 android:textColorHint="@color/black"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:minLines="5"
+                android:maxLines="10" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button

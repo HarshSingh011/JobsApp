@@ -30,4 +30,9 @@
         <item>CONTRACT</item>
     </string-array>
 
+    <string name="my_app">My App</string>
+    <string name="openDrawer">Open Drawer</string>
+    <string name="closeDrawer">Close Drawer</string>
+
+
 </resources>

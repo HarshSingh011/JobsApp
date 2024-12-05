@@ -3,8 +3,10 @@ package com.example.main_project.SeeJobs.Fragments
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.main_project.R
 import com.example.main_project.SeeJobs.DataClasses.Job
 
@@ -20,6 +22,12 @@ class FilteredJobAdapter(
     }
 
     override fun onBindViewHolder(holder: JobViewHolder, position: Int) {
+
+//        Glide.with(holder.image.context)
+//            .load(jobList[position].postedBy.profileImage)
+//            .placeholder(R.drawable.bottomnav4)
+//            .error(R.drawable.bottomnav4)
+//            .into(holder.image)
         val job = jobList[position]
         holder.title.text = job.title
         holder.experience.text = "${job.experience} yr EXP"
@@ -51,5 +59,6 @@ class FilteredJobAdapter(
         val jobType: TextView = itemView.findViewById(R.id.JobType)
         val jobMode: TextView = itemView.findViewById(R.id.JobMode)
         val viewMoreButton: View = itemView.findViewById(R.id.ViewMore)
+        val image: ImageView = itemView.findViewById(R.id.image)
     }
 }

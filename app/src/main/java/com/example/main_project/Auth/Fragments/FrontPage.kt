@@ -6,11 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.main_project.R
 import com.example.main_project.databinding.FragmentFrontPageBinding
-import kotlinx.coroutines.launch
 
 class FrontPage : Fragment() {
 
@@ -40,7 +38,6 @@ class FrontPage : Fragment() {
                 }
             }
         )
-
 
         return binding.root
     }

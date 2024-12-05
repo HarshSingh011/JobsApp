@@ -187,7 +187,6 @@ class LoginPage : Fragment() {
                                 "CANDIDATE" -> navigateToNotification4()
                                 "RECRUITER" -> navigateToActivity5()
                                 "USER" -> navigateToActivity6()
-//                                else -> Toast.makeText(requireContext(), "Invalid role", Toast.LENGTH_SHORT).show()
                             }
                         } else {
                             val errorMessage = parseErrorMessage(response.errorBody()?.string())
@@ -232,6 +231,7 @@ class LoginPage : Fragment() {
         if (message == "Incorrect password") {
             binding.editPassword.error = message
             binding.editPassword.editText?.setBackgroundResource(R.drawable.error_prop)
+            binding.editPassword.clearFocus()
         } else {
             Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
         }

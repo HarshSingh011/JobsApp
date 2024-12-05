@@ -34,5 +34,10 @@
         android:label="fragment_recruiter_details"
         tools:layout="@layout/fragment_recruiter_details">
     </fragment>
+    <fragment
+        android:id="@+id/buttonPostAJob"
+        android:name="com.example.main_project.candidate.Fragments.ButtonPostAJob"
+        android:label="fragment_button_post_a_job"
+        tools:layout="@layout/fragment_button_post_a_job" />
 
 </navigation>

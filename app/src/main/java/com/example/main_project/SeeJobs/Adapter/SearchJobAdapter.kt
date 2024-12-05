@@ -3,8 +3,10 @@ package com.example.main_project.SeeJobs.Fragments
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.main_project.R
 import com.example.main_project.SeeJobs.DataClasses.Job
 
@@ -14,11 +16,16 @@ class SearchJobAdapter(
 ) : RecyclerView.Adapter<SearchJobAdapter.JobViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JobViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.search_jobs_elements, parent, false)
+            .inflate(R.layout.searchboxelement, parent, false)
         return JobViewHolder(view)
     }
     override fun onBindViewHolder(holder: JobViewHolder, position: Int) {
         val job = jobList[position]
+        Glide.with(holder.image.context)
+            .load(job.postedBy.profileImage)
+            .placeholder(R.drawable.bottomnav4)
+            .error(R.drawable.bottomnav4)
+            .into(holder.image)
         holder.title.text = job.title
         holder.experience.text = "${job.experience}yr EXP"
         holder.salary.text = "₹${job.minSalary} - ₹${job.maxSalary}/Monthly"
@@ -49,5 +56,6 @@ class SearchJobAdapter(
         val jobType: TextView = itemView.findViewById(R.id.JobType)
         val jobMode: TextView = itemView.findViewById(R.id.JobMode)
         val viewMoreButton: View = itemView.findViewById(R.id.ViewMore)
+        val image: ImageView = itemView.findViewById(R.id.image)
     }
 }

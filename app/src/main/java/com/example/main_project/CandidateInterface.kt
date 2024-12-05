@@ -80,7 +80,7 @@ interface CandidateInterface {
     ): Response<RecruiterUpdateResponse>
     @POST("jobs/post")
     suspend fun postJob(@Body jobRequest: JobRequest): Response<JobResponse>
-    @GET("jobs/all-jobs")
+    @GET("jobs/get-recommended-Jobs")
     suspend fun getJobs(): Response<List<Job>>
 
     @PATCH("candidates/update")

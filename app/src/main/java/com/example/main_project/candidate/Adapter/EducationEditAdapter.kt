@@ -30,6 +30,9 @@ class EducationEditAdapter : ListAdapter<EducationShowDataClasses, EducationEdit
             itemList.clear()
             itemList.addAll(list)
         }
+        else if(list == null){
+            itemList.clear()
+        }
     }
 
     fun getUpdatedList(): List<EducationShowDataClasses> {

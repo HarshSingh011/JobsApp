@@ -10,48 +10,22 @@
     android:id="@+id/RecentSearchJobElement">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:background="@drawable/applicantion_prop"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:padding="10dp">
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline1"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.0" />
-
-        <ImageView
-            android:id="@+id/IntituteIcon"
-            android:layout_width="18dp"
-            android:layout_height="18dp"
-            android:layout_marginTop="5dp"
-            android:src="@drawable/institute"
-            app:layout_constraintStart_toStartOf="@id/guideline1"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/IntituteName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
-            android:layout_marginTop="5dp"
             android:text="Intitute_name"
-            android:textColor="@color/background"
+            android:textColor="@color/black"
             android:textSize="16sp"
-            app:layout_constraintStart_toEndOf="@id/IntituteIcon"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/DegreeIcon"
-            android:layout_width="18dp"
-            android:layout_height="18dp"
-            android:layout_marginTop="4dp"
-            android:src="@drawable/fresher"
-
-            app:layout_constraintHorizontal_chainStyle="spread"
-            app:layout_constraintStart_toStartOf="@id/guideline1"
-            app:layout_constraintTop_toBottomOf="@id/IntituteIcon" />
 
         <TextView
             android:id="@+id/Degree"
@@ -59,19 +33,11 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:text="Degree"
-            android:textColor="@color/background"
+            android:textColor="@color/black"
             android:textSize="16sp"
-            app:layout_constraintStart_toEndOf="@id/DegreeIcon"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/IntituteName" />
 
-        <ImageView
-            android:id="@+id/Calender_Icon"
-            android:layout_width="18dp"
-            android:layout_height="18dp"
-            android:layout_marginTop="4dp"
-            android:src="@drawable/calender"
-            app:layout_constraintStart_toStartOf="@id/guideline1"
-            app:layout_constraintTop_toBottomOf="@id/DegreeIcon" />
 
         <TextView
             android:id="@+id/Date"
@@ -79,9 +45,9 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:text="Date of Completion"
-            android:textColor="@color/background"
+            android:textColor="@color/black"
             android:textSize="16sp"
-            app:layout_constraintStart_toEndOf="@id/Calender_Icon"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/Degree" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

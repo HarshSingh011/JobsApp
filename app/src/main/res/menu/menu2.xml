@@ -7,11 +7,7 @@
 
     <item android:title="Jobs"
         android:id="@+id/jobs"
-        android:icon="@drawable/bottomnav2"/>
-
-    <item android:title="community"
-        android:id="@+id/community"
-        android:icon="@drawable/bottomnav3"/>
+        android:icon="@drawable/bottomnav5"/>
 
     <item android:title="Pofile"
         android:id="@+id/profile"

@@ -7,6 +7,7 @@ import android.graphics.pdf.PdfRenderer
 import android.net.Uri
 import android.os.Bundle
 import android.os.ParcelFileDescriptor
+import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -22,7 +23,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.main_project.CandidateInterface
 import com.example.main_project.CandidateProfileRetrofitClient
-import com.example.main_project.DataStoreManager
 import com.example.main_project.R
 import com.example.main_project.SettingProfile.DataClasses.Education
 import com.example.main_project.SettingProfile.DataClasses.Experience
@@ -37,9 +37,14 @@ import com.example.main_project.candidate.DataClasses.ExperienceShowDataClasses
 import com.example.main_project.candidate.DataClasses.SkillShowDataClasses
 import com.example.main_project.candidate.ViewModels.CandidateProfileViewModel
 import com.example.main_project.databinding.FragmentCandidateProfileBinding
+import com.github.dhaval2404.imagepicker.ImagePicker
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import org.json.JSONObject
 import java.io.File
 import java.io.FileOutputStream
 import java.net.URL
@@ -49,7 +54,6 @@ class CandidateProfile : Fragment() {
     private var _binding: FragmentCandidateProfileBinding? = null
     private val binding get() = _binding!!
     private lateinit var loadingDialog: Dialog
-
 
     private val candidateViewModel: CandidateProfileViewModel by activityViewModels()
 
@@ -64,6 +68,14 @@ class CandidateProfile : Fragment() {
         candidateViewModel.candidateData.observe(viewLifecycleOwner) { candidateData ->
             println("CandidateProfile observed data: $candidateData")
             updateUI(candidateData)
+        }
+
+        binding.profileImageView.setOnClickListener {
+            ImagePicker.with(this)
+                .crop()
+                .compress(1024)
+                .maxResultSize(1080, 1080)
+                .start()
         }
 
         fetchCurrentCandidate()
@@ -205,6 +217,18 @@ class CandidateProfile : Fragment() {
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        val fileUri = data?.data
+        if (fileUri != null) {
+            binding.profileImageView.setImageURI(fileUri)
+            binding.profileImageView.setContentPadding(0, 0, 0, 0)
+            uploadImage(fileUri)
+        } else {
+            Toast.makeText(requireContext(), "Image selection failed", Toast.LENGTH_SHORT).show()
+        }
+    }
+
     private fun loadPdfThumbnail(pdfUrl: String, imageView: ImageView) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
@@ -239,6 +263,116 @@ class CandidateProfile : Fragment() {
             }
         }
         return file
+    }
+
+    private fun uploadImage(fileUri: Uri) {
+        val context = requireContext()
+        showLoadingDialog()
+        lifecycleScope.launch {
+            try {
+                loadingDialog.dismiss()
+                Log.d("ProfilePictureUpload", "Original URI: $fileUri")
+                Log.d("ProfilePictureUpload", "URI Scheme: ${fileUri.scheme}")
+                Log.d("ProfilePictureUpload", "URI Path: ${fileUri.path}")
+
+                val filePath = getActualFilePath(fileUri)
+
+                if (filePath == null) {
+                    Toast.makeText(context, "Unable to retrieve file path", Toast.LENGTH_LONG).show()
+                    Log.e("ProfilePictureUpload", "File path retrieval failed")
+                    return@launch
+                }
+
+                val file = File(filePath)
+
+                Log.d("ProfilePictureUpload", "Resolved File Path: ${file.absolutePath}")
+                Log.d("ProfilePictureUpload", "File Exists: ${file.exists()}")
+                Log.d("ProfilePictureUpload", "File Length: ${file.length()} bytes")
+
+                if (!file.exists()) {
+                    Toast.makeText(context, "File not found", Toast.LENGTH_LONG).show()
+                    return@launch
+                }
+
+                val contentResolver = context.contentResolver
+                val mimeType = contentResolver.getType(fileUri) ?: "image/jpeg"
+
+                Log.d("ProfilePictureUpload", "Detected MIME Type: $mimeType")
+
+                val requestFile = file.asRequestBody(mimeType.toMediaTypeOrNull())
+                val body = MultipartBody.Part.createFormData("image", file.name, requestFile)
+
+                val api = CandidateProfileRetrofitClient.instance(context).create(CandidateInterface::class.java)
+                val response = api.uploadProfilePicture(body)
+
+                if (response.isSuccessful) {
+                    val responseBody = response.body()
+                    val message = responseBody?.message ?: "Image uploaded successfully!"
+                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                    Log.d("ProfilePictureUpload", "Response: $message")
+                } else {
+                    loadingDialog.dismiss()
+                    val errorResponse = response.errorBody()?.string()
+                    val errorMessage = try {
+                        JSONObject(errorResponse).optString("message", "Failed to upload image")
+                    } catch (e: Exception) {
+                        "Failed to upload image"
+                    }
+                    Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
+                    Log.e("ProfilePictureUpload", "Error Response Code: ${response.code()}")
+                    Log.e("ProfilePictureUpload", "Error: $errorMessage")
+                }
+            } catch (e: Exception) {
+                loadingDialog.dismiss()
+                Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_LONG).show()
+                Log.e("API Error", "Exception details", e)
+            }
+        }
+    }
+
+    private fun getActualFilePath(uri: Uri): String? {
+        val context = requireContext()
+        return when {
+            "content" == uri.scheme -> {
+                try {
+                    val projection = arrayOf(MediaStore.Images.Media.DATA)
+                    val cursor = context.contentResolver.query(uri, projection, null, null, null)
+
+                    cursor?.use {
+                        val columnIndex = it.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+                        it.moveToFirst()
+                        it.getString(columnIndex)
+                    }
+                } catch (e: Exception) {
+                    uriToFileWithContentResolver(uri)
+                }
+            }
+
+            "file" == uri.scheme -> uri.path
+
+            else -> {
+                Log.e("FileUpload", "Unsupported URI scheme: ${uri.scheme}")
+                null
+            }
+        }
+    }
+
+    private fun uriToFileWithContentResolver(uri: Uri): String? {
+        val context = requireContext()
+        val tempFile = File(context.cacheDir, "temp_image_${System.currentTimeMillis()}.jpg")
+
+        try {
+            val inputStream = context.contentResolver.openInputStream(uri)
+            inputStream?.use { input ->
+                tempFile.outputStream().use { output ->
+                    input.copyTo(output)
+                }
+            }
+            return tempFile.absolutePath
+        } catch (e: Exception) {
+            Log.e("FileUpload", "Error converting URI to file: ${e.message}")
+            return null
+        }
     }
 
     private fun openResume(resumeUrl: String) {

@@ -27,10 +27,10 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Applicants"
+        android:text="Applicantions"
         android:textSize="30sp"
         android:textStyle="bold"
-        android:layout_marginLeft="41dp"
+        android:layout_marginLeft="55dp"
         android:layout_marginTop="43dp"
         android:id="@+id/titleTextView"
         app:layout_constraintTop_toTopOf="parent"

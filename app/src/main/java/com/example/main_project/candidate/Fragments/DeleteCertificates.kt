@@ -200,4 +200,3 @@ class DeleteCertificates : Fragment() {
         _binding = null
     }
 }
-

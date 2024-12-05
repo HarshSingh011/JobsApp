@@ -29,12 +29,14 @@
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.95" />
 
-        <ImageView
+        <TextView
             android:id="@+id/bookmark"
-            android:layout_width="24dp"
+            android:layout_width="wrap_content"
             android:layout_height="24dp"
-            android:layout_marginTop="15dp"
-            android:src="@drawable/bookmark"
+            android:layout_marginTop="25dp"
+            android:text="Status"
+            android:textSize="16sp"
+            android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="@id/guideline2"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -142,8 +144,8 @@
             android:layout_height="35dp"
             android:layout_marginTop="150dp"
             android:backgroundTint="@color/previous"
-            android:text="View more"
-            android:textColor="@color/background"
+            android:text="Candidates"
+            android:textColor="@color/black"
             android:textSize="10sp"
             app:cornerRadius="10dp"
             app:layout_constraintEnd_toEndOf="@id/guideline2"

@@ -16,6 +16,7 @@ import com.example.main_project.CandidateProfileRetrofitClient
 import com.example.main_project.R
 import com.example.main_project.Recruiter.DataClasses.JobRequest
 import com.example.main_project.databinding.FragmentPostAJobBinding
+import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 
@@ -61,9 +62,39 @@ class PostAJob : Fragment() {
             }
         }
 
+        binding.JobTypeInput.editText?.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) resetToDefaultDrawable(binding.JobTypeInput)
+        }
+        binding.locationInput.editText?.setOnFocusChangeListener{ _, hasFocus ->
+            if (hasFocus) resetToDefaultDrawable(binding.locationInput)
+        }
+        binding.ExperienceInput.editText?.setOnFocusChangeListener{ _, hasFocus ->
+            if (hasFocus) resetToDefaultDrawable(binding.ExperienceInput)
+        }
+        binding.jobtitleInput.editText?.setOnFocusChangeListener{ _, hasFocus ->
+            if (hasFocus) resetToDefaultDrawable(binding.jobtitleInput)
+        }
+        binding.ModeInput.editText?.setOnFocusChangeListener{ _, hasFocus ->
+            if (hasFocus) resetToDefaultDrawable(binding.ModeInput)
+        }
+        binding.MinimumSalaryInput.editText?.setOnFocusChangeListener{ _, hasFocus ->
+            if (hasFocus) resetToDefaultDrawable(binding.MinimumSalaryInput)
+        }
+        binding.MaximumSalaryInput.editText?.setOnFocusChangeListener{ _, hasFocus ->
+            if (hasFocus) resetToDefaultDrawable(binding.MaximumSalaryInput)
+        }
+        binding.DescriptionInput.editText?.setOnFocusChangeListener{ _, hasFocus ->
+            if (hasFocus) resetToDefaultDrawable(binding.DescriptionInput)
+        }
+        binding.skillInput.editText?.setOnFocusChangeListener{ _, hasFocus ->
+            if (hasFocus) resetToDefaultDrawable(binding.skillInput)
+        }
+
         binding.submit.setOnClickListener {
-            lifecycleScope.launch {
-                postJob()
+            if (validateInputs()) {
+                lifecycleScope.launch {
+                    postJob()
+                }
             }
         }
 
@@ -74,6 +105,78 @@ class PostAJob : Fragment() {
         })
 
         return binding.root
+    }
+
+    private fun resetToDefaultDrawable(editText: TextInputLayout) {
+        editText.editText?.setBackgroundResource(R.drawable.edittext_prop)
+        editText.error = null
+    }
+
+    private fun setToErrorDrawable(editText: TextInputLayout) {
+        editText.editText?.setBackgroundResource(R.drawable.error_prop)
+        editText.error = "Empty Field!"
+        editText.clearFocus()
+    }
+
+    private fun validateInputs(): Boolean {
+        val jobtitle = binding.jobtitleInput.editText?.text.toString().trim()
+        val location = binding.locationInput.editText?.text.toString().trim()
+        val experience = binding.ExperienceInput.editText?.text.toString().trim()
+        val jobtype = binding.JobTypeInput.editText?.text.toString().trim()
+        val mode = binding.ModeInput.editText?.text.toString().trim()
+        val minimumsal = binding.MinimumSalaryInput.editText?.text.toString().trim()
+        val maximumsal = binding.MaximumSalaryInput.editText?.text.toString().trim()
+        val des = binding.DescriptionInput.editText?.text.toString().trim()
+        val skill = binding.skillInput.editText?.text.toString().trim()
+
+        var isValid = true
+
+        if (maximumsal.isBlank()) {
+            setToErrorDrawable(binding.MaximumSalaryInput)
+            isValid = false
+        }
+
+        if (des.isBlank()) {
+            setToErrorDrawable(binding.DescriptionInput)
+            isValid = false
+        }
+
+        if( skill.isBlank()){
+            setToErrorDrawable(binding.skillInput)
+            isValid = false
+        }
+
+        if( minimumsal.isBlank()){
+            setToErrorDrawable(binding.MinimumSalaryInput)
+            isValid = false
+        }
+
+        if( mode.isBlank()){
+            setToErrorDrawable(binding.ModeInput)
+            isValid = false
+        }
+
+        if (location.isBlank()) {
+            setToErrorDrawable(binding.locationInput)
+            isValid = false
+        }
+
+        if (jobtitle.isBlank()) {
+            setToErrorDrawable(binding.jobtitleInput)
+            isValid = false
+        }
+
+        if (experience.isBlank()) {
+            setToErrorDrawable(binding.ExperienceInput)
+            isValid = false
+        }
+
+        if (jobtype.isBlank()) {
+            setToErrorDrawable(binding.JobTypeInput)
+            isValid = false
+        }
+
+        return isValid
     }
 
     override fun onDestroyView() {
@@ -90,12 +193,6 @@ class PostAJob : Fragment() {
         val maxSalary = binding.MaximumSalaryInputbox.text.toString().trim().toIntOrNull() ?: 0
         val jobType = binding.JobTypeInputbox.text.toString().trim()
         val jobMode = binding.ModeInputbox.text.toString().trim()
-
-        if (title.isBlank() || description.isBlank() || location.isBlank() || jobType.isBlank() || requiredSkills.isEmpty()) {
-            println("Title: $title, Description: $description, Location: $location, Job Type: $jobType, Required Skills: $requiredSkills")
-            Toast.makeText(requireContext(), "Please fill all required fields", Toast.LENGTH_SHORT).show()
-            return
-        }
 
         val jobRequest = JobRequest(
             title = title,

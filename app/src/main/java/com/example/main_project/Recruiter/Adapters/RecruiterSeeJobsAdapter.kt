@@ -5,9 +5,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.main_project.R
 import com.example.main_project.Recruiter.DataClasses.JobContent
-import com.example.main_project.Recruiter.Fragments.Applicants
 import com.example.main_project.databinding.SearchJobsElementsBinding
 
 class RecruiterSeeJobsAdapter(private val jobList: List<JobContent>) : RecyclerView.Adapter<RecruiterSeeJobsAdapter.JobViewHolder>() {
@@ -22,6 +22,11 @@ class RecruiterSeeJobsAdapter(private val jobList: List<JobContent>) : RecyclerV
     override fun onBindViewHolder(holder: JobViewHolder, position: Int) {
         val job = jobList[position]
         holder.binding.apply {
+            Glide.with(image.context)
+                .load(job.postedBy.profileImage)
+                .placeholder(R.drawable.bottomnav4)
+                .error(R.drawable.bottomnav4)
+                .into(image)
             Title.text = job.title
             location.text = job.location
             JobType.text = job.jobType
