@@ -18,12 +18,6 @@
         tools:layout="@layout/fragment_your_profile" />
 
     <fragment
-        android:id="@+id/experience"
-        android:name="com.example.main_project.SettingProfile.Fragments.ExprienceRecord"
-        android:label="fragment_experience"
-        tools:layout="@layout/fragment_experience" />
-
-    <fragment
         android:id="@+id/certificates"
         android:name="com.example.main_project.SettingProfile.Fragments.Certificates"
         android:label="fragment_certificates"

@@ -17,8 +17,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.main_project.R
-import com.example.main_project.Auth.ViewModels.RegisterViewModel
 import com.example.main_project.Auth.RetrofitClient
+import com.example.main_project.Auth.ViewModels.RegisterViewModel
 import com.example.main_project.databinding.FragmentVerificationCodeBinding
 import retrofit2.Call
 import retrofit2.Callback

@@ -25,6 +25,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import org.json.JSONObject
 import retrofit2.Response
 
 class JobFilter : Fragment() {
@@ -124,9 +125,15 @@ class JobFilter : Fragment() {
                     }
                 } else {
                     loadingDialog.dismiss()
-                    Log.e("API Error", "Error fetching jobs: ${response.code()}")
-                    Log.e("API Error", "Error body: ${response.errorBody()?.string()}")
-                    Toast.makeText(context, "Error fetching jobs: ${response.code()}", Toast.LENGTH_SHORT).show()
+                    FilteredJobAdapter = FilteredJobAdapter(mutableListOf()) { job ->
+                        navigateToJobDetails(job)
+                    }
+                    val errorResponse = response.errorBody()?.string()
+                    println("failer")
+                    val errorMessage = errorResponse?.let { parseErrorMessage(it) } ?: "An error occurred"
+                    Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
+                    binding.Jobfilter.adapter = FilteredJobAdapter
+//                    Toast.makeText(context, "Error fetching jobs: ${response.code()}", Toast.LENGTH_SHORT).show()
 
                     if (response.code() == 403) {
                         Log.e("API Error", "403 Forbidden - Check authentication token")
@@ -135,9 +142,22 @@ class JobFilter : Fragment() {
                 }
             } catch (e: Exception) {
                 loadingDialog.dismiss()
+                FilteredJobAdapter = FilteredJobAdapter(mutableListOf()) { job ->
+                    navigateToJobDetails(job)
+                }
+                binding.Jobfilter.adapter = FilteredJobAdapter
                 Log.e("API Error", "Error fetching jobs: ${e.message}")
                 Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
             }
+        }
+    }
+
+    private fun parseErrorMessage(response: String?): String {
+        return try {
+            val jsonObject = JSONObject(response ?: "")
+            jsonObject.getString("message")
+        } catch (e: Exception) {
+            "An error occurred"
         }
     }
 
@@ -164,6 +184,8 @@ class JobFilter : Fragment() {
             putString("job_location", job.location)
             putString("job_Mode", job.mode)
             putString("job_type", job.jobType)
+            putString("job_profile_image", job.postedBy.profileImage)
+
         }
         findNavController().navigate(R.id.jobsDetails, bundle)
     }
@@ -176,3 +198,4 @@ class JobFilter : Fragment() {
         }
     }
 }
+

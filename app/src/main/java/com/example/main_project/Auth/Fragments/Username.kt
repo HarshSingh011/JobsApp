@@ -8,8 +8,8 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.example.main_project.R
 import com.example.main_project.Auth.ViewModels.RegisterViewModel
+import com.example.main_project.R
 import com.example.main_project.databinding.FragmentUsernameBinding
 
 class Username : Fragment() {

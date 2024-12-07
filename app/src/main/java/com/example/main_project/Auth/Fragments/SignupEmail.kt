@@ -4,17 +4,19 @@ import com.example.main_project.Auth.DataClasses.RegisterRequestEmail
 import com.example.main_project.Auth.DataClasses.RegisterResponse
 import android.app.Dialog
 import android.os.Bundle
+import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.main_project.R
-import com.example.main_project.Auth.ViewModels.RegisterViewModel
 import com.example.main_project.Auth.RetrofitClient
+import com.example.main_project.Auth.ViewModels.RegisterViewModel
 import com.example.main_project.databinding.FragmentSignupEmailBinding
 import com.google.android.material.textfield.TextInputLayout
 import org.json.JSONObject
@@ -60,6 +62,17 @@ class SignupEmail : Fragment() {
             findNavController().navigate(R.id.loginPage)
         }
 
+        binding.editPassword.setEndIconOnClickListener {
+            if (binding.editPasswordInput.inputType == InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD) {
+                binding.editPasswordInput.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+                binding.editPassword.endIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.eye_closed)
+            } else {
+                binding.editPasswordInput.inputType = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+                binding.editPassword.endIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.eye_open)
+            }
+            binding.editPasswordInput.setSelection(binding.editPasswordInput.text?.length ?: 0)
+        }
+
         return binding.root
     }
 
@@ -82,9 +95,11 @@ class SignupEmail : Fragment() {
 
         val passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,20}$".toRegex()
         if (!passwordRegex.matches(password)) {
-            binding.editEmail.clearFocus()
-            binding.editPassword.error = "8-20 char, A-Z, a-z, 0-9, and symbol"
-            binding.editPassword.editText?.setBackgroundResource(R.drawable.error_prop)
+//            binding.editEmail.clearFocus()
+//            binding.editPassword.clearFocus()
+//            binding.editPassword.error = "8-20 char, A-Z, a-z, 0-9, and symbol"
+//            binding.editPassword.editText?.setBackgroundResource(R.drawable.error_prop)
+            applyErrorBackground(binding.editPassword, "8-20 char, A-Z, a-z, 0-9, and symbol")
             hasError = true
         } else {
             binding.editPassword.editText?.setBackgroundResource(R.drawable.edittext_prop)
@@ -154,12 +169,14 @@ class SignupEmail : Fragment() {
                     val errorMessage = errorResponse?.let { parseErrorMessage(it) } ?: "An error occurred"
                     Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
                     applyErrorBackground(binding.editEmail, errorMessage)
+                    binding.editPassword.clearFocus()
                 }
             }
 
             override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
                 loadingDialog.dismiss()
                 binding.getOTP.isEnabled = true
+                binding.editPassword.clearFocus()
                 val errorMessage = if (t is java.net.SocketTimeoutException) {
                     "Request timed out. Please try again."
                 } else {

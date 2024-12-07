@@ -46,7 +46,10 @@ class PostAJob : Fragment() {
         _binding = FragmentPostAJobBinding.inflate(inflater, container, false)
 
         val skillSuggestions = listOf(
-            "Java", "Kotlin", "Python", "JavaScript", "Ruby", "C++", "React", "Spring Boot", "AWS", "Angular", "Vue.js"
+            "Java", "Kotlin", "Python", "JavaScript", "Ruby", "C++", "React", "Spring Boot", "AWS", "Angular", "Vue.js",
+            "Node.js", "Express.js", "MongoDB", "SQL", "NoSQL", "Git", "Docker", "Kubernetes", "Machine Learning",
+            "Artificial Intelligence", "Data Science", "DevOps", "Agile", "Scrum", "iOS", "Android", "Swift", "Flutter",
+            "React Native", "GraphQL", "RESTful API", "Microservices", "Blockchain", "Cybersecurity", "Cloud Computing"
         )
         val skillAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, skillSuggestions)
         binding.skillInputbox.setAdapter(skillAdapter)
@@ -55,7 +58,7 @@ class PostAJob : Fragment() {
             val enteredSkill = binding.skillInputbox.text.toString().trim()
             if (enteredSkill.isNotEmpty()) {
                 requiredSkills.add(enteredSkill)
-                binding.skillInputbox.setText("")
+                binding.skillInputbox.text?.clear()
                 Toast.makeText(requireContext(), "Skill added: $enteredSkill", Toast.LENGTH_SHORT).show()
             } else {
                 Toast.makeText(requireContext(), "Please enter a skill to add", Toast.LENGTH_SHORT).show()

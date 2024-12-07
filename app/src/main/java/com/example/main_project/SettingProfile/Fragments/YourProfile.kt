@@ -84,7 +84,11 @@ class YourProfile : Fragment() {
 
         val domainSuggestions = listOf(
             "Web Developer", "Front End", "Back End", "Data Scientist",
-            "Software Engineer", "Android Developer", "Game Developer","Weblogic Admin"
+            "Software Engineer", "Android Developer", "Game Developer","Weblogic Admin",
+            "Java", "Kotlin", "Python", "JavaScript", "Ruby", "C++", "React", "Spring Boot", "AWS", "Angular", "Vue.js",
+            "Node.js", "Express.js", "MongoDB", "SQL", "NoSQL", "Git", "Docker", "Kubernetes", "Machine Learning",
+            "Artificial Intelligence", "Data Science", "DevOps", "Agile", "Scrum", "iOS", "Android", "Swift", "Flutter",
+            "React Native", "GraphQL", "RESTful API", "Microservices", "Blockchain", "Cybersecurity", "Cloud Computing"
         )
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, domainSuggestions)
         binding.autoCompleteDomain.setAdapter(adapter)
@@ -325,9 +329,6 @@ class YourProfile : Fragment() {
         lifecycleScope.launch {
             try {
                 loadingDialog.dismiss()
-                Log.d("ProfilePictureUpload", "Original URI: $fileUri")
-                Log.d("ProfilePictureUpload", "URI Scheme: ${fileUri.scheme}")
-                Log.d("ProfilePictureUpload", "URI Path: ${fileUri.path}")
 
                 val filePath = getActualFilePath(fileUri)
 
@@ -338,10 +339,6 @@ class YourProfile : Fragment() {
                 }
 
                 val file = File(filePath)
-
-                Log.d("ProfilePictureUpload", "Resolved File Path: ${file.absolutePath}")
-                Log.d("ProfilePictureUpload", "File Exists: ${file.exists()}")
-                Log.d("ProfilePictureUpload", "File Length: ${file.length()} bytes")
 
                 if (!file.exists()) {
                     Toast.makeText(context, "File not found", Toast.LENGTH_LONG).show()
@@ -373,8 +370,6 @@ class YourProfile : Fragment() {
                         "Failed to upload image"
                     }
                     Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
-                    Log.e("ProfilePictureUpload", "Error Response Code: ${response.code()}")
-                    Log.e("ProfilePictureUpload", "Error: $errorMessage")
                 }
             } catch (e: Exception) {
                 loadingDialog.dismiss()

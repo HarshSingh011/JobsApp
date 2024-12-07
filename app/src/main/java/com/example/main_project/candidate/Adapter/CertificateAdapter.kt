@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.core.content.FileProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -20,9 +21,7 @@ import com.example.main_project.R
 import com.example.main_project.candidate.DataClasses.Certificate
 import com.example.main_project.candidate.ViewModels.CandidateProfileViewModel
 import com.example.main_project.databinding.CertificatedeleteBinding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import java.io.File
 import java.io.FileOutputStream
 import java.net.URL
@@ -131,16 +130,22 @@ class CertificateAdapter(
         }
 
         private fun openFile(context: Context, fileUrl: String, mimeType: String) {
-            val intent = Intent(Intent.ACTION_VIEW).apply {
-                data = Uri.parse(fileUrl)
-                type = mimeType
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK
-            }
-
-            try {
-                context.startActivity(intent)
-            } catch (e: Exception) {
-                e.printStackTrace()
+            CoroutineScope(Dispatchers.IO).launch {
+                try {
+                    val file = downloadFile(fileUrl)
+                    val uri = FileProvider.getUriForFile(context, "${context.packageName}.fileprovider", file)
+                    val intent = Intent(Intent.ACTION_VIEW).apply {
+                        setDataAndType(uri, mimeType)
+                        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    }
+                    withContext(Dispatchers.Main) {
+                        context.startActivity(Intent.createChooser(intent, "Open File"))
+                    }
+                } catch (e: Exception) {
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(context, "Error opening file: ${e.message}", Toast.LENGTH_LONG).show()
+                    }
+                }
             }
         }
     }
@@ -157,3 +162,4 @@ class CertificateAdapter(
 
     override fun getItemCount(): Int = certificates.size
 }
+

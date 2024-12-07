@@ -4,17 +4,19 @@ import com.example.main_project.Auth.DataClasses.RegisterRequestPhone
 import com.example.main_project.Auth.DataClasses.RegisterResponse
 import android.app.Dialog
 import android.os.Bundle
+import android.text.InputType
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.main_project.R
-import com.example.main_project.Auth.ViewModels.RegisterViewModel
 import com.example.main_project.Auth.RetrofitClient
+import com.example.main_project.Auth.ViewModels.RegisterViewModel
 import com.example.main_project.databinding.FragmentSignupPhoneBinding
 import com.google.android.material.textfield.TextInputLayout
 import org.json.JSONObject
@@ -46,13 +48,13 @@ class SignupPhone : Fragment() {
 
         binding.editEmail.editText?.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
-                resetToDefaultDrawable(binding.editEmail)
+                clearErrorBackground(binding.editEmail)
             }
         }
 
         binding.editPassword.editText?.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
-                resetToDefaultDrawable(binding.editPassword)
+                clearErrorBackground(binding.editPassword)
             }
         }
 
@@ -61,6 +63,17 @@ class SignupPhone : Fragment() {
                 findNavController().navigate(R.id.loginPage)
             }
         })
+
+        binding.editPassword.setEndIconOnClickListener {
+            if (binding.editPasswordInput.inputType == InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD) {
+                binding.editPasswordInput.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+                binding.editPassword.endIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.eye_closed)
+            } else {
+                binding.editPasswordInput.inputType = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+                binding.editPassword.endIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.eye_open)
+            }
+            binding.editPasswordInput.setSelection(binding.editPasswordInput.text?.length ?: 0)
+        }
 
         return binding.root
     }
@@ -73,9 +86,7 @@ class SignupPhone : Fragment() {
 
         if (input.isBlank() || input.length != 10) {
             binding.editEmail.clearFocus()
-            binding.editPassword.clearFocus()
-            binding.editEmail.error = "10 digit mobile number required"
-            binding.editEmail.editText?.setBackgroundResource(R.drawable.error_prop)
+            applyErrorBackground(binding.editPassword, "10 digit mobile number required")
             hasError = true
         } else {
             binding.editEmail.editText?.setBackgroundResource(R.drawable.edittext_prop)
@@ -84,22 +95,23 @@ class SignupPhone : Fragment() {
         val passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,20}$".toRegex()
         if (!passwordRegex.matches(password)) {
             binding.editEmail.clearFocus()
-            binding.editPassword.clearFocus()
-            binding.editPassword.error = "8-20 char, A-Z, a-z, 0-9, and symbol"
-            binding.editPassword.editText?.setBackgroundResource(R.drawable.error_prop)
+            applyErrorBackground(binding.editPassword, "8-20 char, A-Z, a-z, 0-9, and symbol")
             hasError = true
         } else {
             binding.editPassword.editText?.setBackgroundResource(R.drawable.edittext_prop)
         }
 
         if (password.isBlank()) {
-            binding.editPassword.error = "Required"
             binding.editEmail.clearFocus()
-            binding.editPassword.clearFocus()
-            binding.editPassword.editText?.setBackgroundResource(R.drawable.error_prop)
+            applyErrorBackground(binding.editPassword, "Required")
             hasError = true
         } else {
             binding.editPassword.editText?.setBackgroundResource(R.drawable.edittext_prop)
+        }
+
+        if( !binding.chkbox.isChecked ){
+            Toast.makeText(requireContext(), "Terms and Conditions", Toast.LENGTH_SHORT).show()
+            hasError= true
         }
 
         if (!hasError) {
@@ -109,6 +121,17 @@ class SignupPhone : Fragment() {
             sendDataToApi(mobile, password)
             showLoadingDialog()
         }
+    }
+
+    private fun applyErrorBackground(editText: TextInputLayout, errorMessage: String) {
+        editText.editText?.setBackgroundResource(R.drawable.error_prop)
+        editText.error = errorMessage
+        editText.editText?.clearFocus()
+    }
+
+    private fun clearErrorBackground(editText: TextInputLayout) {
+        editText.error = null
+        editText.editText?.setBackgroundResource(R.drawable.edittext_prop)
     }
 
     private fun sendDataToApi(mobile: String, password: String) {
@@ -132,6 +155,8 @@ class SignupPhone : Fragment() {
                     val errorResponse = response.errorBody()?.string()
                     val errorMessage = errorResponse?.let { parseErrorMessage(it) } ?: "An error occurred"
                     handleApiError(errorMessage)
+                    binding.editPassword.clearFocus()
+
                 }
             }
 
@@ -145,6 +170,7 @@ class SignupPhone : Fragment() {
                     "Error: ${t.message}"
                 }
                 handleApiError(errorMessage)
+                binding.editPassword.clearFocus()
             }
         })
     }
@@ -174,11 +200,6 @@ class SignupPhone : Fragment() {
         binding.editEmail.error = errorMessage
         binding.editEmail.clearFocus()
         binding.editEmail.editText?.setBackgroundResource(R.drawable.error_prop)
-    }
-
-    private fun resetToDefaultDrawable(editTextLayout: TextInputLayout) {
-        editTextLayout.error = null
-        editTextLayout.editText?.setBackgroundResource(R.drawable.edittext_prop)
     }
 
     override fun onDestroyView() {

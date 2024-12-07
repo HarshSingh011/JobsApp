@@ -167,28 +167,6 @@
                     app:layout_constraintStart_toEndOf="@id/mail_icon"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <ImageView
-                    android:id="@+id/Dob_icon"
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    android:layout_marginLeft="29dp"
-                    android:layout_marginTop="128dp"
-                    android:src="@drawable/mail"
-                    app:layout_constraintEnd_toStartOf="@id/Dob"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
-
-                <TextView
-                    android:id="@+id/Dob"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
-                    android:layout_marginTop="128dp"
-                    android:text="Dob"
-                    android:textSize="14sp"
-                    app:layout_constraintStart_toEndOf="@id/Dob_icon"
-                    app:layout_constraintTop_toTopOf="parent" />
-
                 <TextView
                     android:id="@+id/Education"
                     android:layout_width="wrap_content"
@@ -196,7 +174,7 @@
                     android:textSize="18sp"
                     android:textStyle="bold"
                     android:layout_marginLeft="29dp"
-                    android:layout_marginTop="158dp"
+                    android:layout_marginTop="148dp"
                     android:textColor="@color/background"
                     android:text="Education"
                     app:layout_constraintStart_toStartOf="parent"
@@ -221,7 +199,7 @@
                     android:textSize="18sp"
                     android:textStyle="bold"
                     android:layout_marginLeft="29dp"
-                    android:layout_marginTop="22dp"
+                    android:layout_marginTop="20dp"
                     android:textColor="@color/background"
                     android:text="Experience"
                     app:layout_constraintStart_toStartOf="parent"
@@ -319,6 +297,7 @@
                     />
 
                 <TextView
+                    android:id="@+id/resumeTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
@@ -355,6 +334,7 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/Certificate_detail"
                     android:layout_width="0dp"
+                    android:layout_marginHorizontal="10dp"
                     android:layout_height="wrap_content"
                     android:paddingVertical="20dp"
                     android:orientation="horizontal"

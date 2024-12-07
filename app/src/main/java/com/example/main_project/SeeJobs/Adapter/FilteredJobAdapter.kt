@@ -23,11 +23,11 @@ class FilteredJobAdapter(
 
     override fun onBindViewHolder(holder: JobViewHolder, position: Int) {
 
-//        Glide.with(holder.image.context)
-//            .load(jobList[position].postedBy.profileImage)
-//            .placeholder(R.drawable.bottomnav4)
-//            .error(R.drawable.bottomnav4)
-//            .into(holder.image)
+        Glide.with(holder.image.context)
+            .load(jobList[position].postedBy.profileImage)
+            .placeholder(R.drawable.bottomnav4)
+            .error(R.drawable.bottomnav4)
+            .into(holder.image)
         val job = jobList[position]
         holder.title.text = job.title
         holder.experience.text = "${job.experience} yr EXP"

@@ -51,15 +51,19 @@ class RecuriterProfile : Fragment() {
         dataStoreManager = DataStoreManager(requireContext())
 
         binding.nextFragment.setOnClickListener {
-            findNavController().navigate(R.id.mainActivity5)
-//            if (validateInputs()) {
-//                sendRecruiterData()
-//
-//            }
+            if (validateInputs()) {
+                sendRecruiterData()
+            }
         }
 
         binding.pic.setOnClickListener {
             pickImageFromGallery()
+        }
+
+        binding.nextFragment.setOnClickListener {
+            if (validateInputs()) {
+                sendRecruiterData()
+            }
         }
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
@@ -74,7 +78,7 @@ class RecuriterProfile : Fragment() {
         binding.companyEmail.editText?.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) resetToDefaultDrawable(binding.companyEmail)
         }
-        binding.JobTitle.editText?.setOnFocusChangeListener(){_, hasFocus ->
+        binding.JobTitle.editText?.setOnFocusChangeListener() {_, hasFocus ->
             if (hasFocus) resetToDefaultDrawable(binding.JobTitle)
         }
         binding.companyWebsite.editText?.setOnFocusChangeListener(){_, hasFocus ->
@@ -86,8 +90,6 @@ class RecuriterProfile : Fragment() {
         binding.location.editText?.setOnFocusChangeListener(){_, hasFocus ->
             if (hasFocus) resetToDefaultDrawable(binding.location)
         }
-
-        setUpKeyboardListener()
 
         return binding.root
     }
@@ -189,6 +191,7 @@ class RecuriterProfile : Fragment() {
 
                 if (response.isSuccessful) {
                     val role = "RECRUITER"
+                    findNavController().navigate(R.id.mainActivity5)
                     dataStoreManager.saveRole(role)
                     imageUri?.let { uploadProfilePicture(it) }
                     Toast.makeText(requireContext(), "Success: ${response.body()?.message}", Toast.LENGTH_SHORT).show()
@@ -212,9 +215,6 @@ class RecuriterProfile : Fragment() {
         showLoadingDialog()
         lifecycleScope.launch {
             try {
-                Log.d("ProfilePictureUpload", "Original URI: $fileUri")
-                Log.d("ProfilePictureUpload", "URI Scheme: ${fileUri.scheme}")
-                Log.d("ProfilePictureUpload", "URI Path: ${fileUri.path}")
 
                 val filePath = getActualFilePath(fileUri)
 
@@ -226,9 +226,6 @@ class RecuriterProfile : Fragment() {
 
                 val file = File(filePath)
 
-                Log.d("ProfilePictureUpload", "Resolved File Path: ${file.absolutePath}")
-                Log.d("ProfilePictureUpload", "File Exists: ${file.exists()}")
-                Log.d("ProfilePictureUpload", "File Length: ${file.length()} bytes")
 
                 if (!file.exists()) {
                     Toast.makeText(context, "File not found", Toast.LENGTH_LONG).show()
@@ -382,20 +379,8 @@ class RecuriterProfile : Fragment() {
         loadingDialog.show()
     }
 
-    private fun setUpKeyboardListener() {
-        binding.root.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
-            private var lastHeight = 0
-            override fun onGlobalLayout() {
-                val newHeight = binding.root.height
-                if (lastHeight != 0 && newHeight < lastHeight) {
-                    binding.scrollView.post {
-                        binding.scrollView.scrollTo(0, binding.scrollView.bottom)
-                    }
-                }
-                lastHeight = newHeight
-            }
-        })
-    }
+
+
 
     override fun onDestroyView() {
         super.onDestroyView()

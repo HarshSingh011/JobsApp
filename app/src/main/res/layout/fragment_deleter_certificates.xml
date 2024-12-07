@@ -94,14 +94,27 @@
 
         </androidx.cardview.widget.CardView>
 
+        <Button
+            android:id="@+id/resumeadd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="60dp"
+            android:layout_marginTop="20dp"
+            android:backgroundTint="@color/background"
+            android:drawableEnd="@drawable/plus"
+            android:text="Add Resume"
+            android:textSize="18sp"
+            app:cornerRadius="10dp"
+            app:layout_constraintStart_toEndOf="@id/guideline1"
+            app:layout_constraintTop_toBottomOf="@id/Resume"/>
+
         <androidx.cardview.widget.CardView
             android:id="@+id/Certificate"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="50dp"
             android:layout_marginBottom="60dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/Resume"
+            app:layout_constraintTop_toBottomOf="@id/resumeadd"
             app:layout_constraintEnd_toEndOf="@id/guideline2"
             app:layout_constraintStart_toStartOf="@id/guideline1">
 
@@ -134,6 +147,21 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.cardview.widget.CardView>
+
+        <Button
+            android:id="@+id/certificateadd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="60dp"
+            android:backgroundTint="@color/background"
+            android:drawableEnd="@drawable/plus"
+            android:text="Add Certificate"
+            android:textSize="18sp"
+            android:layout_marginTop="20dp"
+            app:cornerRadius="10dp"
+            app:layout_constraintStart_toEndOf="@id/guideline1"
+            app:layout_constraintTop_toBottomOf="@id/Certificate"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

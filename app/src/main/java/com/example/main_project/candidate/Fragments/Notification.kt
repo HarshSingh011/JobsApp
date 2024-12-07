@@ -29,7 +29,7 @@ class Notification : Fragment() {
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                findNavController().navigate(R.id.mainActivity2)
+                findNavController().navigate(R.id.searchJob)
             }
         })
 

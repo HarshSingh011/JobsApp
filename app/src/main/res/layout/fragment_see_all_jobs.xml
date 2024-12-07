@@ -28,8 +28,8 @@
 
         <ImageView
             android:id="@+id/image"
-            android:layout_width="48dp"
-            android:layout_height="43dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_marginTop="45dp"
             android:src="@drawable/bell"
             app:layout_constraintEnd_toStartOf="@id/guideline3"

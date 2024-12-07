@@ -1,12 +1,10 @@
 package com.example.main_project.SettingProfile
 
 import android.os.Bundle
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.findNavController
 import com.example.main_project.R
-import com.example.main_project.TabAdapter
-import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.TabLayoutMediator
-import androidx.viewpager2.widget.ViewPager2
 
 class MainActivity2 : AppCompatActivity() {
 
@@ -14,6 +12,10 @@ class MainActivity2 : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main2)
 
-
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                findNavController(R.id.nav_host_fragment).navigate(R.id.yourProfile)
+            }
+        })
     }
 }

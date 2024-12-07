@@ -2,7 +2,7 @@
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="230dp"
+    android:layout_height="210dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardElevation="5dp"
     app:cardCornerRadius="10dp"
@@ -27,15 +27,6 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.95" />
-
-        <ImageView
-            android:id="@+id/bookmark"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginTop="15dp"
-            android:src="@drawable/bookmark"
-            app:layout_constraintEnd_toEndOf="@id/guideline2"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/image"
@@ -89,6 +80,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="90dp"
+            android:layout_marginLeft="20dp"
             android:background="@drawable/element2_bg"
             android:padding="6dp"
             android:text="Offline"
@@ -103,12 +95,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="90dp"
+            android:layout_marginLeft="20dp"
             android:background="@drawable/element2_bg"
             android:padding="6dp"
             android:text="1yr EXP"
             android:textColor="@color/black"
             android:textSize="10sp"
-            app:layout_constraintEnd_toEndOf="@id/guideline2"
             app:layout_constraintStart_toEndOf="@id/JobMode"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -148,29 +140,6 @@
             android:textColor="@color/black"
             android:textSize="10sp"
             app:cornerRadius="14sp"
-            />
-
-        <ImageView
-            android:id="@+id/clock"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_marginTop="195dp"
-            android:src="@drawable/clock"
-            app:layout_constraintStart_toEndOf="@id/guideline1"
-            app:layout_constraintEnd_toStartOf="@id/days"
-            app:layout_constraintTop_toTopOf="parent"/>
-
-        <TextView
-            android:id="@+id/days"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="195dp"
-            android:text="1 Day ago - 12 applicant applied"
-            android:textColor="@color/black"
-            android:textSize="10sp"
-            app:cornerRadius="10dp"
-            app:layout_constraintStart_toEndOf="@id/clock"
-            app:layout_constraintTop_toTopOf="parent"
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

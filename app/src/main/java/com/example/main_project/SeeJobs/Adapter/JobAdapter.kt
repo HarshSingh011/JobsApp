@@ -31,11 +31,6 @@ class JobAdapter(
             .error(R.drawable.bottomnav4)
             .into(holder.image)
 
-//        if (postedBy != null) {
-//
-//        } else {
-//            holder.image.setImageResource(R.drawable.bottomnav4) // Set a default image if postedBy is null
-//        }
         holder.title.text = job.title
         holder.experience.text = "${job.experience} yr EXP"
         holder.salary.text = "₹${job.minSalary} - ₹${job.maxSalary}/Monthly"

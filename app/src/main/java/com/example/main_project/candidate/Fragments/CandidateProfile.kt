@@ -1,6 +1,7 @@
 package com.example.main_project.candidate.Fragments
 
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.pdf.PdfRenderer
@@ -15,6 +16,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -41,12 +43,14 @@ import com.github.dhaval2404.imagepicker.ImagePicker
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import org.json.JSONObject
 import java.io.File
 import java.io.FileOutputStream
+import java.net.HttpURLConnection
 import java.net.URL
 
 class CandidateProfile : Fragment() {
@@ -86,7 +90,7 @@ class CandidateProfile : Fragment() {
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                findNavController().navigate(R.id.mainActivity2)
+                findNavController().navigate(R.id.candidateProfile)
             }
         })
 
@@ -177,7 +181,6 @@ class CandidateProfile : Fragment() {
         binding.lastname.text = candidateData.lastName ?: "N/A"
         binding.Email.text = candidateData.email ?: "N/A"
         binding.phonenumber.text = candidateData.phone ?: "N/A"
-        binding.Dob.text = candidateData.dob ?: "N/A"
 
         val profileImageUrl = candidateData.profileImageKey ?: ""
         handleProfileImage(profileImageUrl)
@@ -197,22 +200,23 @@ class CandidateProfile : Fragment() {
         if (profileImageUrl.isNotEmpty()) {
             Glide.with(this)
                 .load(profileImageUrl)
-                .placeholder(R.drawable.ic_launcher_background)
-                .error(R.drawable.ic_launcher_foreground)
+                .placeholder(R.drawable.person_vector)
+                .error(R.drawable.person_vector)
                 .into(binding.profileImageView)
         } else {
-            binding.profileImageView.setImageResource(R.drawable.ic_launcher_background)
+            binding.profileImageView.setImageResource(R.drawable.person_vector)
         }
     }
 
     private fun handleResume(resumeUrl: String?) {
         if (resumeUrl.isNullOrEmpty()) {
-            binding.resumeImageView.setImageResource(R.drawable.ic_launcher_background)
+            binding.resumeImageView.setImageResource(R.drawable.applicantion_prop)
+            binding.resumeTextView.text = "No Resume"
         } else {
             loadPdfThumbnail(resumeUrl, binding.resumeImageView)
-
+            binding.resumeTextView.text = "Resume"
             binding.resumeImageView.setOnClickListener {
-                openResume(resumeUrl)
+                openFile(requireContext(), resumeUrl)
             }
         }
     }
@@ -229,41 +233,6 @@ class CandidateProfile : Fragment() {
         }
     }
 
-    private fun loadPdfThumbnail(pdfUrl: String, imageView: ImageView) {
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val file = downloadFile(pdfUrl)
-
-                val pdfRenderer = PdfRenderer(ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY))
-                val page = pdfRenderer.openPage(0)
-
-                val bitmap = Bitmap.createBitmap(page.width, page.height, Bitmap.Config.ARGB_8888)
-                page.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
-
-                page.close()
-                pdfRenderer.close()
-
-                CoroutineScope(Dispatchers.Main).launch {
-                    imageView.setImageBitmap(bitmap)
-                }
-            } catch (e: Exception) {
-                Log.e("PDF Load Error", "Failed to load PDF preview: ${e.message}")
-                CoroutineScope(Dispatchers.Main).launch {
-                    imageView.setImageResource(R.drawable.ic_launcher_background)
-                }
-            }
-        }
-    }
-
-    private fun downloadFile(fileUrl: String): File {
-        val file = File(requireContext().cacheDir, "temp_resume.pdf")
-        URL(fileUrl).openStream().use { input ->
-            FileOutputStream(file).use { output ->
-                input.copyTo(output)
-            }
-        }
-        return file
-    }
 
     private fun uploadImage(fileUri: Uri) {
         val context = requireContext()
@@ -375,12 +344,78 @@ class CandidateProfile : Fragment() {
         }
     }
 
-    private fun openResume(resumeUrl: String) {
-        val intent = Intent(Intent.ACTION_VIEW).apply {
-            data = Uri.parse(resumeUrl)
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK
+    private fun openFile(context: Context, fileUrl: String) {
+        lifecycleScope.launch(Dispatchers.IO) {
+            try {
+                val file = downloadFile(fileUrl)
+                val uri = FileProvider.getUriForFile(context, "${context.packageName}.fileprovider", file)
+                val intent = Intent(Intent.ACTION_VIEW).apply {
+                    setDataAndType(uri, getMimeType(fileUrl))
+                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                }
+                withContext(Dispatchers.Main) {
+                    context.startActivity(Intent.createChooser(intent, "Open File"))
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(context, "Error opening file: ${e.message}", Toast.LENGTH_LONG).show()
+                }
+            }
         }
-        startActivity(intent)
+    }
+
+    private fun getMimeType(url: String): String {
+        return when {
+            url.endsWith(".pdf", true) -> "application/pdf"
+            url.endsWith(".jpg", true) || url.endsWith(".jpeg", true) -> "image/jpeg"
+            url.endsWith(".png", true) -> "image/png"
+            else -> "*/*"
+        }
+    }
+
+    private fun loadPdfThumbnail(pdfUrl: String, imageView: ImageView) {
+        lifecycleScope.launch(Dispatchers.IO) {
+            try {
+                val file = downloadFile(pdfUrl)
+                val bitmap = renderPdfPage(file)
+                withContext(Dispatchers.Main) {
+                    imageView.setImageBitmap(bitmap)
+                }
+            } catch (e: Exception) {
+                Log.e("PDF_THUMBNAIL", "Error loading PDF thumbnail", e)
+                withContext(Dispatchers.Main) {
+                    imageView.setImageResource(R.drawable.applicantion_prop)
+                }
+            }
+        }
+    }
+
+    private fun renderPdfPage(file: File): Bitmap {
+        val pageRenderer = PdfRenderer(ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY))
+        val page = pageRenderer.openPage(0)
+        val bitmap = Bitmap.createBitmap(page.width, page.height, Bitmap.Config.ARGB_8888)
+        page.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
+        page.close()
+        pageRenderer.close()
+        return bitmap
+    }
+
+    private fun downloadFile(fileUrl: String): File {
+        val file = File(requireContext().cacheDir, "temp_file_${System.currentTimeMillis()}")
+        val url = URL(fileUrl)
+        val connection = url.openConnection() as HttpURLConnection
+        connection.connect()
+
+        if (connection.responseCode != HttpURLConnection.HTTP_OK) {
+            throw Exception("Server returned HTTP ${connection.responseCode}")
+        }
+
+        connection.inputStream.use { input ->
+            FileOutputStream(file).use { output ->
+                input.copyTo(output)
+            }
+        }
+        return file
     }
 
     override fun onDestroyView() {

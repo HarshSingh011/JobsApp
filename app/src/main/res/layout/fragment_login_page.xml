@@ -147,8 +147,8 @@
         android:layout_height="wrap_content"
         android:textColor="@color/black"
         android:textSize="14sp"
-        app:endIconMode="password_toggle"
-        app:helperText=""
+        app:endIconMode="custom"
+        app:endIconDrawable="@drawable/eye_closed"
         app:counterMaxLength="20"
         app:counterEnabled="true"
         app:hintEnabled="false"
@@ -160,12 +160,13 @@
         app:layout_constraintTop_toBottomOf="@+id/text_password">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editPasswordInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="14sp"
             android:textColor="@color/black"
             android:background="@drawable/edittext_prop"
-            android:hint="Enter you password"
+            android:hint="Enter your password"
             android:maxLength="20"
             android:textColorHint="@color/black"
             android:inputType="textPassword"

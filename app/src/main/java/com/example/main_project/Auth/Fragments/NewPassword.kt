@@ -4,6 +4,7 @@ import com.example.main_project.Auth.DataClasses.ChangePasswordResponse
 import com.example.main_project.Auth.DataClasses.NewPasswordFormedRequest
 import android.app.Dialog
 import android.os.Bundle
+import android.text.InputType
 import android.util.Log
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
@@ -11,11 +12,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.example.main_project.Auth.ViewModels.ForgotPasswordViewModel
 import com.example.main_project.R
 import com.example.main_project.Auth.RetrofitClient
+import com.example.main_project.Auth.ViewModels.ForgotPasswordViewModel
 import com.example.main_project.databinding.FragmentNewPasswordBinding
 import com.google.android.material.textfield.TextInputLayout
 import org.json.JSONObject
@@ -57,6 +59,17 @@ class NewPassword : Fragment() {
             if (hasFocus) {
                 resetPasswordField()
             }
+        }
+
+        binding.editPassword.setEndIconOnClickListener {
+            if (binding.editPasswordInput.inputType == InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD) {
+                binding.editPasswordInput.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+                binding.editPassword.endIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.eye_closed)
+            } else {
+                binding.editPasswordInput.inputType = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+                binding.editPassword.endIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.eye_open)
+            }
+            binding.editPasswordInput.setSelection(binding.editPasswordInput.text?.length ?: 0)
         }
 
         return binding.root

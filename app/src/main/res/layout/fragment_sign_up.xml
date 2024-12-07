@@ -95,34 +95,24 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.75" />
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.9" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/email"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="152dp"
+        android:layout_height="162dp"
         android:background="@drawable/radio_bg"
         android:padding="4dp"
-        app:layout_constraintBottom_toTopOf="@id/phone"
-        app:layout_constraintEnd_toStartOf="@id/guideline5"
-        app:layout_constraintStart_toEndOf="@id/guideline4"
-        app:layout_constraintTop_toBottomOf="@id/guideline7"
+        app:layout_constraintTop_toTopOf="@id/guideline7"
+        app:layout_constraintEnd_toStartOf="@id/phone"
+        app:layout_constraintStart_toStartOf="@id/guideline4"
+        app:layout_constraintBottom_toTopOf="@id/guideline6"
         >
-        <RadioButton
-            android:id="@+id/loginEmail"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/btn"
-            android:text="Sign up via Email"
-            android:textSize="20sp"
-            android:textColor="@color/black"
-            android:layout_gravity="start"
-            app:cornerRadius="10dp"
-            app:buttonTint="@color/background"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/logo_email"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            >
-        </RadioButton>
 
         <ImageView
             android:id="@+id/logo_email"
@@ -132,38 +122,38 @@
             android:layout_marginRight="2dp"
             android:src="@drawable/gmail_logo"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/viaemail"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/viaemail"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Via Email"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@id/logo_email"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/loginEmail" />
+            app:layout_constraintStart_toStartOf="parent"/>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/phone"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="152dp"
+        android:layout_height="162dp"
         android:padding="4dp"
         app:layout_constraintBottom_toTopOf="@id/guideline6"
-        app:layout_constraintEnd_toStartOf="@id/guideline5"
-        app:layout_constraintStart_toEndOf="@id/guideline4"
-        app:layout_constraintTop_toBottomOf="@id/email"
+        app:layout_constraintEnd_toEndOf="@id/guideline5"
+        app:layout_constraintStart_toEndOf="@id/email"
+        app:layout_constraintTop_toTopOf="@id/guideline7"
         android:background="@drawable/radio_bg">
-
-        <RadioButton
-            android:id="@+id/loginPhoneNumber"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/btn"
-            android:text="Sign up via Phone Number"
-            android:textColor="@color/black"
-            android:textSize="20sp"
-            app:buttonTint="@color/background"
-            app:cornerRadius="10dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/logo_phone"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/logo_phone"
@@ -173,12 +163,37 @@
             android:layout_marginRight="2dp"
             android:src="@drawable/telephone_handset"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/viaphone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            />
+
+        <TextView
+            android:id="@+id/viaphone"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Via Phone Number"
+            android:gravity="center"
+            android:textSize="18sp"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@id/logo_phone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/loginPhoneNumber"
-            />
+            app:layout_constraintStart_toStartOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
+    <Button
+        android:id="@+id/loginBtn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/btn"
+        android:text="Continue"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:cornerRadius="10dp"
+        app:layout_constraintEnd_toStartOf="@+id/guideline5"
+        app:layout_constraintStart_toEndOf="@+id/guideline4"
+        app:layout_constraintTop_toBottomOf="@+id/guideline8" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -10,7 +10,7 @@ import com.example.main_project.databinding.AlljobselemetsBinding
 class SeeAllJobsFilterAdapter(private val onFilterSelected: (String) -> Unit) :
     RecyclerView.Adapter<SeeAllJobsFilterAdapter.FilterViewHolder>() {
 
-    private val filters = listOf("closed", "open", "passed")
+    private val filters = listOf("open", "closed", "paused")
     private var selectedPosition = 0
 
     inner class FilterViewHolder(private val binding: AlljobselemetsBinding) :

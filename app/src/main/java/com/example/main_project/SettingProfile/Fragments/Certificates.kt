@@ -45,7 +45,7 @@ class Certificates : Fragment() {
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                findNavController().navigate(R.id.candidateProfile)
+                findNavController().navigate(R.id.certificates)
             }
         })
 
@@ -60,7 +60,6 @@ class Certificates : Fragment() {
         }
 
         binding.nextFragment.setOnClickListener {
-            println("hello")
             findNavController().navigate(R.id.mainActivity4)
         }
 
@@ -131,19 +130,18 @@ class Certificates : Fragment() {
     }
 
     private fun uploadCertificate(uri: Uri) {
-        val certificateName = binding.certiPdf.text.toString()
+        val certificateName = getFileName(uri) ?: "Certificate"
 
         val certificateNameRequestBody = RequestBody.create(
             "text/plain".toMediaType(), certificateName
         )
 
-        val file = getFileFromUri(uri, "temp_certificate.pdf")
+        val file = getFileFromUri(uri, certificateName)
 
         val certificateDataRequestBody = RequestBody.create(
             "application/pdf".toMediaType(), file
         )
         val certificateDataPart = MultipartBody.Part.createFormData("certificateData", file.name, certificateDataRequestBody)
-        println(certificateDataPart)
 
         lifecycleScope.launch {
             try {
@@ -155,12 +153,11 @@ class Certificates : Fragment() {
                     isApiSuccess = true
                 } else {
                     val errorResponse = response.errorBody()?.string()
-                    println("failer")
                     val errorMessage = errorResponse?.let { parseErrorMessage(it) } ?: "An error occurred"
                     Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
                 }
             } catch (e: Exception) {
-                Toast.makeText(requireContext(), "Error Data: ${e.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Error: ${e.message}", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -195,11 +192,10 @@ class Certificates : Fragment() {
     }
 
     private fun getFileFromUri(uri: Uri, fileName: String): File {
-        val file = File(requireContext().cacheDir, fileName).apply {
-            outputStream().use { outputStream ->
-                requireContext().contentResolver.openInputStream(uri)?.use { inputStream ->
-                    inputStream.copyTo(outputStream)
-                }
+        val file = File(requireContext().cacheDir, fileName)
+        file.outputStream().use { outputStream ->
+            requireContext().contentResolver.openInputStream(uri)?.use { inputStream ->
+                inputStream.copyTo(outputStream)
             }
         }
         return file
@@ -219,3 +215,4 @@ class Certificates : Fragment() {
         _binding = null
     }
 }
+

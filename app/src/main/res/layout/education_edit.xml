@@ -30,6 +30,8 @@
             app:layout_constraintGuide_percent="0.95" />
 
 
+
+
         <TextView
             android:id="@+id/institutionName"
             android:layout_width="0dp"

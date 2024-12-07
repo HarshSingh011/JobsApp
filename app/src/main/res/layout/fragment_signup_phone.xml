@@ -149,7 +149,8 @@
         app:helperText=""
         app:hintEnabled="false"
         app:helperTextTextColor="@color/red"
-        app:endIconMode="password_toggle"
+        app:endIconMode="custom"
+        app:endIconDrawable="@drawable/eye_closed"
         app:endIconTintMode="@color/black"
         app:counterMaxLength="20"
         app:counterEnabled="true"
@@ -159,6 +160,7 @@
         app:layout_constraintTop_toBottomOf="@+id/text_password">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editPasswordInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="14sp"
@@ -170,6 +172,20 @@
             android:background="@drawable/edittext_prop"
             />
     </com.google.android.material.textfield.TextInputLayout>
+
+    <CheckBox
+        android:id="@+id/chkbox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="17dp"
+        android:textSize="12sp"
+        android:text="I agree to the Terms and Conditions and Privacy Policy."
+        android:textColor="@color/black"
+        app:buttonTint="@color/background"
+        app:layout_constraintEnd_toStartOf="@+id/guideline5"
+        app:layout_constraintStart_toEndOf="@id/guideline4"
+        app:layout_constraintTop_toBottomOf="@id/edit_password"
+        app:layout_constraintBottom_toBottomOf="@id/guideline6"/>
 
 
     <androidx.constraintlayout.widget.Guideline

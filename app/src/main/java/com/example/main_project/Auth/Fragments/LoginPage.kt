@@ -6,11 +6,13 @@ import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Bundle
+import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -23,6 +25,7 @@ import com.example.main_project.MainActivity4
 import com.example.main_project.MainActivity5
 import com.example.main_project.MainActivity6
 import com.example.main_project.databinding.FragmentLoginPageBinding
+import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.launch
 import org.json.JSONObject
@@ -84,8 +87,22 @@ class LoginPage : Fragment() {
             }
         )
 
+        binding.editPassword.setEndIconOnClickListener {
+            val currentInputType = binding.editPasswordInput.inputType
+            if (currentInputType == InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD) {
+                binding.editPasswordInput.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+                binding.editPassword.endIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.eye_closed)
+            } else {
+                binding.editPasswordInput.inputType = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+                binding.editPassword.endIconDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.eye_open)
+            }
+            binding.editPasswordInput.setSelection(binding.editPasswordInput.text?.length ?: 0)
+        }
+
         return binding.root
     }
+
+
 
     private fun navigateToNotification4() {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse("myapp://mainActivity4/SearchJob"))

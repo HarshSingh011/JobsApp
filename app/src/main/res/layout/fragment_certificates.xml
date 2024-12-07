@@ -13,6 +13,19 @@
         android:layout_height="match_parent"
         android:background="@color/white">
 
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.05" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.95" />
 
         <LinearLayout
             android:id="@+id/linearLayout"
@@ -40,20 +53,21 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline1"
+        <Button
+            android:id="@+id/next_fragment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.05" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.95" />
-
+            android:layout_marginTop="300dp"
+            android:clickable="true"
+            android:gravity="end"
+            android:text="NEXT"
+            app:cornerRadius="10dp"
+            android:backgroundTint="@color/background"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@id/guideline3"
+            app:layout_constraintTop_toBottomOf="@id/resume_pdf" />
 
         <TextView
             android:id="@+id/field1"
@@ -154,24 +168,6 @@
             app:cornerRadius="10dp"
             app:layout_constraintStart_toEndOf="@id/guideline1"
             app:layout_constraintTop_toBottomOf="@id/resume_pdf" />
-
-        <Button
-            android:id="@+id/next_fragment"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="300dp"
-            android:clickable="true"
-            android:gravity="center"
-            android:backgroundTint="@color/background"
-            android:text="Submit"
-            app:cornerRadius="10dp"
-            android:textColor="@color/white"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@id/guideline1"
-            app:layout_constraintEnd_toEndOf="@id/guideline3"
-            app:layout_constraintTop_toBottomOf="@id/resume"
-            app:layout_constraintBottom_toBottomOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

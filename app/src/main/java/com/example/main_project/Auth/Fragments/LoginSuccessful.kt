@@ -58,6 +58,14 @@ class LoginSuccessful : Fragment() {
             }
         }
 
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (findNavController().currentDestination?.id == R.id.forgotOtp) {
+                    findNavController().navigate(R.id.loginSuccessful)
+                }
+            }
+        })
+
         return binding.root
     }
 

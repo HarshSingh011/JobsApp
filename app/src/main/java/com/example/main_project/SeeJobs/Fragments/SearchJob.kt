@@ -25,6 +25,7 @@ import com.example.main_project.databinding.FragmentSearchJobBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.json.JSONObject
 import retrofit2.Response
 
 class SearchJob : Fragment() {
@@ -57,9 +58,9 @@ class SearchJob : Fragment() {
 
         fetchJobs()
 
-        binding.filter.setOnClickListener {
-            findNavController().navigate(R.id.seeAllJobs)
-        }
+//        binding.filter.setOnClickListener {
+//            findNavController().navigate(R.id.seeAllJobs)
+//        }
 
         binding.notification.setOnClickListener {
             findNavController().navigate(R.id.notification)
@@ -116,11 +117,28 @@ class SearchJob : Fragment() {
 
                     binding.searchBoxRecyclerView.visibility = if (jobList.isNotEmpty()) View.VISIBLE else View.GONE
                 } else {
+                    val errorResponse = response.errorBody()?.string()
+                    println("failer")
+                    val errorMessage = errorResponse?.let { parseErrorMessage(it) } ?: "An error occurred"
+                    Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
+                    jobSearchAdapter.updateJobs(emptyList())
+                    binding.searchBoxRecyclerView.visibility = View.GONE
                     Toast.makeText(requireContext(), "Error: ${response.message()}", Toast.LENGTH_SHORT).show()
                 }
             } catch (e: Exception) {
+                // Clear the adapter when there's a network error
+                jobSearchAdapter.updateJobs(emptyList())
+                binding.searchBoxRecyclerView.visibility = View.GONE
                 Toast.makeText(requireContext(), "Network error: ${e.message}", Toast.LENGTH_SHORT).show()
             }
+        }
+    }
+    private fun parseErrorMessage(response: String?): String {
+        return try {
+            val jsonObject = JSONObject(response ?: "")
+            jsonObject.getString("message")
+        } catch (e: Exception) {
+            "An error occurred"
         }
     }
 
@@ -207,21 +225,10 @@ class SearchJob : Fragment() {
             putString("job_location", job.location)
             putString("job_Mode", job.mode)
             putString("job_type", job.jobType)
+            putString("job_profile_image", job.postedBy.profileImage) // Added line
         }
         findNavController().navigate(R.id.jobsDetails, bundle)
     }
 
-//    private fun navigateToJobDetails(job: Job) {
-//        val bundle = Bundle().apply {
-//            putString("job_id", job.id.toString())
-//            putString("job_title", job.title)
-//            putString("job_description", job.description)
-//            putString("job_salary", job.maxSalary.toString() + " - " + job.minSalary.toString())
-//            putString("job_location", job.location)
-//            putString("job_Mode", job.mode)
-//            putString("job_type", job.jobType)
-//        }
-//        findNavController().navigate(R.id.jobsDetails, bundle)
-//    }
-
 }
+

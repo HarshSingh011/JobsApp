@@ -15,9 +15,11 @@ import com.example.main_project.CandidateProfileRetrofitClient
 import com.example.main_project.R
 import com.example.main_project.SeeJobs.DataClasses.JobApplyResponse
 import com.example.main_project.databinding.FragmentJobsDetailsBinding
+import com.bumptech.glide.Glide
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.json.JSONObject
 import retrofit2.Response
 
 class JobsDetails : Fragment() {
@@ -52,10 +54,22 @@ class JobsDetails : Fragment() {
 
         val jobId = arguments?.getString("job_id")
 
+        val jobProfileImage = arguments?.getString("job_profile_image")
+        Glide.with(requireContext())
+            .load(jobProfileImage)
+            .placeholder(R.drawable.bottomnav4)
+            .error(R.drawable.bottomnav4)
+            .into(binding.profileImage)
+
+
         binding.apply.setOnClickListener {
             jobId?.let {
                 applyForJob(it)
             }
+        }
+
+        binding.backbutton.setOnClickListener {
+            findNavController().navigate(R.id.searchJob)
         }
 
         requireActivity().onBackPressedDispatcher.addCallback(
@@ -92,9 +106,10 @@ class JobsDetails : Fragment() {
 
         CoroutineScope(Dispatchers.Main).launch {
             try {
-                loadingDialog.dismiss()
+
                 val response: Response<JobApplyResponse> = apiService.applyForJob(id)
                 if (response.isSuccessful) {
+                    loadingDialog.dismiss()
                     val apiResponse = response.body()
                     apiResponse?.let {
                         Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
@@ -102,8 +117,10 @@ class JobsDetails : Fragment() {
                     println("Applied for job successfully")
                 } else {
                     loadingDialog.dismiss()
-                    Log.e("API Error", "Error applying for job: ${response.code()}")
-                    Toast.makeText(requireContext(), "Failed to apply for the job.", Toast.LENGTH_SHORT).show()
+                    val errorResponse = response.errorBody()?.string()
+                    println("failer")
+                    val errorMessage = errorResponse?.let { parseErrorMessage(it) } ?: "An error occurred"
+                    Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
                 }
             } catch (e: Exception) {
                 loadingDialog.dismiss()
@@ -113,8 +130,18 @@ class JobsDetails : Fragment() {
         }
     }
 
+    private fun parseErrorMessage(response: String?): String {
+        return try {
+            val jsonObject = JSONObject(response ?: "")
+            jsonObject.getString("message")
+        } catch (e: Exception) {
+            "An error occurred"
+        }
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 }
+
