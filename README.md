@@ -52,9 +52,19 @@ Workify is a feature-rich job portal application designed for Android, catering 
 ## Videos
 
 ### Candidate Side
-https://github.com/user-attachments/assets/8de83db8-170c-47b2-8e7e-e92135b4489d
-https://github.com/user-attachments/assets/2c264eb4-96db-4538-9585-5314c0663c25
-https://github.com/user-attachments/assets/fd11b359-a919-4adb-8bce-7163b5f393ec
+
+
+https://github.com/user-attachments/assets/b0f025b3-7009-4b5f-8ce6-cdf3aae1accd
+
+
+https://github.com/user-attachments/assets/c78d95fb-310a-4473-93ee-cd0ed85f2a77
+
+
+https://github.com/user-attachments/assets/1f1cc7b7-75ba-41b2-81d7-8cd8d626b2bc
+
+
+
+
 
 ### Recruiter Side
 https://github.com/user-attachments/assets/831f34f9-2440-463d-bdc5-2bcca8e12ca3
@@ -62,16 +72,23 @@ https://github.com/user-attachments/assets/831f34f9-2440-463d-bdc5-2bcca8e12ca3
 
 
 
+## Dependencies
+Workify relies on the following key dependencies:
+- **Retrofit**: A type-safe HTTP client for Android and Java, Retrofit makes it easy to consume RESTful web services. It handles network requests, parsing responses, and serializing/deserializing data, simplifying API integrations.
+- **Coroutines**: A concurrency design pattern in Kotlin, Coroutines simplify asynchronous programming by providing structured concurrency. They manage background tasks efficiently, reducing boilerplate code and ensuring smooth execution of long-running operations like network requests.
+- **LiveData**: A lifecycle-aware data holder for Android, LiveData ensures UI components receive updates when data changes, reducing memory leaks and improving efficiency in reactive programming.
+- **ViewModel**: A lifecycle-conscious component in Android, ViewModel stores and manages UI-related data, surviving configuration changes and ensuring data persistence across activity and fragment lifecycles.
+-**ImagePicker**: A flexible library for Android, ImagePicker simplifies selecting images from the gallery or capturing photos using the camera.
+- **Datastore Preferences**: For local storage of tokens and their expiry times.
+- **Glide**: For efficient image loading .
 
+## Contributing
+Contributions to Workify are welcome! To contribute:
+1. Fork the repository.
+2. Create a new branch for your feature or bug fix: `git checkout -b feature-name`.
+3. Make your changes and commit them: `git commit -m 'Add new feature'`.
+4. Push to the branch: `git push origin feature-name`.
+5. Create a pull request with a detailed description of your changes.
 
-
-
-
-
-
-
-
-
-
-
-
+## Contact
+For any inquiries or feedback regarding Workify, please contact the maintainer.
